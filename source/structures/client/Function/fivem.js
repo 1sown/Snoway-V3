@@ -1,29 +1,20 @@
-async function getStatus() {
-    const FiveM = require("fivem")
-    const srv = new FiveM.Server('87.98.147.55:30134')
+const { QuickDB } = require("quick.db");
+const { EmbedBuilder } = require('discord.js');
+const db = new QuickDB();
 
-    srv.getServerStatus().then(data => {
-        return data.online
-    })
-}
-async function getPlayer() {
+async function getStatus() {
     const FiveM = require("fivem");
-    const srv = new FiveM.Server('87.98.147.55:30134');
+    const ipserv = await getServerdb();
 
     try {
-        const data = await srv.getPlayers();
-        console.log(data);
-        return {
-            num: data
-        };
+        const srv = new FiveM.Server(ipserv);
+        const data = await srv.getServerStatus();
+        return data.online;
     } catch (error) {
         console.error("Erreur:", error);
-        return {
-            error: "Une erreur s'est produite."
-        };
+        return false; 
     }
 }
-
 
 async function getPlayerMax() {
     const FiveM = require("fivem");
@@ -31,20 +22,48 @@ async function getPlayerMax() {
 
     try {
         const data = await srv.getMaxPlayers();
-        console.log(data);
         return {
             max: data
         };
     } catch (error) {
-        console.error("Erreur:", error);
-        return {
-            error: "Une erreur s'est produite."
-        };
+        if(error.message === "Error: Please provide an IP.") {
+            return {
+                max: "Impossible à récupérer"
+            };   
+        }
     }
+}
+
+async function getAllPlayer() {
+    const FiveM = require("fivem");
+    const ipserv = await getServerdb();
+
+    try {
+        const srv = new FiveM.Server(ipserv);
+        const data = await srv.getPlayersAll();
+        return {
+            serv: data
+        };
+    } catch (error) {
+        if(error.message === "Error: Please provide an IP.") {
+            return {
+                serv: "Impossible à récupérer"
+            };   
+        }
+    }
+}
+
+async function getServerdb() {
+    const dbs = await db.get(`fivemip`);
+    if (dbs) return ''; 
+
+    const { ip, port } = dbs;
+    return `${ip}:${port}`;
 }
 
 module.exports = {
     getStatus,
-    getPlayer,
     getPlayerMax,
-}
+    getAllPlayer,
+    getServerdb
+};

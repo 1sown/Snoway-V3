@@ -7,6 +7,17 @@ module.exports = {
         if (args.length === 0) {
             const cmddanslefichier = fs.readdirSync('./source/commands').filter(folder => folder !== 'DEV');
             const module = await client.db.get(`module-help`) || 'normal'
+            const fileEmojis = {
+                Informations: '🔍',
+                Buyers: '🎭',
+                Modérations: '⚔',
+                Gestion: '🛠',
+                Musique: '🎶',
+                Logs: '📁',
+                Antiraid: '🛡',
+                Owner: '🔑',
+                Misc: '🎗',
+            };
 
             if (module === 'normal') {
                 const totalpag = cmddanslefichier.length;
@@ -18,10 +29,22 @@ module.exports = {
                     if (page >= totalpag) page = totalpag - 1;
                 }
 
+             
+                
+                const folderOrder = [
+                    'Informations',
+                    'Modération',
+                    'Gestion',
+                    'Misc',
+                    'Owner',
+                    'Buyer'
+                ];
+                cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
+            
                 const generetapage = (pageactuellement) => {
                     const fichiertasoeur = cmddanslefichier[pageactuellement];
                     const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
-
+                    
                     const categoryCommands = cmdFiles.map(file => {
                         const command = require(`../${fichiertasoeur}/${file}`);
                         const usage = command.usage || {
@@ -34,26 +57,25 @@ module.exports = {
                         }
                         return description;
                     });
-
                     const embed = new Discord.EmbedBuilder()
                         .setColor(client.color)
                         .setTitle(fichiertasoeur)
-                        .setFooter({ text: `Snoway - Les variables entre les <...> sont des variables obligatoires à placer sous une commande, contrairement aux variables entre les [...] qui elles sont facultatives.` })
-                        .setDescription(categoryCommands.join(''));
-
+                        .setFooter(client.footer)
+                        .setDescription(`*Les variables entre les \`<...>\` sont obligatoires , alors que les \`[...]\` sont facultatives. Utilisez la commande \`${client.prefix}help <commande>\` pour obtenir plus d'informations.*\n`+categoryCommands.join(''));
                     const row = new Discord.ActionRowBuilder()
                         .addComponents(
-                            new Discord.ButtonBuilder()
-                                .setCustomId('revient')
-                                .setLabel('<<<')
-                                .setStyle(1)
-                                .setDisabled(pageactuellement === 0),
-                            new Discord.ButtonBuilder()
-                                .setCustomId('suivant')
-                                .setLabel('>>>')
-                                .setStyle(1)
-                                .setDisabled(pageactuellement === totalpag - 1)
+                            new Discord.StringSelectMenuBuilder()
+                                .setCustomId('selectMenu')
+                                .setPlaceholder('Snoway')
+                                .addOptions(
+                                    cmddanslefichier.map(folder => ({
+                                        label: folder,
+                                        value: folder,
+                                        emoji: fileEmojis[folder] || "⚫",
+                                    }))
+                                ),
                         );
+
 
                     return { embeds: [embed], components: [row] };
                 };
@@ -61,25 +83,23 @@ module.exports = {
                 const { embeds, components } = generetapage(page);
                 const helpMessage = await message.channel.send({ embeds, components });
 
-                const filter = i => i.customId === 'revient' || i.customId === 'suivant';
+                const filter = i => i.customId === 'selectMenu';
                 const collector = helpMessage.createMessageComponentCollector({ filter });
 
                 collector.on('collect', async i => {
-                    if (i.user.id !== message.author.id) {
-                        return i.reply({ content: "Tu n'es pas autorisé à interagir avec cette interaction !", flags: 64 })
+                    if(i.user.id !== message.author.id) {
+                        return i.reply({
+                            content: "Vous n'êtes pas autorisé à utiliser cette interaction.",
+                            flags: 64
+                        })
                     }
-                    if (i.customId === 'revient' && page > 0) {
-                        page--;
-                    } else if (i.customId === 'suivant' && page < totalpag - 1) {
-                        page++;
-                    }
-
+                    const selectedFile = i.values[0];
+                    const page = cmddanslefichier.indexOf(selectedFile);
                     const { embeds, components } = generetapage(page);
                     await i.update({ embeds, components });
                 });
 
             }
-
 
 
             if (module === "onepage") {
@@ -94,13 +114,13 @@ module.exports = {
                         catecmd.push(`${command.name}`);
                     }
 
-                    formattedCategories.push(`[\`${folder}\`](${client.support})\n\`${catecmd.join('\`, \`')}\``);
+                    formattedCategories.push(`**${fileEmojis[folder]}・${folder}**\n\`${catecmd.join('\`, \`')}\``);
                 }
 
                 const embed = new Discord.EmbedBuilder()
                     .setColor(client.color)
-                    .setTitle('Help')
-                    .setDescription(formattedCategories.join('\n\n'))
+                    .setAuthor({name: "Snoway V3", url: client.user.avatarURL(), iconURL: client.user.avatarURL()})
+                    .setDescription(`Mon préfixe sur ce serveur est : \`${client.prefix}\`\nNombre de commandes : \`${client.commands.size}\`\n\`${client.prefix}help <commande>\` pour obtenir plus d'informations\n\n`+formattedCategories.join('\n\n'))
                     .setFooter(client.footer);
 
                 message.channel.send({ embeds: [embed] });

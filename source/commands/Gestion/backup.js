@@ -96,7 +96,7 @@ module.exports = {
 
         for (const backup of userBackups) {
           const backupFilePath = path.join(__dirname, `../../../backup/backup_${backup.id}.json`);
-          await fsPromises.rm(backupFilePath).catch(() => {})
+          await fsPromises.rm(backupFilePath).catch(() => { })
         }
 
         return message.channel.send({ content: "Vos backups ont été supprimées avec succès !" })
@@ -179,6 +179,12 @@ module.exports = {
       const collector = reply.createMessageComponentCollector({ time: 180000 });
 
       collector.on('collect', async (button) => {
+        if(button.user.id !== message.author.id) {
+          return button.reply({
+              content: "Vous n'êtes pas autorisé à utiliser cette interaction.",
+              flags: 64
+          })
+      }
         if (button.customId.includes('suivant_') && page < totalPages) {
           page++;
         } else if (button.customId.includes('previous_') && page > 1) {
@@ -275,7 +281,7 @@ module.exports = {
               .setDisabled(false)
               .setEmoji('⚡')
               .setCustomId('start'),
-              new ButtonBuilder()
+            new ButtonBuilder()
               .setStyle(1)
               .setDisabled(false)
               .setEmoji('❌')
@@ -379,13 +385,16 @@ module.exports = {
 
       const messageSelect = await message.reply(messageOptions);
 
-      const filter = (interaction) => {
-        return interaction.user.id === message.author.id;
-      };
 
-      const collector = messageSelect.createMessageComponentCollector({ filter});
+      const collector = messageSelect.createMessageComponentCollector();
 
       collector.on('collect', async (interaction) => {
+        if (interaction.user.id !== message.author.id) {
+          return interaction.reply({
+            content: "Vous n'êtes pas autorisé à utiliser cette interaction.",
+            flags: 64
+          })
+        }
         if (interaction.customId === 'stop') {
           interaction.message.delete()
         }
@@ -415,20 +424,20 @@ module.exports = {
           const start = Date.now();
           message.author.send({
             embeds: [new EmbedBuilder().setColor((await client.db.get(`color_${message.guild.id}`) || client.config.color)).setDescription(`Votre backup est en cours de chargement. Merci de patienter.`).setFooter(client.footer)]
-        });
+          });
           const backupData = await backup.load(backupJson, message.guild, {
             emojis: dboption.emojis,
             roles: dboption.roles,
             bans: dboption.bans,
             channels: dboption.channels,
             createdTimestamp: Date.now()
-          });       
+          });
           (await backupData)
           const stop = Date.now();
           const time = stop - start;
           message.author.send({
             embeds: [new EmbedBuilder().setColor((await client.db.get(`color_${message.guild.id}`) || client.config.color)).setDescription(`Votre backup vient d'être chargée en **${time}ms**.`).setFooter(client.footer)]
-        });
+          });
         }
       });
     }

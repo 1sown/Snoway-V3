@@ -4,7 +4,9 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'leave',
     description: 'Permet de faire quitter le bot sur un serveur.',
-    usage: "leave <ID>",
+    usage: {
+        "leave <ID>": "Permet de faire quitter le bot sur un serveur."
+    },
     /**
    * 
    * @param {Snoway} client 

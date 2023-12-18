@@ -6,7 +6,7 @@ module.exports = {
     run: async (client, message, args) => {
         const options = [
             { label: 'Onepage', value: 'onepage' },
-            { label: 'Boutons', value: 'normal' },
+            { label: 'Menu', value: 'normal' },
         ];
 
         const selectMenu = new StringSelectMenuBuilder()
@@ -34,10 +34,12 @@ module.exports = {
         const collector = helpMessage.createMessageComponentCollector({ filter });
 
         collector.on('collect', async i => {
-            if (i.user.id !== message.author.id) {
-                return i.reply({ content: "Vous n'êtes pas autorisé à interagir avec cette interaction !", ephemeral: true });
+            if(i.user.id !== message.author.id) {
+                return i.reply({
+                    content: "Vous n'êtes pas autorisé à utiliser cette interaction.",
+                    flags: 64
+                })
             }
-
             const selectedValue = i.values[0];
             await client.db.set("module-help", selectedValue)
             await i.update({ content: "Type de help modifié.", components: [], embeds: [] });

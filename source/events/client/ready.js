@@ -31,7 +31,6 @@ module.exports = {
     console.log(`[USERS]    : ${userbot}`);
     console.log('Snoway est prêt');
     console.log("-------------------------------");
-
     const restartChannelId = await client.db.get(`restartchannel`);
 
     if (restartChannelId) {

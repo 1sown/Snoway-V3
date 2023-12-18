@@ -56,8 +56,11 @@ module.exports = {
         });
 
         collector.on('collect', async (button) => {
-            if (button.user.id !== message.author.id) {
-                return button.reply({ content: await client.lang('noperminterac'), ephemeral: true });
+            if(button.user.id !== message.author.id) {
+                return button.reply({
+                    content: "Vous n'êtes pas autorisé à utiliser cette interaction.",
+                    flags: 64
+                })
             }
             if (button.customId === `avant_${message.id}` && currentPage > 1) {
                 currentPage--;
