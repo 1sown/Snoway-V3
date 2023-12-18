@@ -30,6 +30,7 @@ module.exports = {
                         .addFields({name: 'Entrée 📥', value: `\`\`\`javascript\n${code}\n\`\`\``})
                         .addFields({name:'Sortie 📤', value: `\`\`\`javascript\n${clean(evaled)}\n\`\`\``})
                         .setColor(client.color)
+                        
                 ]
             });
         } catch (err) {
