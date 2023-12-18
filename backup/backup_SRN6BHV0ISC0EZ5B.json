@@ -1,0 +1,155 @@
+{
+    "name": "Snoway V2 | Testing",
+    "verificationLevel": 0,
+    "explicitContentFilter": 0,
+    "defaultMessageNotifications": 0,
+    "afk": null,
+    "widget": {
+        "enabled": null,
+        "channel": null
+    },
+    "channels": {
+        "categories": [
+            {
+                "name": "Salons textuels",
+                "permissions": [],
+                "children": [
+                    {
+                        "type": 0,
+                        "name": "général",
+                        "nsfw": false,
+                        "rateLimitPerUser": 0,
+                        "parent": "Salons textuels",
+                        "topic": null,
+                        "permissions": [
+                            {
+                                "roleName": "@everyone",
+                                "allow": "1050624",
+                                "deny": "0"
+                            }
+                        ],
+                        "messages": [],
+                        "isNews": false,
+                        "threads": []
+                    },
+                    {
+                        "type": 0,
+                        "name": "images",
+                        "nsfw": false,
+                        "rateLimitPerUser": 0,
+                        "parent": "Salons textuels",
+                        "topic": null,
+                        "permissions": [
+                            {
+                                "roleName": "@everyone",
+                                "allow": "1051648",
+                                "deny": "0"
+                            }
+                        ],
+                        "messages": [],
+                        "isNews": false,
+                        "threads": []
+                    },
+                    {
+                        "type": 0,
+                        "name": "err",
+                        "nsfw": false,
+                        "rateLimitPerUser": 0,
+                        "parent": "Salons textuels",
+                        "topic": null,
+                        "permissions": [
+                            {
+                                "roleName": "@everyone",
+                                "allow": "1050624",
+                                "deny": "0"
+                            }
+                        ],
+                        "messages": [],
+                        "isNews": false,
+                        "threads": []
+                    }
+                ]
+            },
+            {
+                "name": "Salons vocaux",
+                "permissions": [],
+                "children": [
+                    {
+                        "type": 2,
+                        "name": "Général",
+                        "bitrate": 64000,
+                        "userLimit": 0,
+                        "parent": "Salons vocaux",
+                        "permissions": [
+                            {
+                                "roleName": "@everyone",
+                                "allow": "1050624",
+                                "deny": "0"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "others": []
+    },
+    "roles": [
+        {
+            "name": "(dev)",
+            "color": "#000000",
+            "hoist": false,
+            "permissions": "0",
+            "mentionable": false,
+            "position": 10,
+            "isEveryone": false
+        },
+        {
+            "name": "Développeurs",
+            "color": "#992d22",
+            "hoist": true,
+            "permissions": "0",
+            "mentionable": false,
+            "position": 9,
+            "isEveryone": false
+        },
+        {
+            "name": "Bots",
+            "color": "#ad1457",
+            "hoist": true,
+            "permissions": "0",
+            "mentionable": false,
+            "position": 8,
+            "isEveryone": false
+        },
+        {
+            "name": "Membres",
+            "color": "#a84300",
+            "hoist": true,
+            "permissions": "0",
+            "mentionable": false,
+            "position": 7,
+            "isEveryone": false
+        },
+        {
+            "name": "@everyone",
+            "color": "#000000",
+            "hoist": false,
+            "permissions": "559623605571137",
+            "mentionable": false,
+            "position": 0,
+            "isEveryone": true
+        }
+    ],
+    "bans": [
+        {
+            "id": "1084814252642160712",
+            "reason": "gblacklisted by 1tsubasa"
+        }
+    ],
+    "emojis": [],
+    "members": [],
+    "createdTimestamp": 1702777703854,
+    "guildID": "1182679074943025263",
+    "id": "1185760375384051712",
+    "iconURL": "https://cdn.discordapp.com/icons/1182679074943025263/96896908f78d25f748582f4ef546c96f.webp"
+}

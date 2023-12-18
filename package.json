@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "axios": "^1.6.2",
+    "better-sqlite3": "^9.2.2",
+    "discord-backup": "^3.3.2",
+    "discord.js": "^14.13.0",
+    "fivem": "^2.1.8",
+    "fs": "^0.0.1-security",
+    "node-fetch": "^2.6.7",
+    "openai": "^4.22.1",
+    "path": "^0.12.7",
+    "quick.db": "^9.1.7"
+  }
+}
