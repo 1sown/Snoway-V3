@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageSelectMenuBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 
 module.exports = {
     name: 'sethelp',

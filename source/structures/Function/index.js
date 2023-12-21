@@ -1,10 +1,10 @@
 const perm = require('./perms')
-const api = require('./api')
-const process = require('./process')
+const api = require('./manager')
+const bot = require('./bot')
 const fivem = require('./fivem')
 module.exports = {
     perm,
     api,
-    process,
-    fivem
+    fivem,
+    bot
 }

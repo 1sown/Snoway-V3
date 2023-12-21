@@ -1,12 +1,12 @@
 const { ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
-const Valory = require('../../structures/client');
+const Snoway = require('../../structures/client');
 const Discord = require('discord.js');
 const discordTranscripts = require('discord-html-transcripts');
 module.exports = {
     name: "interactionCreate",
     /**
-     * @param {Valory} client
-     * @param {Valory} interaction
+     * @param {Snoway} client
+     * @param {Snoway} interaction
      */
     run: async (client, interaction) => {
         if (!interaction.isButton()) return;

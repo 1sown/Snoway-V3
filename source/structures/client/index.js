@@ -22,7 +22,7 @@ module.exports = class Snoway extends Client {
     this.invite = new Map();
     this.snipeMap = new Map();
 
-    this.functions = require('./Function/index')
+    this.functions = require('../Function/index')
     this.config = require('../../../config/config');
 
     this.support = 'https://discord.gg/Snoway'
@@ -33,61 +33,67 @@ module.exports = class Snoway extends Client {
     this.db = db
     this.api = this.functions.api
 
-    this.initCommands();
-    this.initEvents();
-    this.connectToToken();
-    
+    this.CommandLoad();
+    this.EventLoad();
+    this.connect()
   }
-          
-
-  async connectToToken() {
-    this.login(this.config.token).catch(async (err) => {
+  connect() {
+    return super.login(this.config.token).catch(async (err) => {
       console.log(err)
-    })
-  }
-
-
-  initCommands() {
-    const subFolders = fs.readdirSync("./source/commands");
-    for (const category of subFolders) {
-      const commandsFiles = fs
-        .readdirSync(`./source/commands/${category}`)
-        .filter((file) => file.endsWith(".js"));
-      for (const commandFile of commandsFiles) {
-        const command = require(`../../commands/${category}/${commandFile}`);
-        command.category = category;
-        command.commandFile = commandFile;
-        console.log(`Commande charger : ${command.name}`);
-        this.commands.set(command.name, command);
-        if (command.aliases && command.aliases.length > 0) {
-          command.aliases.forEach((alias) => this.aliases.set(alias, command));
-        }
-      }
-    }
-    let finale = new Collection();
-    this.commands.map((cmd) => {
-      if (finale.has(cmd.name)) return;
-      finale.set(cmd.name, cmd);
-      this.commands
-        .filter((v) => v.name.startsWith(cmd.name) || v.name.endsWith(cmd.name))
-        .map((cm) => finale.set(cm.name, cm));
     });
-    this.commands = finale;
-  }
+  };  
 
-  initEvents() {
-    const subFolders = fs.readdirSync(`./source/events`);
+
+  CommandLoad() {
+    const subFolders = fs.readdirSync("./source/commands");
+    let finale = new Collection();
     for (const category of subFolders) {
-      const eventsFiles = fs
-        .readdirSync(`./source/events/${category}`)
-        .filter((file) => file.endsWith(".js"));
-      for (const eventFile of eventsFiles) {
-        const event = require(`../../events/${category}/${eventFile}`);
-        this.on(event.name, (...args) => event.run(this, ...args));
-        if (category === "anticrash")
-          process.on(event.name, (...args) => event.run(this, ...args));
-        console.log(`EVENT charger : ${eventFile}`);
-      }
+        const commandsFiles = fs
+            .readdirSync(`./source/commands/${category}`)
+            .filter((file) => file.endsWith(".js"));
+
+        for (const commandFile of commandsFiles) {
+            const command = require(`../../commands/${category}/${commandFile}`);
+            command.category = category;
+            command.commandFile = commandFile;
+
+            console.log(`Commande chargée : ${command.name}`);
+            if (!finale.has(command.name)) {
+                finale.set(command.name, command);
+            }
+
+            if (command.aliases && command.aliases.length > 0) {
+                command.aliases.forEach((alias) => {
+                    if (!finale.has(alias)) {
+                        finale.set(alias, command);
+                    }
+                });
+            }
+        }
     }
+    this.commands = finale;
+}
+
+EventLoad() {
+  const subFolders = fs.readdirSync('./source/events');
+
+  for (const category of subFolders) {
+      const eventsFiles = fs
+          .readdirSync(`./source/events/${category}`)
+          .filter((file) => file.endsWith('.js'));
+
+      for (const eventFile of eventsFiles) {
+          const event = require(`../../events/${category}/${eventFile}`);
+
+          const eventHandler = (...args) => event.run(this, ...args);
+          this.on(event.name, eventHandler);
+          if (category === 'anticrash') {
+              process.on(event.name, eventHandler);
+          }
+
+          console.log(`EVENT chargé : ${eventFile}`);
+      }
   }
+}
+
 };

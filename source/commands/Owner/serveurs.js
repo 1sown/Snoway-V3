@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const { ActionRowBuilder, ButtonBuilder, EmbedBuilder } = require("discord.js")
-const Valory = require('../../structures/client/index');
+const Snoway = require('../../structures/client/index');
 
 module.exports = {
     name: 'servers',
@@ -8,7 +8,7 @@ module.exports = {
     description: 'Affiche la liste des serveurs sur lesquels le bot est présent',
     /**
      * 
-     * @param {Valory} client 
+     * @param {Snoway} client 
      * @param {Discord.Message} message
      * 
      **/

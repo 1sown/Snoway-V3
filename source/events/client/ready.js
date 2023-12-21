@@ -32,7 +32,6 @@ module.exports = {
     console.log('Snoway est prêt');
     console.log("-------------------------------");
     const restartChannelId = await client.db.get(`restartchannel`);
-
     if (restartChannelId) {
       const channel = client.channels.cache.get(restartChannelId);
 
@@ -41,5 +40,6 @@ module.exports = {
         await client.db.delete(`restartchannel`);
       }
     }
+
   },
 };

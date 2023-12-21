@@ -9,7 +9,7 @@ module.exports = {
     name: 'chatgpt',
     description: 'Permet de discuter avec le bot en utilisant l\'API ChatGPT-3 Turbo.',
     usage: {
-        "chatgpt": "Permet de discute ChatGPT-3"
+        "chatgpt <message>": "Permet de discute ChatGPT-3"
     },
     /**
      * @param {Snoway} client 

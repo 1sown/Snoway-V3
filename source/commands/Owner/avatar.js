@@ -3,7 +3,9 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'setpic',
     aliases: ["setavatar", "avatar"],
-    usage: "setpic <image/lien>",
+    usage: {
+        "setpic <image/lien>": "Définir l\'avatar du bot."
+    }, 
     description: 'Définir l\'avatar du bot.',
     run: async (client, message, args, commandName) => {
         let avatarURL;

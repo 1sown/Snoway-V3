@@ -1,10 +1,12 @@
 const Discord = require('discord.js');
-const Valory = require('../../structures/client/index');
+const Snoway = require('../../structures/client/index');
 
 module.exports = {
     name: "name",
     description: "Permet de changer le nom du bot",
-    usage: "name <nom>",
+    usage: {
+        "name <new_name>": "Permet de changer le nom du bot"
+    },
     run: async (client, message, args) => {
         let name = args.join(" ");
 

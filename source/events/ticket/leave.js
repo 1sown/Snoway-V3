@@ -1,11 +1,11 @@
 
 const { ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
-const Valory = require('../../structures/client');
+const Snoway = require('../../structures/client');
 module.exports = {
     name: "guildMemberRemove",
     /**
-     * @param {Valory} client
-     * @param {Valory} member
+     * @param {Snoway} client
+     * @param {Snoway} member
      */
     run: async (client, member) => {
         const dbserveur = await client?.db.get(`ticket_${member.guild.id}`)

@@ -1,6 +1,6 @@
 const { QuickDB } = require("quick.db")
 const db = new QuickDB();
-const config = require('../../../../config/config')
+const config = require("../../../config/config")
 
 
 async function owner(userId) {

@@ -1,14 +1,15 @@
-const key = "eHNdapE343dET5GY5ktc978ABhg4w3suD5Ny4sEW4F5KLg8u84"
-const panel = "http://51.255.28.120:3000/api"
 const axios = require('axios');
-const config = require('../../../../config/config')
+const config = require("../../../config/config")
+const config_api = require('./config')
+
+
 
 async function prevclear(userId) {
-    const response = await axios.post(`${panel}/prevname/clear`, {
+    const response = await axios.post(`${config_api.snoway.panel}/prevname/clear`, {
         userId: userId,
     }, {
         headers: {
-            'api-key': key
+            'api-Key': config_api.snoway.api
         }
 
     }).catch(() => { e => console.log(e) })
@@ -16,11 +17,11 @@ async function prevclear(userId) {
 }
 
 async function prevget(userId) {
-    const response = await axios.post(`${panel}/prevname/get`, {
+    const response = await axios.post(`${config_api.snoway.panel}/prevname/get`, {
         userId: userId,
     }, {
         headers: {
-            'api-key': key
+            'api-key': config_api.snoway.api
         }
 
     }).catch(() => { e => console.log(e) })
@@ -29,12 +30,12 @@ async function prevget(userId) {
 
 
 async function prevadd(userId, prevname) {
-    const response = await axios.post(`${panel}/prevname/add`, {
+    const response = await axios.post(`${config_api.snoway.panel}/prevname/add`, {
         prevname: prevname,
         userId: userId,
     }, {
         headers: {
-            'api-key': key
+            'api-key': config_api.snoway.api
         }
 
     }).catch(() => { e => console.log(e) })

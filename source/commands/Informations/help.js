@@ -1,8 +1,16 @@
 const Discord = require('discord.js');
 const fs = require('fs');
+const Snoway = require('../../structures/client');
 module.exports = {
     name: "help",
     description: "Affiche les commandes du bot",
+    /**
+     * 
+     * @param {Snoway} client 
+     * @param {Discord.Message} message 
+     * @param {args[]} args 
+     * @returns 
+     */
     run: async (client, message, args) => {
         if (args.length === 0) {
             const cmddanslefichier = fs.readdirSync('./source/commands').filter(folder => folder !== 'DEV');
@@ -140,10 +148,8 @@ module.exports = {
             for (const [key, value] of Object.entries(usage)) {
                 fields.push({ name: "`" + client.prefix + key + "`", value: value, inline: false });
             }
-
             const embed = new Discord.EmbedBuilder()
-
-                .setTitle(`Commande : ${command.name}`)
+                .setTitle(`Commande : ${client.functions.bot.maj(command.name)}`)
                 .setColor(client.color)
                 .setFooter(client.footer)
                 .addFields(fields);
