@@ -37,8 +37,6 @@ module.exports = {
                     if (page >= totalpag) page = totalpag - 1;
                 }
 
-             
-                
                 const folderOrder = [
                     'Informations',
                     'Modération',
@@ -48,11 +46,11 @@ module.exports = {
                     'Buyer'
                 ];
                 cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
-            
+
                 const generetapage = (pageactuellement) => {
                     const fichiertasoeur = cmddanslefichier[pageactuellement];
                     const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
-                    
+
                     const categoryCommands = cmdFiles.map(file => {
                         const command = require(`../${fichiertasoeur}/${file}`);
                         const usage = command.usage || {
@@ -67,9 +65,9 @@ module.exports = {
                     });
                     const embed = new Discord.EmbedBuilder()
                         .setColor(client.color)
-                        .setTitle(fichiertasoeur)
+                        .setTitle((fileEmojis[fichiertasoeur] || '❌') + " " + fichiertasoeur)
                         .setFooter(client.footer)
-                        .setDescription(`*Les variables entre les \`<...>\` sont obligatoires , alors que les \`[...]\` sont facultatives. Utilisez la commande \`${client.prefix}help <commande>\` pour obtenir plus d'informations.*\n`+categoryCommands.join(''));
+                        .setDescription(`*Les variables entre les \`<...>\` sont obligatoires , alors que les \`[...]\` sont facultatives. Utilisez la commande \`${client.prefix}help <commande>\` pour obtenir plus d'informations.*\n` + categoryCommands.join(''));
                     const row = new Discord.ActionRowBuilder()
                         .addComponents(
                             new Discord.StringSelectMenuBuilder()
@@ -79,7 +77,7 @@ module.exports = {
                                     cmddanslefichier.map(folder => ({
                                         label: folder,
                                         value: folder,
-                                        emoji: fileEmojis[folder] || "⚫",
+                                        emoji: fileEmojis[folder] || "❌",
                                     }))
                                 ),
                         );
@@ -95,7 +93,7 @@ module.exports = {
                 const collector = helpMessage.createMessageComponentCollector({ filter });
 
                 collector.on('collect', async i => {
-                    if(i.user.id !== message.author.id) {
+                    if (i.user.id !== message.author.id) {
                         return i.reply({
                             content: "Vous n'êtes pas autorisé à utiliser cette interaction.",
                             flags: 64
@@ -122,13 +120,13 @@ module.exports = {
                         catecmd.push(`${command.name}`);
                     }
 
-                    formattedCategories.push(`**${fileEmojis[folder]}・${folder}**\n\`${catecmd.join('\`, \`')}\``);
+                    formattedCategories.push(`**${fileEmojis[folder]}・${folder}**\n\`${catecmd.join('\`, \`') || "Aucune commande"}\``);
                 }
 
                 const embed = new Discord.EmbedBuilder()
                     .setColor(client.color)
-                    .setAuthor({name: "Snoway V3", url: client.user.avatarURL(), iconURL: client.user.avatarURL()})
-                    .setDescription(`Mon préfixe sur ce serveur est : \`${client.prefix}\`\nNombre de commandes : \`${client.commands.size}\`\n\`${client.prefix}help <commande>\` pour obtenir plus d'informations\n\n`+formattedCategories.join('\n\n'))
+                    .setAuthor({ name: "Snoway V3", url: client.user.avatarURL(), iconURL: client.user.avatarURL() })
+                    .setDescription(`Mon préfixe sur ce serveur est : \`${client.prefix}\`\nNombre de commandes : \`${client.commands.size}\`\n\`${client.prefix}help <commande>\` pour obtenir plus d'informations\n\n` + formattedCategories.join('\n\n'))
                     .setFooter(client.footer);
 
                 message.channel.send({ embeds: [embed] });
@@ -154,12 +152,12 @@ module.exports = {
                 .setFooter(client.footer)
                 .addFields(fields);
             const row = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                .setStyle(5)
-                .setURL(client.support)
-                .setLabel('Serveur support')
-            )
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setStyle(5)
+                        .setURL(client.support)
+                        .setLabel('Serveur support')
+                )
 
             message.channel.send({ embeds: [embed], components: [row] });
         }

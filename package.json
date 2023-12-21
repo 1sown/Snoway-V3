@@ -1,14 +1,20 @@
 {
   "dependencies": {
+    "@discord-player/extractor": "^4.4.5",
+    "@discordjs/opus": "^0.9.0",
     "axios": "^1.6.2",
     "better-sqlite3": "^9.2.2",
     "discord-backup": "^3.3.2",
+    "discord-html-transcripts": "^3.2.0",
+    "discord-player": "^6.6.6",
     "discord.js": "^14.13.0",
+    "ffmpeg-static": "^5.2.0",
     "fivem": "^2.1.8",
     "fs": "^0.0.1-security",
     "node-fetch": "^2.6.7",
     "openai": "^4.22.1",
     "path": "^0.12.7",
-    "quick.db": "^9.1.7"
+    "quick.db": "^9.1.7",
+    "ytdl-core": "^4.9.1"
   }
 }

@@ -3,6 +3,7 @@ const fs = require("fs");
 const version = require('../../../version')
 const { QuickDB } = require("quick.db")
 const db = new QuickDB();
+const { Player } = require('discord-player');
 module.exports = class Snoway extends Client {
   constructor(
     options = {
@@ -21,6 +22,8 @@ module.exports = class Snoway extends Client {
     this.slashCommands = new Collection();
     this.invite = new Map();
     this.snipeMap = new Map();
+    this.player = Player.singleton(this);
+    this.player.extractors.loadDefault();
 
     this.functions = require('../Function/index')
     this.config = require('../../../config/config');
@@ -29,7 +32,7 @@ module.exports = class Snoway extends Client {
     this.footer = { "text": "Snoway © 2023"}
     this.dev = ["798973949189947459","1171205236799582289", "233657223190937601"]
 
-    this.version = version.version;
+    this.version = version;
     this.db = db
     this.api = this.functions.api
 
@@ -86,6 +89,7 @@ EventLoad() {
           const event = require(`../../events/${category}/${eventFile}`);
 
           const eventHandler = (...args) => event.run(this, ...args);
+          this.player.on(event.name, (...args) => event.run(this, ...args))
           this.on(event.name, eventHandler);
           if (category === 'anticrash') {
               process.on(event.name, eventHandler);
