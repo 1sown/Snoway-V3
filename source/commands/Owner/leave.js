@@ -1,36 +1,34 @@
-const Snoway = require('../../structures/client/index');
-const Discord = require('discord.js');
-
 module.exports = {
     name: 'leave',
-    description: 'Permet de faire quitter le bot sur un serveur.',
-    usage: {
-        "leave <ID>": "Permet de faire quitter le bot sur un serveur."
-    },
-    /**
-   * 
-   * @param {Snoway} client 
-   * @param {Discord.Message} message 
-   * @param {Snoway} args 
-   * @returns 
-   */
-    run: async (client, message, args) => {
+    description: 'Permet de faire leave le bot d\'un discord ou il est !',
+    run: async (client, message, args, commandName) => {
 
-        const guildId = args[0] || message.guild.id;
+        const guildId = args[0];
+        const guildToLeave = client.guilds.cache.get(guildId);
 
-
-        const guild = client.guilds.cache.get(guildId);
-
-        if (!guild) {
-            return message.reply("> `❌` Le serveur est introuvable dans ma base de données");
+        if (!guildToLeave) {
+            return message.reply({ content: "Je n'ai pas pu trouver la guilde spécifiée ou actuelle." });
         }
+
+        const confirmationMessage = await message.reply({ content: `Voulez-vous vraiment que je quitte le serveur : **${guildToLeave.name}**, répondre par oui ou non ?` });
+
+        const filter = response => {
+            return response.author.id === message.author.id;
+        };
 
         try {
-            message.reply((guildId === message.guild.id) ? '> Je quitte le serveur.' : `> Je quitte le serveur **${guild.name}**`);
-            await guild.leave();
+            const collected = await message.channel.awaitMessages({ filter, max: 1, time: 15000, errors: ['time'] });
+            const response = collected.first();
+
+            if (response.content.toLowerCase() === 'oui') {
+                await guildToLeave.leave();
+                message.reply({ content: `J'ai bien quitté le serveur **${guildToLeave.name}**` });
+            } else {
+                message.reply({ content: "Annulation." });
+            }
         } catch (error) {
-            console.error(`Erreur:`, error);
-            message.reply("Une erreur est survenue.");
+            console.error(error);
+            message.reply({ content: " Opération annulée." });
         }
-    },
+    }
 };
