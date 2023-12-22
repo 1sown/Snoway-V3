@@ -31,16 +31,6 @@ module.exports = {
     const cmd = client.commands.get(commandName) || client.aliases.get(commandName);
     if (!cmd) return;
 
-    if (cmd.category === "Owner") {
-      if ((await client.functions.perm.owner(message.author.id)) || !(await client.functions.perm.buyer(message.author.id))) {
-        const msg = await message.reply({ content: "*Vous n'avez pas la permission d'utiliser cette commande !*" });
-        setTimeout(() => {
-          msg.delete().catch(e => { });
-        }, 3000);
-        return;
-      }
-    }
-
     cmd.run(client, message, args, commandName);
   }
 }

@@ -25,7 +25,6 @@ module.exports = {
         if (!client.functions.bot.color(colorArg)) {
             return message.channel.send("Couleur non valide.");
         }
-        console.log(colorArg)
         const embed = new Discord.EmbedBuilder()
             .setColor(colorArg)
             .setDescription(textArg);

@@ -19,7 +19,7 @@ module.exports = {
             const invite = await client.fetchInvite(`https://discord.gg/` + url);
 
             const server = invite.guild;
-    
+
             const embed = new Discord.EmbedBuilder()
                 .setTitle(server.name)
                 .setColor(0x6200b8)
@@ -35,11 +35,11 @@ module.exports = {
                 embed.setImage(server.bannerURL({ dynamic: true, size: 4096 }))
             }
             await message.reply({ embeds: [embed] });
-    
-            } catch (error) {
-              await message.reply('Erreur, serveur invalide');
-              console.log('Erreur, serveur invalide');
-            }
+
+        } catch (error) {
+            await message.reply('Erreur, serveur invalide');
+            console.log('Erreur, serveur invalide');
+        }
 
 
 
