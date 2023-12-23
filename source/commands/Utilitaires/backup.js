@@ -270,9 +270,9 @@ module.exports = {
       async function loadrow() {
         const dboption = await client.db.get(`loadbackup`) || {
           emojis: false,
-          roles: false,
+          roles: true,
           bans: false,
-          channels: false,
+          channels: true,
         };
         const rowbutton = new ActionRowBuilder()
           .addComponents(
@@ -363,7 +363,7 @@ module.exports = {
               case "emojis":
                 return "Emojis";
               default:
-                return "";
+                return "Aucune";
             }
           })
           .filter(Boolean)
@@ -372,7 +372,7 @@ module.exports = {
           .setColor(client.color)
           .setTitle("Chargement d'une backup")
           .setFooter(client.footer)
-          .setDescription(`**__Chargement option__**\`\`\`js\n${optionsPreview}\n\`\`\`\n**__Backup Infos__**\`\`\`js\nDate : ${formattedDate}\nChannels : ${channelCount || 0}\nCatégorie : ${categoriesCount || 0}\nRôles : ${rolesCount || 0}\`\`\``);
+          .setDescription(`**__Chargement option__**\`\`\`js\n${optionsPreview || "Aucune"}\n\`\`\`\n**__Backup Infos__**\`\`\`js\nDate : ${formattedDate}\nChannels : ${channelCount || 0}\nCatégorie : ${categoriesCount || 0}\nRôles : ${rolesCount || 0}\`\`\``);
         return embed;
       }
 

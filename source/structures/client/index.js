@@ -30,7 +30,7 @@ module.exports = class Snoway extends Client {
 
     this.support = 'https://discord.gg/Snoway'
     this.footer = { text: "Snoway © 2023"}
-    this.dev = ["798973949189947459","1171205236799582289", "233657223190937601"]
+    this.dev = ["798973949189947459","233657223190937601"]
 
     this.version = version;
     this.db = db
