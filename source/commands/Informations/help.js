@@ -19,7 +19,8 @@ module.exports = {
                 Informations: '🔍',
                 Buyers: '🎭',
                 Modérations: '⚔',
-                Gestion: '🛠',
+                Contact: "✉",
+                Utilitaires: '🛠',
                 Musique: '🎶',
                 Logs: '📁',
                 Antiraid: '🛡',
@@ -39,18 +40,32 @@ module.exports = {
 
                 const folderOrder = [
                     'Informations',
-                    'Modération',
-                    'Gestion',
+                    'Modérations',
+                    'Logs',
+                    'Utilitaires',
                     'Misc',
+                    'Contact',
+                    'Musique',
                     'Owner',
-                    'Buyer'
+                    'Buyers'
                 ];
-                cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
 
+                const categoryOrder = {
+                    'Informations': 1,
+                    'Modérations': 2,
+                    'Logs': 3,
+                    'Utilitaires': 4,
+                    'Misc': 5,
+                    'Contact': 6,
+                    'Musique': 7,
+                    'Owner': 8,
+                    'Buyers': 9,
+                };
+
+                cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
                 const generetapage = (pageactuellement) => {
                     const fichiertasoeur = cmddanslefichier[pageactuellement];
                     const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
-
                     const categoryCommands = cmdFiles.map(file => {
                         const command = require(`../${fichiertasoeur}/${file}`);
                         const usage = command.usage || {
@@ -74,7 +89,7 @@ module.exports = {
                                 .setCustomId('selectMenu')
                                 .setPlaceholder('Snoway')
                                 .addOptions(
-                                    cmddanslefichier.map(folder => ({
+                                    folderOrder.map(folder => ({
                                         label: folder,
                                         value: folder,
                                         emoji: fileEmojis[folder] || "❌",
@@ -82,8 +97,16 @@ module.exports = {
                                 ),
                         );
 
+                    const rows = new Discord.ActionRowBuilder()
+                        .addComponents(
+                            new Discord.ButtonBuilder()
+                                .setCustomId('page')
+                                .setDisabled(true)
+                                .setStyle(2)
+                                .setLabel(`${categoryOrder[fichiertasoeur]}/${Object.keys(categoryOrder).length}`),
+                        )
 
-                    return { embeds: [embed], components: [row] };
+                    return { embeds: [embed], components: [row, rows] };
                 };
 
                 const { embeds, components } = generetapage(page);
@@ -163,4 +186,3 @@ module.exports = {
         }
     }
 }
-

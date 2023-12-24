@@ -79,10 +79,10 @@ module.exports = {
             "beige": "#F5F5DC",
             "defaut": config_bot.color
         };
-    
+
         const colorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
-            const lowerCaseColorArg = colorArg.toLowerCase();
-            if (lowerCaseColorArg in colorMap) {
+        const lowerCaseColorArg = colorArg.toLowerCase();
+        if (lowerCaseColorArg in colorMap) {
             const color = colorMap[lowerCaseColorArg];
             return color;
         } else if (colorRegex.test(colorArg)) {

@@ -29,8 +29,8 @@ module.exports = class Snoway extends Client {
     this.config = require('../../../config/config');
 
     this.support = 'https://discord.gg/Snoway'
-    this.footer = { text: "Snoway © 2023"}
-    this.dev = ["798973949189947459","233657223190937601"]
+    this.footer = { text: "Snoway © 2023" }
+    this.dev = ["798973949189947459", "233657223190937601"]
 
     this.version = version;
     this.db = db
@@ -44,60 +44,61 @@ module.exports = class Snoway extends Client {
     return super.login(this.config.token).catch(async (err) => {
       console.log(err)
     });
-  };  
+  };
 
 
   CommandLoad() {
     const subFolders = fs.readdirSync("./source/commands");
     let finale = new Collection();
     for (const category of subFolders) {
-        const commandsFiles = fs
-            .readdirSync(`./source/commands/${category}`)
-            .filter((file) => file.endsWith(".js"));
+      const commandsFiles = fs
+        .readdirSync(`./source/commands/${category}`)
+        .filter((file) => file.endsWith(".js"));
 
-        for (const commandFile of commandsFiles) {
-            const command = require(`../../commands/${category}/${commandFile}`);
-            command.category = category;
-            command.commandFile = commandFile;
+      for (const commandFile of commandsFiles) {
+        const command = require(`../../commands/${category}/${commandFile}`);
+        command.category = category;
+        command.commandFile = commandFile;
 
-            console.log(`Commande chargée : ${command.name}`);
-            if (!finale.has(command.name)) {
-                finale.set(command.name, command);
-            }
-
-            if (command.aliases && command.aliases.length > 0) {
-                command.aliases.forEach((alias) => {
-                    if (!finale.has(alias)) {
-                        finale.set(alias, command);
-                    }
-                });
-            }
+        console.log(`Commande chargée : ${command.name}`);
+        if (!finale.has(command.name)) {
+          finale.set(command.name, command);
         }
+
+        if (command.aliases && command.aliases.length > 0) {
+          command.aliases.forEach((alias) => {
+            if (!finale.has(alias)) {
+              finale.set(alias, command);
+            }
+          });
+        }
+      }
     }
     this.commands = finale;
-}
+  }
 
-EventLoad() {
-  const subFolders = fs.readdirSync('./source/events');
 
-  for (const category of subFolders) {
+  EventLoad() {
+    const subFolders = fs.readdirSync('./source/events');
+
+    for (const category of subFolders) {
       const eventsFiles = fs
-          .readdirSync(`./source/events/${category}`)
-          .filter((file) => file.endsWith('.js'));
+        .readdirSync(`./source/events/${category}`)
+        .filter((file) => file.endsWith('.js'));
 
       for (const eventFile of eventsFiles) {
-          const event = require(`../../events/${category}/${eventFile}`);
+        const event = require(`../../events/${category}/${eventFile}`);
 
-          const eventHandler = (...args) => event.run(this, ...args);
-          this.player.on(event.name, (...args) => event.run(this, ...args))
-          this.on(event.name, eventHandler);
-          if (category === 'anticrash') {
-              process.on(event.name, eventHandler);
-          }
+        const eventHandler = (...args) => event.run(this, ...args);
+        this.player.on(event.name, (...args) => event.run(this, ...args))
+        this.on(event.name, eventHandler);
+        if (category === 'anticrash') {
+          process.on(event.name, eventHandler);
+        }
 
-          console.log(`EVENT chargé : ${eventFile}`);
+        console.log(`EVENT chargé : ${eventFile}`);
       }
+    }
   }
-}
 
 };

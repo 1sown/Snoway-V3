@@ -18,11 +18,11 @@ module.exports = {
 * 
 */
   run: async (client) => {
+    console.clear()
     const tag = client.user.tag;
     const id = client.user.id;
     const channel = client.channels.cache.size
     const userbot = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0).toLocaleString()
-    console.clear();
     console.log(`[BOT]      : ${tag} (${id}) est connecté à ${getNow().time}`);
     console.log(`[VERSION]  : ${client.version}`)
     console.log(`[COMMANDS] : ${client.commands.size}`)
