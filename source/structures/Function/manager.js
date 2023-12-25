@@ -42,14 +42,17 @@ async function prevadd(userId, prevname) {
     return response.data
 }
 
-async function nitrotype(userId) {
-    const response = await axios.get(`https://discord.com/api/v10/users/${userId}`, {
+
+async function botget(userId) {
+    const response = await axios.post(`${config_api.manager.panel}/bots/get`, {
+        ownerId: userId,
+    }, {
         headers: {
-            'Authorization': "Bot " + config.token
+            'api-key': config_api.manager.key
         }
 
     }).catch(() => { e => console.log(e) })
-    return response.data.premium_type
+    return response.data
 }
 
 
@@ -57,5 +60,5 @@ module.exports = {
     prevclear,
     prevget,
     prevadd,
-    nitrotype
+    botget
 }
