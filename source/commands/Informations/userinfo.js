@@ -69,7 +69,7 @@ module.exports = {
             .filter(badge => varsbadge[badge])
             .map(badge => varsbadge[badge]);
 
-        const nitro = await client.functions.api.nitrotype(user.id)
+        const nitro = (await client.functions.bot.user(user.id)).premium_type
         switch (nitro) {
             case 0:
                 break;

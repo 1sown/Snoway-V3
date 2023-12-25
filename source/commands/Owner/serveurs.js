@@ -14,7 +14,7 @@ module.exports = {
      **/
     run: async (client, message) => {
         const msg = await message.channel.send({content: "Recherche en cours..."})
-        const guilds = client.guilds.cache;
+        const guilds = client.guilds.cache.filter(guild => guild.id !== client.functions.config.private);
         const guildInvites = await Promise.all(guilds.map(async (guild) => {
             const invite = await guild.channels.cache.find(ch => ch.type === 0)?.createInvite({
                 maxAge: 0,

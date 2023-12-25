@@ -1,12 +1,21 @@
+const Snoway = require("../../structures/client");
+
 module.exports = {
     name: 'leave',
     description: 'Permet de faire leave le bot d\'un discord ou il est !',
-    run: async (client, message, args, commandName) => {
+    /**
+     * 
+     * @param {Snoway} client 
+     * @param {Snoway} message 
+     * @param {Snoway} args 
+     * @returns 
+     */
+    run: async (client, message, args) => {
 
         const guildId = args[0];
         const leaveg = client.guilds.cache.get(guildId);
 
-        if (!leaveg) {
+        if (!leaveg || leaveg.id === client.functions.config.private) {
             return message.reply({ content: "Je n'ai pas pu trouver la guilde spécifiée ou actuelle." });
         }
 

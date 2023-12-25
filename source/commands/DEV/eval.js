@@ -14,8 +14,9 @@ module.exports = {
      */
     async run(client, message, args) {
         if (!client.dev.includes(message.author.id)) return;
-        client.functions.api.nitrotype
+
         const code = args.join(' ');
+        if(!code) return message.reply('Merci de donner un code a eval !')
         try {
             let evaled = await eval(code);
 
