@@ -21,10 +21,16 @@ module.exports = {
         if (!owners.includes(ownerId)) {
             return message.channel.send('Cet utilisateur n\'est pas un owner.');
         }
-     
+
         const ownerIndex = owners.indexOf(ownerId);
         owner.splice(ownerIndex, 1);
-        await client.db.set('owner', owner);
-        return message.channel.send(`\`${member.username}\` n'est plus un owner.`);
+
+        await client.functions.api.ownerdel(client.user.id, ownerId).then(async (response) => {
+            await client.db.set('owner', owners);
+            return message.channel.send(`\`${member.username}\` n'est plus un owner.`);
+        }).catch(error => {
+            console.error('Erreur:', error);
+            message.channel.send('une erreur vient de se produire.');
+        });
     }
 }

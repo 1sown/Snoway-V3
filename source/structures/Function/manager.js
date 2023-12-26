@@ -56,9 +56,48 @@ async function botget(userId) {
 }
 
 
+
+async function owneradd(botId, userId) {
+    const response = await axios.post(`${config_api.manager.panel}/bots/owner/add`, {
+        BotId: botId,
+        owner: userId
+    }, {
+        headers: {
+            'api-key': config_api.manager.key
+        }
+
+    }).catch(() => { })
+}
+
+async function ownerdel(botId, userId) {
+    const response = await axios.post(`${config_api.manager.panel}/bots/owner/remove`, {
+        BotId: botId,
+        owner: userId
+    }, {
+        headers: {
+            'api-key': config_api.manager.key
+        }
+
+    }).catch(() => { })
+}
+
+async function ownerclear(botId) {
+    const response = await axios.post(`${config_api.manager.panel}/bots/owner/clear`, {
+        BotId: botId,
+    }, {
+        headers: {
+            'api-key': config_api.manager.key
+        }
+
+    }).catch(() => { })
+}
+
 module.exports = {
     prevclear,
     prevget,
     prevadd,
-    botget
+    botget,
+    owneradd,
+    ownerdel,
+    ownerclear
 }

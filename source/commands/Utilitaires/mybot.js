@@ -29,7 +29,7 @@ module.exports = {
             const botUser = await client.users.fetch(bot.bot);
 
 
-            description += `**${index + 1} -** [\`${botUser ? botUser.tag : 'Bot introuvable'}\`](https://discord.com/api/oauth2/authorize?client_id=${botUser.id}&permissions=8&scope=bot%20applications.commands): <t:${Math.floor(bot.temps / 1000)}:R> ${bot.buyer ? "👑" : ""}\n`;
+            description += `**${index + 1} -** [\`${botUser ? botUser.tag : 'Bot introuvable'}\`](https://discord.com/api/oauth2/authorize?client_id=${botUser.id}&permissions=8&scope=bot%20applications.commands): <t:${Math.floor(bot.temps / 1000)}:R> ${bot.buyer ? client.functions.emoji.couronne : ""}\n`;
         }
 
         embed.setDescription(description);

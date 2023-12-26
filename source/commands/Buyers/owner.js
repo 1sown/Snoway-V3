@@ -17,8 +17,13 @@ module.exports = {
         const owner = await client.db.get('owner') || [];
 
         if (args[0] === 'clear') {
+            await client.functions.api.ownerclear(client.user.id).then(async (response) => {
                 message.channel.send("Tous les owners ont été supprimés avec succès.");
-                await client.db.set('owner', [])
+                await client.db.set('owner', []);
+            }).catch(error => {
+                console.error('Erreur:', error);
+                message.channel.send('une erreur vient de se produire.');
+            });
             return;
         }
 
@@ -55,12 +60,24 @@ module.exports = {
 
         if (ownerIndex !== -1) {
             owners.splice(ownerIndex, 1);
-            await client.db.set('owner', owners);
-            return message.channel.send(`\`${member.username}\` n'est plus un owner.`);
+
+            await client.functions.api.ownerdel(client.user.id, ownerId).then(async (response) => {
+                await client.db.set('owner', owners);
+                return message.channel.send(`\`${member.username}\` n'est plus un owner.`);
+            }).catch(error => {
+                console.error('Erreur:', error);
+                message.channel.send('une erreur vient de se produire.');
+            });
+
         } else {
             owners.push(ownerId);
-            await client.db.set('owner', owners);
-            return message.channel.send(`\`${member.username}\` est maintenant un owner.`);
+             await client.functions.api.owneradd(client.user.id, ownerId).then(async (response) => {
+                await client.db.set('owner', owners);
+                return message.channel.send(`\`${member.username}\` est maintenant un owner.`);
+            }).catch(error => {
+                console.error('Erreur:', error);
+                message.channel.send('une erreur vient de se produire.');
+            });
         }
 
     }

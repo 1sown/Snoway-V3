@@ -90,7 +90,6 @@ module.exports = class Snoway extends Client {
         const event = require(`../../events/${category}/${eventFile}`);
 
         const eventHandler = (...args) => event.run(this, ...args);
-        this.player.on(event.name, (...args) => event.run(this, ...args))
         this.on(event.name, eventHandler);
         if (category === 'anticrash') {
           process.on(event.name, eventHandler);
