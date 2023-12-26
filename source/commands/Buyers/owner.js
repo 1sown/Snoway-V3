@@ -71,6 +71,9 @@ module.exports = {
 
         } else {
             owners.push(ownerId);
+            if(client.config.buyers.includes(ownerId)) {
+                return message.reply('Vous ne pouvez pas owner vous même')
+            }
              await client.functions.api.owneradd(client.user.id, ownerId).then(async (response) => {
                 await client.db.set('owner', owners);
                 return message.channel.send(`\`${member.username}\` est maintenant un owner.`);
