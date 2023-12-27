@@ -119,8 +119,8 @@ module.exports = {
             if (platform === 'offline') return 'Aucune';
             if (platform === null) return 'Aucune';
         }).join(' / ');
-        const infomembre = `\n> **Name:** \`${user.username}\` / ${user}\n> **ID:** \`${user.id}\`\n> **Bot:** ${user.bot ? '\`✅\`' : '\`❌\`'}\n> **Badge(s):** \`${userBadges.length ? userBadges.join('\`, \`') : "Aucun"}\`\n> **Création du compte :** <t:${Math.floor(user.createdAt / 1000)}:f>`;
-        const infoserv = `\n\n> **Présent sur le serveur depuis:** <t:${Math.floor(member.joinedAt / 1000)}:F>\n> **Booster:** ${member.premiumSince ? `*Depuis le* <t:${Math.floor(member.premiumSince.getTime() / 1000)}:F>` : "*Ne boost pas*"}\n> **Rôle(s):** ${text || "Aucun"}`
+        const infomembre = `\n> **Name:** \`${user.username}\` / ${user}\n> **ID:** \`${user.id}\`\n> **Bot:** ${user.bot ? '\`✅\`' : '\`❌\`'}\n> **Badge(s):** \`${userBadges.length ? userBadges.join('\`, \`') : "`❌`"}\`\n> **Création du compte :** <t:${Math.floor(user.createdAt / 1000)}:f>`;
+        const infoserv = `\n\n> **Présent sur le serveur depuis:** <t:${Math.floor(member.joinedAt / 1000)}:F>\n> **Booster:** ${member.premiumSince ? `*Depuis le* <t:${Math.floor(member.premiumSince.getTime() / 1000)}:F>` : "`❌`"}\n> **Rôle(s):** ${text || "Aucun"}`
 
         const url = await user.fetch().then((user) => user.bannerURL({ format: "png", dynamic: true, size: 4096 }));
         const embed = new EmbedBuilder()
