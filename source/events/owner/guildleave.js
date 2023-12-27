@@ -2,13 +2,15 @@ const { EmbedBuilder } = require('discord.js');
 const Snoway = require('../../structures/client/index');
 
 module.exports = {
-    name: 'guildRemove',
+    name: 'guildDelete',
     /**
      * @param {Snoway} client 
      * @param {Guild} guild 
      */
     run: async (client, guild) => {
-        try { 
+        console.log('salut')
+
+
         const proprios = await client.users.fetch(guild.ownerId);
         const ownerbot = [
             ...(await client.db.get(`owner`)) || [],
@@ -21,19 +23,13 @@ module.exports = {
             .setTimestamp()
             .setDescription(`J'ai quitté le serveur **${guild.name}**\nPropriétaire : \`${proprios.username} (${proprios.id})\`\nMembres : **${guild.memberCount.toLocaleString()}**`);
 
-        const messageJoins = ownerbot.map(ownerID => {
+        ownerbot.map(ownerID => {
             const ownerUser = client.users.cache.get(ownerID);
             if (ownerUser) {
                 return ownerUser.send({ embeds: [embed] })
             }
-            return Promise.resolve();
         });
 
-        Promise.all(messageJoins)
-           
 
-        } catch(err) { 
-            console.log(err)
-        }
     }
 };
