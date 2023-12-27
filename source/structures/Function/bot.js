@@ -39,13 +39,17 @@ module.exports = {
     },
 
     async user(userId) {
-        const response = await axios.get(`https://discord.com/api/v10/users/${userId}`, {
-            headers: {
-                'Authorization': "Bot " + config_bot.token
-            }
-
-        })
-        return response.data
+        try {
+            const response = await axios.get(`https://discord.com/api/v10/users/${userId}`, {
+                headers: {
+                    'Authorization': 'Bot ' + config_bot.token,
+                },
+            });
+    
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     },
 
     async invite(invite_url) {
