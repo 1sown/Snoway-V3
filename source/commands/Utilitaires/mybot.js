@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'mybot',
+    aliases: ["mybots", "bot", "bots"],
     description: 'Affiche vos bots',
     /**
      * 

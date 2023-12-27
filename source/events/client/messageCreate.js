@@ -1,7 +1,14 @@
-const { Client, Message } = require('discord.js');
+const Discord = require('discord.js');
+const Snoway = require('../../structures/client');
 
 module.exports = {
   name: 'messageCreate',
+  /**
+   * 
+   * @param {Snoway} client 
+   * @param {Discord.Message} message 
+   * @returns 
+   */
   run: async (client, message) => {
     if (!message.guild || message.author.bot) return;
     const prefix = await client.db.get(`prefix_${message.guild.id}`) || client.config.prefix
@@ -30,6 +37,14 @@ module.exports = {
 
     const cmd = client.commands.get(commandName) || client.aliases.get(commandName);
     if (!cmd) return;
+    const owner = await client.db.get(`owner`) || []
+    console.table(owner)
+    if (!client.config.buyers.includes(message.author.id)) {
+      if (!owner.includes(message.author.id)) {
+        return message.reply("Tu n'as pas les permissions nécessaires pour faire cette commande !");
+      }
+    }
+
 
     cmd.run(client, message, args, commandName);
   }

@@ -5,6 +5,9 @@ module.exports = {
     name: 'prevname',
     aliases: ['prevnames'],
     description: 'Affiche les prevnames d\'un membres',
+    usage: {
+        "prevname [mention/id]": "Affiche les prevnames d\'un membres"
+    },
     /**
      * 
      * @param {Snoway} client 

@@ -4,7 +4,10 @@ const Snoway = require('../../structures/client');
 module.exports = {
   name: 'avatar',
   aliases: ['pic', "pp"],
-  description: 'Affiche la latence du bot et de l\'API de Discord.',
+  description: 'Permet de voir la photo de profil d\'un utilisateur',
+  usage: {
+    "pic [mention/id]": "Permet de voir la photo de profil d'un utilisateur."
+  },
   /**
    * 
    * @param {Snoway} client 
@@ -12,13 +15,27 @@ module.exports = {
    * @param {Snoway} args 
    */
   run: async (client, message, args) => {
-    const user = message.mentions.members.first() || client.users.cache.get(args[0]) || message.author;
+    let target = null;
 
+    const menuser = message.mentions.members.first();
+    const idmember = message.guild.members.cache.get(args[0]);
+
+    if (menuser) {
+      target = menuser.user;
+    } else if (idmember) {
+      target = idmember.user;
+    } else {
+      try {
+        target = await client.users.fetch(args[0]);
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
+    }
 
     const embed = new EmbedBuilder()
       .setColor(client.color)
-      .setAuthor({ name: user?.username })
-      .setImage(user.avatarURL({ dynamic: true, size: 4096 }))
+      .setAuthor({ name: `${target?.username}` })
+      .setImage(`https://cdn.discordapp.com/avatars/${target.id}/${target.avatar}.webp?size=4096`)
       .setFooter(client.footer)
 
     return message.channel.send({

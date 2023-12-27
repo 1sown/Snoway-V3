@@ -30,7 +30,7 @@ module.exports = {
                 activities: [{
                     name: status || "Snoway V" + client.version,
                     type: activityType || 1,
-                    url: "https://twitch.tv/1nsidou"
+                    url: "https://twitch.tv/oni0145"
 
                 }]
             };
