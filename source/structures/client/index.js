@@ -24,7 +24,7 @@ module.exports = class Snoway extends Client {
     this.player = Player.singleton(this);
     this.player.extractors.loadDefault();
 
-    this.functions = require('../Function/index')
+    this.functions = require('../Functions/index')
     this.config = require('../../../config/config');
 
     this.support = 'https://discord.gg/Snoway'
