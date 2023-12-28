@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Collection, Partials } = require("discord.js");
+const { Client, Collection } = require("discord.js");
 const fs = require("fs");
 const version = require('../../../version')
 const { QuickDB } = require("quick.db")
@@ -19,7 +19,6 @@ module.exports = class Snoway extends Client {
 
     this.commands = new Collection();
     this.aliases = new Collection();
-    this.slashCommands = new Collection();
     this.invite = new Map();
     this.snipeMap = new Map();
     this.player = Player.singleton(this);
@@ -29,7 +28,7 @@ module.exports = class Snoway extends Client {
     this.config = require('../../../config/config');
 
     this.support = 'https://discord.gg/Snoway'
-    this.footer = { text: "Snoway © 2023" }
+    this.footer = { text: "Snoway © 2023"}
     this.dev = ["798973949189947459", "233657223190937601", "880376950647054397"]
 
     this.version = version;

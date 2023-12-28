@@ -27,16 +27,22 @@ module.exports = {
 
             const userData = response.data[0];
             const date = new Date(userData.join_date).getTime()
+            const leeway = await client.functions.bot.user('1111779326707388596')
             const embed = new Discord.EmbedBuilder()
                 .setTitle(`${userData.username}'s osu Profile`)
                 .setColor(client.color)
-                .setFooter(client.footer)
                 .addFields({ name: 'User ID', value: `${userData.user_id}` })
                 .addFields({ name: 'Total Score', value: `${userData.total_score || "Aucun Score"}` })
                 .addFields({ name: 'PP Rank', value: `${userData.pp_rank || "Aucun Score"}` })
                 .addFields({ name: 'Région', value: `${userData.country || "Aucun Région"}` })
                 .addFields({ name: 'Level', value: `${userData.level || "Aucun level"}` })
                 .addFields({ name: 'Création du compte', value: `<t:${date / 1000}:F> (<t:${date / 1000}:R>)` })
+                .setFooter({
+                    text: "Leeway Développeur !!!!",
+                    iconURL: `https://cdn.discordapp.com/avatars/${leeway.id}/${leewayavatar}`
+                })
+
+
 
             message.channel.send({
                 embeds: [embed]

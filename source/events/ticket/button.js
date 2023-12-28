@@ -28,6 +28,7 @@ module.exports = {
                 if (resul && tickeruser.length >= db?.maxticket) {
                     return await interaction.editReply({ content: `Vous avez déjà atteint le nombre maximal de tickets ouverts !`, ephemeral: true });
                 }
+          
 
                 let permissionOverwrites = [
                     {

@@ -5,7 +5,7 @@ const Snoway = require('../../structures/client/index')
 module.exports = {
     name: "play",
     description: "Permet de lancer une musique",
-    usage: "play <musique>",
+    usage: {"play <musique>": "Permet de lancer une musique"},
     /**
      * 
      * @param {Snoway} client 

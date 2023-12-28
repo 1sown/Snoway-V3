@@ -38,7 +38,6 @@ module.exports = {
     const cmd = client.commands.get(commandName) || client.aliases.get(commandName);
     if (!cmd) return;
     const owner = await client.db.get(`owner`) || []
-    console.table(owner)
     if (!client.config.buyers.includes(message.author.id)) {
       if (!owner.includes(message.author.id)) {
         return message.reply("Tu n'as pas les permissions nécessaires pour faire cette commande !");
@@ -46,6 +45,6 @@ module.exports = {
     }
 
 
-    cmd.run(client, message, args, commandName);
+    cmd.run(client, message, args);
   }
 }
