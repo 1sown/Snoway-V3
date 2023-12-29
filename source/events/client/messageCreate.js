@@ -45,6 +45,6 @@ module.exports = {
     }
 
 
-    cmd.run(client, message, args);
+    cmd.run(client, message, args, commandName);
   }
 }

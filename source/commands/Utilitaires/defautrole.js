@@ -15,6 +15,7 @@ module.exports = {
      * @param {Snoway} args 
      */
     run: async (client, message, args) => {
+
         const roleName = args[0];
         const db = await client.db.get(`defautrole_${message.guild.id}`) || {
             roles: []

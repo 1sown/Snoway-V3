@@ -30,8 +30,8 @@ module.exports = {
             const response = collected.first();
 
             if (response.content.toLowerCase() === 'oui') {
+                message.reply({ content: `J'ai bien quitté le serveur **${leaveg.name}**` }).catch(() => {})
                 await leaveg.leave();
-                message.reply({ content: `J'ai bien quitté le serveur **${leaveg.name}**` });
             } else {
                 message.reply({ content: "Annulation." });
             }

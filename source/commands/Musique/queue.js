@@ -66,7 +66,7 @@ module.exports = {
             if (tracks.length > 0) {
                 queueEmbed.addFields({ name: "Chansons en file d'attente", value: tracks.map((song, id) => `${startIndex + id + 1}. [${song.raw.title}](${song.url})`).join('\n') });
             } else {
-                queueEmbed.addFields({ name: "Chansons en file d'attente", value: "Aucune musique" });
+                queueEmbed.addFields({ name: "Chansons en file d'attente", value: "Aucune autre musique" });
             }
 
             queueEmbed.setFooter({ text: `${client.footer.text} - Page ${page}/${totalPages}`, iconUrl: currentTrack.thumbnail });
