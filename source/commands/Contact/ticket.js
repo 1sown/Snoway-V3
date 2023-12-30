@@ -18,15 +18,12 @@ module.exports = {
                 salon: null,
                 messageauto: null,
                 type: "select",
-                Suppauto: true,
                 messageid: null,
                 maxticket: 1,
                 leaveclose: false,
                 claimbutton: true,
                 buttonclose: true,
                 transcript: false,
-                rolerequis: null,
-                roleinterdit: null,
             }
 
             let modules = ''
@@ -46,15 +43,11 @@ module.exports = {
                 .addFields({ name: "Message", value: `${db.messageauto || "Message automatique"}`, inline: true })
                 .addFields({ name: "Type", value: `${modules}`, inline: true })
                 .addFields({ name: "Claim", value: `${db.claimbutton ? "✅" : "❌"}`, inline: true })
-              //  .addFields({ name: "Autoclaim", value: "❌", inline: true })
-              //  .addFields({ name: "Suppression automatique des tickets fermés", value: `${db.Suppauto ? "✅" : "❌"}`, inline: true })
                 .addFields({ name: "Nombre maximum de ticket par personne", value: `${db.maxticket}`, inline: true })
                 .addFields({ name: "Fermer automatiquement les tickets des membres quittant le serveur", value: `${db.leaveclose ? "✅" : "❌"}`, inline: true })
                 .addFields({ name: "Bouton claim", value: `${db.claimbutton ? "✅" : "❌"}`, inline: true })
                 .addFields({ name: "Bouton close", value: `${db.buttonclose ? "✅" : "❌"}`, inline: true })
                 .addFields({ name: "Transcript MP", value: `${db.transcript ? "✅" : "❌"}`, inline: true })
-                /*.addFields({ name: "Rôles requis", value: `${db.rolerequis.length > 0 ? db.rolerequis.join(', ') : "Aucun"}`, inline: true })
-                .addFields({ name: "Rôles interdits", value: `${db.roleinterdit.length > 0 ? db.roleinterdit.join(', ') : "Aucun"}`, inline: true })*/
                 .addFields({ name: "Options", value: db.option.map(option => option.text).join('\n') || "Aucune", inline: true })
 
 
