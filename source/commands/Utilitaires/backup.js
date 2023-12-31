@@ -9,11 +9,13 @@ module.exports = {
   aliases: ["bk", "bakp"],
   description: 'Affiche la latence du bot et de l\'API de Discord.',
   usage: {
+     fr: {
     "backup create <nom>": "Crée une backup pour le serveur",
     "backup delete <nom>": "Permet de supprimer une backup",
     "backup load <nom>": "Permet de charger une backup",
     "backup list": "Affiche toutes les backups",
     "backup clear": "Supprime toute les backups",
+    }
   },
   /**
    * 
