@@ -9,12 +9,21 @@ module.exports = {
   aliases: ["bk", "bakp"],
   description: 'Affiche la latence du bot et de l\'API de Discord.',
   usage: {
-    "backup create <nom>": "Crée une backup pour le serveur",
-    "backup delete <nom>": "Permet de supprimer une backup",
-    "backup load <nom>": "Permet de charger une backup",
-    "backup list": "Affiche toutes les backups",
-    "backup clear": "Supprime toute les backups",
-  },
+    fr: {
+        "backup create <nom>": "Crée une backup pour le serveur",
+        "backup delete <nom>": "Permet de supprimer une backup",
+        "backup load <nom>": "Permet de charger une backup",
+        "backup list": "Affiche toutes les backups",
+        "backup clear": "Supprime toute les backups",
+    },
+    en: {
+        "backup create <name>": "Creates a backup for the server",
+        "backup delete <name>": "Allows you to delete a backup",
+        "backup load <name>": "Allows you to load a backup",
+        "backup list": "Displays all backups",
+        "backup clear": "Deletes all backups",
+    },
+},
   /**
    * 
    * @param {Snoway} client 

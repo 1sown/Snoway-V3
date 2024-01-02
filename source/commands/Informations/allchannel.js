@@ -3,7 +3,10 @@ const Snoway = require('../../structures/client/index');
 
 module.exports = {
     name: 'allchannel',
-    description: 'Affiche tous les salons & catégories du serveur.',
+    description: {
+        fr: "Affiche tous les salons & catégories du serveur.",
+        en: "Displays all lounges & categories on the server."
+    },
     /**
      * @param {Snoway} client 
      * @param {Discord.Message} message 

@@ -38,6 +38,37 @@ module.exports = class Snoway extends Client {
     this.CommandLoad();
     this.EventLoad();
     this.connect()
+
+    this.lang = async function (key, guildId) {
+      return new Promise(async (resolve, reject) => {
+        const guildConfig = await this.db.get(`langue`);
+        const langCode = guildConfig || "fr";
+        const langFilePath = `../../../langue/${langCode}.json`;
+        const keys = key.split(".");
+        let text;
+
+        try {
+          text = require(langFilePath);
+        } catch (error) {
+          console.error(
+            `Impossible de charger le fichier de langue pour la langue "${langCode}" : ${error.message}`
+          );
+          return resolve("");
+        }
+
+        for (const key of keys) {
+          text = text[key];
+          if (!text) {
+            console.error(
+              `Impossible de trouver une traduction pour "${key}", langue : ${langCode}`
+            );
+            return resolve("");
+          }
+        }
+
+        return resolve(text);
+      });
+    }
   }
   connect() {
     return super.login(this.config.token).catch(async (err) => {

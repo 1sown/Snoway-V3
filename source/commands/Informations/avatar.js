@@ -4,9 +4,16 @@ const Snoway = require('../../structures/client');
 module.exports = {
   name: 'avatar',
   aliases: ['pic', "pp"],
-  description: 'Permet de voir la photo de profil d\'un utilisateur',
+  description: {
+    fr: "Permet de voir la photo de profil d\'un utilisateur.",
+    en: "View a user's profile picture"
+  },
   usage: {
-    "pic [mention/id]": "Permet de voir la photo de profil d'un utilisateur."
+    fr: {
+      "pic [mention/id]": "Permet de voir la photo de profil d'un utilisateur."
+    }, en: {
+      "pic [mention/id]": "View a user's profile photo"
+    }
   },
   /**
    * 

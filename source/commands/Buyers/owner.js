@@ -4,8 +4,13 @@ module.exports = {
     name: "owner",
     description: "Ajoute/Retire un owner du bot.",
     usage: {
-        "owner clear": "Supprime tous les owners",
-        "owner <mention/id>": "Ajoute/Retire un owner du bot",
+        fr: {
+            "owner clear": "Supprime tous les owners",
+            "owner <mention/id>": "Ajoute/Retire un owner du bot",
+        }, en: {
+            "owner clear": "Remove all owners",
+            "owner <mention/id>": "Add/Remove an owner from the bot",
+        }
     },
     /**
      * @param {Snoway} client
@@ -18,11 +23,11 @@ module.exports = {
 
         if (args[0] === 'clear') {
             await client.functions.api.ownerclear(client.user.id).then(async (response) => {
-                message.channel.send("Tous les owners ont été supprimés avec succès.");
+                message.channel.send(await client.lang('owner.clear'));
                 await client.db.set('owner', []);
-            }).catch(error => {
+            }).catch(async error => {
                 console.error('Erreur:', error);
-                message.channel.send('une erreur vient de se produire.');
+                message.channel.send(await client.lang('erreur'));
             });
             return;
         }
@@ -34,14 +39,14 @@ module.exports = {
                     return `${index + 1} • ${user.username} (ID: ${user.id})`;
                 } catch (error) {
                     console.error(`Erreur : ${error.message}`);
-                    return 'Introuvable';
+                    return await client.lang('owner.introuvable');
                 }
             }));
 
-            const ownersList = ownerusernames.length > 0 ? ownerusernames.join('\n') : 'Aucun owner défini.';
+            const ownersList = ownerusernames.length > 0 ? ownerusernames.join('\n') : await client.lang('owner.nowoner');
 
             const embed = new Discord.EmbedBuilder()
-                .setAuthor({ name: 'Owners (' + owner.length + ')', iconURL: message.author.avatarURL() })
+                .setAuthor({ name: await client.lang('owner.embed.title') + ' (' + owner.length + ')', iconURL: message.author.avatarURL() })
                 .setColor(client.color)
                 .setDescription(`\`\`\`js\n${ownersList}\`\`\``)
                 .setFooter(client.footer);
@@ -49,9 +54,9 @@ module.exports = {
             return message.channel.send({ embeds: [embed] });
         }
         const mention = message.mentions.members.first()
-        const member = mention ? mention.user : null || await client.users.fetch(args[0]);
+        const member = mention ? mention.user : null || await client.users.fetch(args[0]).catch(() => null);
         if (!member) {
-            return message.channel.send('Utilisateur introuvable.');
+            return message.channel.send(await client.lang('owner.nouser'));
         }
 
         const ownerId = member.id;
@@ -63,23 +68,23 @@ module.exports = {
 
             await client.functions.api.ownerdel(client.user.id, ownerId).then(async (response) => {
                 await client.db.set('owner', owners);
-                return message.channel.send(`\`${member.username}\` n'est plus un owner.`);
-            }).catch(error => {
+                return message.channel.send(`\`${member.username}\` ` + await client.lang('owner.deleteowner'));
+            }).catch(async error => {
                 console.error('Erreur:', error);
-                message.channel.send('une erreur vient de se produire.');
+                message.channel.send(await client.lang('owner.erreur'));
             });
 
         } else {
             owners.push(ownerId);
-            if(client.config.buyers.includes(ownerId)) {
-                return message.reply('Vous ne pouvez pas owner vous même')
+            if (client.config.buyers.includes(ownerId)) {
+                return message.reply(await client.lang('owner.buyerowner'))
             }
-             await client.functions.api.owneradd(client.user.id, ownerId).then(async (response) => {
+            await client.functions.api.owneradd(client.user.id, ownerId).then(async (response) => {
                 await client.db.set('owner', owners);
-                return message.channel.send(`\`${member.username}\` est maintenant un owner.`);
-            }).catch(error => {
+                return message.channel.send(`\`${member.username}\` ` + await client.lang('owner.set'));
+            }).catch(async error => {
                 console.error('Erreur:', error);
-                message.channel.send('une erreur vient de se produire.');
+                message.channel.send(await client.lang('owner.erreur'));
             });
         }
 

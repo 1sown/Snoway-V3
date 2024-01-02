@@ -2,7 +2,10 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilde
 
 module.exports = {
   name: 'allbots',
-  description: 'Liste tous les bots sur le serveur.',
+  description: {
+    fr: "Liste tous les bots sur le serveur.",
+    en: "Lists all bots on the server."
+},
   run: async (client, message, args, commandName) => {
 
 const botMembers = message.guild.members.cache.filter((member) => member.user.bot);

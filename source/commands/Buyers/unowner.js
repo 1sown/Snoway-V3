@@ -9,6 +9,13 @@ module.exports = {
      * @param {Discord.Message} message 
      * @param {Array} args 
      */
+    usage: {
+        fr: {
+            "unowner <mention/id>": "Retire un owner du bot",
+        }, en: {
+            "unowner <mention/id>": "Remove an owner from the bot",
+        }
+    },
     run: async (client, message, args) => {
         if (!client.config.buyers.includes(message.author.id)) return;
         const mention = message.mentions.members.first();

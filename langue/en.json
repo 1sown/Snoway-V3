@@ -1,0 +1,37 @@
+{
+    "erreur": "An error has just occurred.",
+    "ping": {
+        "ping": "My ping is:"
+    },
+    "owner": {
+        "clear": "All owners have been successfully deleted.",
+        "set": "is now an owner.",
+        "buyerowner": "You cannot own it yourself",
+        "deleteowner": "is no longer an owner.",
+        "nouser": "User not found.",
+        "introuvable": "Not found",
+        "nowoner": "No owner defined.",
+        "embed": {
+            "title": "Owners"
+        }
+    },
+    "langue": {
+        "deja": "The language is already set to: {langCode}",
+        "erreur": "An error occurred.",
+        "invalide": "Invalid language.",
+        "nolang": "Please provide a language...",
+        "set": "The language is now set to: {langCode}"
+    },
+    "help": {
+        "description": "",
+        "aide": "*Variables between `<...>` are mandatory, while `[...]` are optional. Use the command `{prefix}help <command>` for more information.*",
+        "help": "`{prefix}help <commande>` for more information",
+        "cmd": "Number of commands: ",
+        "prefix": "My prefix on this server is:",
+        "nocmd": "No commands",
+        "inconnue": "This command does not exist. Use `{prefix}help` to see the list of commands.",
+        "command": "Command:",
+        "button": "Support Server"
+    }
+    
+}

@@ -4,9 +4,16 @@ const Snoway = require('../../structures/client');
 module.exports = {
     name: 'banner',
     usage: {
+        fr: { 
         "banner [@user/ID]": "Obtenir la bannière d'un utilisateur."
+        }, en: {
+         "banner [@user/ID]": "Retrieve the banner of a user."
+        }
     },
-    description: 'Obtenir la bannière d\'un utilisateur.',
+    description: {
+        fr: 'Obtenir la bannière d\'un utilisateur.',
+        en: "Get a user's banner."
+    },
     /**
      * 
      * @param {Snoway} client 

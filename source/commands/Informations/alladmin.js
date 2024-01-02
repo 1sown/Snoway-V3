@@ -2,7 +2,10 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilde
 
 module.exports = {
     name: 'alladmin',
-    description: 'Liste tous les membres avec la permission d\'administrateur.',
+    description: {
+        fr: "Liste tous les membres avec la permission d\'administrateur.",
+        en: "Lists all members with administrator permission."
+    },
     run: async (client, message, args, commandName) => {
 
         const adminMembers = message.guild.members.cache.filter((member) => member.permissions.has(PermissionFlagsBits.Administrator));

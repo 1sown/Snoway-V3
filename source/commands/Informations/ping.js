@@ -13,6 +13,6 @@ module.exports = {
    */
       run: async(client, message, args) => {
  
-    message.channel.send({content: `Mon ping est de: **${client.ws.ping}ms**` });
+    message.channel.send({content: await client.lang('ping.ping') +` **${client.ws.ping}ms**` });
   }
 }

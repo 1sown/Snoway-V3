@@ -4,6 +4,13 @@ const Snoway = require('../../structures/client');
 module.exports = {
     name: "help",
     description: "Affiche les commandes du bot",
+    usage: {
+        fr: {
+            "help [commande]": "Affiche les commandes ou une commande du bot."
+        }, en: {
+            "help [command]": "Displays commands or a bot command."
+        }
+    },
     /**
      * 
      * @param {Snoway} client 
@@ -12,6 +19,9 @@ module.exports = {
      * @returns 
      */
     run: async (client, message, args) => {
+        const lang = await client.db.get(`langue`)
+        const aidetext = await client.lang('help.aide')
+        const aide = aidetext.replace("{prefix}", `${client.prefix}`)
         if (args.length === 0) {
             const cmddanslefichier = fs.readdirSync('./source/commands').filter(folder => folder !== 'DEV');
             const module = await client.db.get(`module-help`) || 'normal'
@@ -63,12 +73,28 @@ module.exports = {
                 };
 
                 cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
+
                 const generetapage = (pageactuellement) => {
                     const fichiertasoeur = cmddanslefichier[pageactuellement];
                     const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
                     const categoryCommands = cmdFiles.map(file => {
                         const command = require(`../${fichiertasoeur}/${file}`);
-                        const usage = command.usage || {
+                        let usages = null;
+
+                        if (command.usage) {
+                            switch (lang) {
+                                case "fr":
+                                    usages = command.usage.fr;
+                                    break;
+                                case "en":
+                                    usages = command.usage.en;
+                                    break;
+                                default:
+                                    usages = command.usage.fr;
+                            }
+                        }
+
+                        const usage = usages || {
                             [command.name]: command.description || "Aucune description disponible"
                         };
 
@@ -76,13 +102,15 @@ module.exports = {
                         for (const [key, value] of Object.entries(usage)) {
                             description += `\n\`${client.prefix}${key}\`\n${value}`;
                         }
+
                         return description;
                     });
+
                     const embed = new Discord.EmbedBuilder()
                         .setColor(client.color)
                         .setTitle((fileEmojis[fichiertasoeur] || '❌') + " " + fichiertasoeur)
                         .setFooter(client.footer)
-                        .setDescription(`*Les variables entre les \`<...>\` sont obligatoires , alors que les \`[...]\` sont facultatives. Utilisez la commande \`${client.prefix}help <commande>\` pour obtenir plus d'informations.*\n` + categoryCommands.join(''));
+                        .setDescription(`${aide}\n` + categoryCommands.join(''));
                     const row = new Discord.ActionRowBuilder()
                         .addComponents(
                             new Discord.StringSelectMenuBuilder()
@@ -118,7 +146,7 @@ module.exports = {
                 collector.on('collect', async i => {
                     if (i.user.id !== message.author.id) {
                         return i.reply({
-                            content: "Vous n'êtes pas autorisé à utiliser cette interaction.",
+                            content: await client.lang('interaction'),
                             flags: 64
                         })
                     }
@@ -143,13 +171,15 @@ module.exports = {
                         catecmd.push(`${command.name}`);
                     }
 
-                    formattedCategories.push(`**${fileEmojis[folder]}・${folder}**\n\`${catecmd.join('\`, \`') || "Aucune commande"}\``);
+                    formattedCategories.push(`**${fileEmojis[folder]}・${folder}**\n\`${catecmd.join('\`, \`') || await client.lang('help.nocmd')}\``);
                 }
 
+                const helptext = await client.lang('help.help')
+                const text = helptext.replace("{prefix}", `${client.prefix}`)
                 const embed = new Discord.EmbedBuilder()
                     .setColor(client.color)
                     .setAuthor({ name: "Snoway V3", url: client.user.avatarURL(), iconURL: client.user.avatarURL() })
-                    .setDescription(`Mon préfixe sur ce serveur est : \`${client.prefix}\`\nNombre de commandes : \`${client.commands.size}\`\n\`${client.prefix}help <commande>\` pour obtenir plus d'informations\n\n` + formattedCategories.join('\n\n'))
+                    .setDescription(`${await client.lang("help.prefix")} \`${client.prefix}\`\n${await client.lang("help.cmd")} \`${client.commands.size}\`\n${text}\n\n` + formattedCategories.join('\n\n'))
                     .setFooter(client.footer);
 
                 message.channel.send({ embeds: [embed] });
@@ -159,10 +189,38 @@ module.exports = {
             const cmdname = args[0]
             const command = client.commands.get(cmdname) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(cmdname));
             if (!command) {
-                return message.reply(`Cette commande n'existe pas. Utilisez \`${client.prefix}help\` pour voir la liste des commandes.`);
+                const noexiste = await client.lang('help.inconnue')
+                const replay = noexiste.replace("{prefix}", `${client.prefix}`)
+                return message.reply(replay);
             }
-            const usage = command.usage || {
-                [command.name]: command.description || "Aucune description disponible"
+            let usages = null
+            let description = null
+            if (command.usage) {
+                switch (lang) {
+                    case "fr":
+                        usages = command.usage.fr;
+                        break;
+                    case "en":
+                        usages = command.usage.en;
+                        break;
+                    default:
+                        usages = command.usage.fr;
+                }
+            }
+
+                switch (lang) {
+                    case "fr":
+                        description = command.description.fr;
+                        break;
+                    case "en":
+                        description = command.description.en;
+                        break;
+                    default:
+                        description = command.description.fr;
+                }
+
+            const usage = usages || {
+                [command.name]: description || "Aucune description disponible"
             };
             const fields = [];
 
@@ -170,7 +228,7 @@ module.exports = {
                 fields.push({ name: "`" + client.prefix + key + "`", value: value, inline: false });
             }
             const embed = new Discord.EmbedBuilder()
-                .setTitle(`Commande : ${client.functions.bot.maj(command.name)}`)
+                .setTitle(`${await client.lang('help.command')} ${client.functions.bot.maj(command.name)}`)
                 .setColor(client.color)
                 .setFooter(client.footer)
                 .addFields(fields);
@@ -179,9 +237,8 @@ module.exports = {
                     new Discord.ButtonBuilder()
                         .setStyle(5)
                         .setURL(client.support)
-                        .setLabel('Serveur support')
+                        .setLabel(await client.lang('help.button'))
                 )
-
             message.channel.send({ embeds: [embed], components: [row] });
         }
     }

@@ -3,8 +3,10 @@ const Snoway = require('../../structures/client/index')
 module.exports = {
     name: "boosters",
     aliases: ["booster"],
-    description: "Permet de voir tout les boosters présents sur le serveur",
-
+    description: {
+        fr: "Permet de voir tout les boosters présents sur le serveur",
+        en: "View all boosters on the server"
+    },
     /**
      * 
      * @param {Snoway} client 
