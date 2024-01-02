@@ -15,6 +15,6 @@ module.exports = {
         if (name.length < 2) return message.channel.send("Le nom est trop court.");
 
         client.user.setUsername(name);
-        message.channel.send("J'ai bien changé mon nom en : " + `${name}`);
+        await message.channel.send("J'ai bien changé mon nom en : " + `${name}`);
     }
 };

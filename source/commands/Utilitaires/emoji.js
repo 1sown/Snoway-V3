@@ -35,6 +35,7 @@ module.exports = {
                         }
                     })
                     .catch((error) => {
+                        console.error(error)
                         message.channel.send({ content: "Une erreur s'est produite" });
                     });
             }
