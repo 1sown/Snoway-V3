@@ -3,14 +3,26 @@ const Snoway = require('../../structures/client/index');
 
 module.exports = {
     name: 'activity',
-    description: 'Affiche la liste des serveurs sur lesquels le bot est présent',
+    description: {
+        fr: "Change le status du bot !",
+        en: "Change bot status!"
+    },
     usage: {
-        "activity playing <message>": "Affiche le statut de bot comme si il jouait à un jeu",
-        "activity streaming <message>": "Affiche le statut du bot comme si il était en live",
-        "activity listening <message>": "Affiche le statut du bot comme si il écouté de la musique",
-        "activity watching <message>": "Affiche le statut du bot comme si il regardait un partage d'écran",
-        "activity competing <message>": "Affiche la statut du bot comme si il était en pleine compétition",
-        "activity clear": "Supprime le message d'activité du bot",
+        fr: {
+            "activity playing <message>": "Affiche le statut de bot comme si il jouait à un jeu",
+            "activity streaming <message>": "Affiche le statut du bot comme si il était en live",
+            "activity listening <message>": "Affiche le statut du bot comme si il écouté de la musique",
+            "activity watching <message>": "Affiche le statut du bot comme si il regardait un partage d'écran",
+            "activity competing <message>": "Affiche la statut du bot comme si il était en pleine compétition",
+            "activity clear": "Supprime le message d'activité du bot",
+        }, en: {
+            "activity playing <message>": "Displays bot status as if it were playing a game",
+            "activity streaming <message>": "Displays bot status as if it were live",
+            "activity listening <message>": "Displays bot status as if listening to music",
+            "activity watching <message>": "Displays the bot's status as if it were watching a screen share",
+            "activity competing <message>": "Displays the bot's status as if it were competing",
+            "activity clear": "Deletes the bot's activity message",
+        }
     },
     /**
      * 

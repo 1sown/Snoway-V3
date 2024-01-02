@@ -2,7 +2,10 @@ const Discord = require('discord.js');
 const Snoway = require('../../structures/client');
 module.exports = {
     name: "owner",
-    description: "Ajoute/Retire un owner du bot.",
+    description: {
+        fr: "Ajoute/Retire un owner du bot",
+        en: "Add/Remove an owner from the bot"
+    },
     usage: {
         fr: {
             "owner clear": "Supprime tous les owners",

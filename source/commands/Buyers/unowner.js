@@ -3,7 +3,10 @@ const Snoway = require('../../structures/client');
 
 module.exports = {
     name: "unowner",
-    description: "Retire un owner",
+    description: {
+        fr: "Retire un owner",
+        en: "Remove an owner from the bot"
+    },
     /**
      * @param {Snoway} client 
      * @param {Discord.Message} message 

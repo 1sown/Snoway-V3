@@ -2,7 +2,10 @@ const Discord = require('discord.js');
 const Snoway = require("../../structures/client/index")
 module.exports = {
     name: 'stats',
-    description: 'Affiche les statistiques du serveur.',
+    description: {
+        fr: "Affiche les statistiques du serveur",
+        en: "Displays server statistics"
+    },
     /**
      * 
      * @param {Snoway} client 

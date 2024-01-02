@@ -3,9 +3,13 @@ const Snoway = require('../../structures/client/index')
 
 module.exports = {
     name: 'inviteinfo',
-    description: 'Return les infos d\'une vanity !',
+    description: {
+        fr: 'Affiche les informations d\'une invitation personnalisée !',
+        en: "Display personalized invitation information!"
+    },
     usage: {
-        'inviteinfo <url>': 'Return les infos d\'une vanity !',
+        fr: {'inviteinfo <url>': "Affiche les informations d\'une invitation personnalisée !"},
+        en: {'inviteinfo <url>': "Display personalized invitation information!"}
     },
     /**
 * 

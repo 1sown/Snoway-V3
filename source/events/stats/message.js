@@ -1,9 +1,9 @@
-const Valory = require("../../structures/client/index");
+const Snoway = require("../../structures/client/index");
 
 module.exports = {
     name: "messageCreate",
     /**
-     * @param {Valory} client
+     * @param {Snoway} client
      * @param {Message} message
      */
     run: async (client, message) => {

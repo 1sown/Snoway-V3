@@ -2,10 +2,18 @@ const Snoway = require("../../structures/client");
 
 module.exports = {
     name: "clear",
-    description: "Clear le nombre de messages dans le salon ou d'un utilisateur entre 1 et 100",
+    description: {
+        fr: "Clear le nombre de messages dans le salon ou d'un utilisateur entre 1 et 100",
+        en: "Clear the number of messages in the lounge or from a user between 1 and 100"
+    },
     usage: {
-        "clear <nombre>": "Permet de supprimer d'un coup plusieurs messages dans un salon",
-        "clear <@/ID> <nombre>": "Permet de supprimer un nombre de message en ciblant un membre"
+        fr: {
+            "clear <nombre>": "Permet de supprimer d'un coup plusieurs messages dans un salon",
+            "clear <@/ID> <nombre>": "Permet de supprimer un nombre de message en ciblant un membre"
+        }, en: {
+            "clear <number>": "Allows you to delete several messages in a room at once",
+            "clear <@/ID> <number>": "Allows you to clear a number of messages by targeting a member"
+        }
     },
     /**
      * 

@@ -3,9 +3,13 @@ const Snoway = require('../../structures/client');
 
 module.exports = {
     name: "ban",
-    description: "Permet de bannir l'utilisateur mentionné",
-    usages: {
-        "ban <@user/ID> [raison]": "Permet de bannir un utilisateur du serveur, une raison peut être précisé"
+    description: {
+        fr: "Permet de bannir l'utilisateur mentionné",
+        en: "Allows you to ban the specified user"
+    },
+    usage: {
+        fr: {"ban <@user/ID> [raison]": "Permet de bannir un utilisateur du serveur, une raison peut être précisé"},
+        en: {"ban <@user/ID> [reason]": "Allows you to ban a user from the server, a reason can be specified"}
     },
     /**
      * 

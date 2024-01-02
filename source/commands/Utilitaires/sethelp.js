@@ -2,7 +2,10 @@ const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('dis
 
 module.exports = {
     name: 'sethelp',
-    description: 'Configurer le type de help affiché.',
+    description: {
+        fr: 'Configurer le type de help affiché',
+        en: "Configure the type of help displayed"
+    },
     run: async (client, message, args) => {
         const options = [
             { label: 'Onepage', value: 'onepage' },

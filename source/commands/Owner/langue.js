@@ -1,13 +1,16 @@
 const Discord = require('discord.js');
-const Valory = require('../../structures/client/index');
+const Snoway = require('../../structures/client/index');
 
 module.exports = {
     name: 'langue',
     description: 'Change la langue du bot',
-    usages: "langue <fr/en>",
+    usage: {
+        fr: {"langue <fr/en>": "Change la langue du bot"},
+        en: {"langue <fr/en>": "Change bot language"}
+    },
     /**
      * 
-     * @param {Valory} client 
+     * @param {Snoway} client 
      * @param {import('discord.js').Message} message 
      * @param {string[]} args 
      */

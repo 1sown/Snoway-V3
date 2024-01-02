@@ -3,8 +3,8 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilde
 module.exports = {
     name: 'alladmin',
     description: {
-        fr: "Liste tous les membres avec la permission d\'administrateur.",
-        en: "Lists all members with administrator permission."
+        fr: "Liste tous les membres avec la permission d\'administrateur",
+        en: "Lists all members with administrator permission"
     },
     run: async (client, message, args, commandName) => {
 

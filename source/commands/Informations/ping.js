@@ -4,7 +4,10 @@ const Snoway = require('../../structures/client');
 module.exports = {
   name: 'ping',
   aliases: ['latency', "latence"],
-  description: 'Affiche la latence du bot et de l\'API de Discord.',
+  description: {
+    fr: "Affiche la latence du bot",
+    en: "Displays bot latency"
+  },
   /**
    * 
    * @param {Snoway} client 

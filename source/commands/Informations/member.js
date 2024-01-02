@@ -2,9 +2,13 @@ const Discord = require('discord.js');
 const Snoway = require('../../structures/client');
 module.exports = {
     name: 'member',
-    description: "Affiche les statistiques des channels vocaux et des messages d'un membre mentionné ou de vous-même.",
+    description: {
+        fr: "Affiche les statistiques des channels vocal et des messages d'un membre mentionné ou de vous-même",
+        en: "Displays statistics on voice channels and messages from a named member or yourself"
+    },
     usage: {
-        "member [mention/id]": "Permet d'afficher les statistiques d'un membre"
+        fr: { "member [mention/id]": "Permet d'afficher les statistiques d'un membre" },
+        en: { "member [mention/id]": "Display member statistics" }
     },
     /**
      * 

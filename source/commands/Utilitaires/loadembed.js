@@ -4,9 +4,13 @@ const Snoway = require('../../structures/client');
 
 module.exports = {
     name: 'loadembed',
-    description: 'Charge et affiche un embed sauvegardé par son nom',
+    description: {
+        fr: 'Charge et affiche un embed sauvegardé par son nom',
+        en: "Loads and displays an embed saved by name"
+    },
     usage: {
-        "loadembed <nom>": "Charge et affiche un embed sauvegardé par son nom"
+       fr: {"loadembed <nom>": "Charge et affiche un embed sauvegardé par son nom"},
+       en: {"loadembed <name>": "Loads and displays an embed saved by name"}
     },
     /**
      * 

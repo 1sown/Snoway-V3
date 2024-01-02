@@ -4,9 +4,13 @@ const Snoway = require('../../structures/client');
 module.exports = {
     name: 'prevname',
     aliases: ['prevnames'],
-    description: 'Affiche les prevnames d\'un membres',
+    description: {
+        fr: "Affiche les prevnames d\'un membres",
+        en: "Display member's prevnames"
+    },
     usage: {
-        "prevname [mention/id]": "Affiche les prevnames d\'un membres"
+        fr: {"prevname [mention/id]": "Affiche les prevnames d\'un membres"},
+        en: {"prevname [mention/id]": "Display member's prevnames"}
     },
     /**
      * 

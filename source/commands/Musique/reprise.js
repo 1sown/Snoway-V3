@@ -5,7 +5,10 @@ const Snoway = require('../../structures/client/index');
 module.exports = {
     name: "reprise",
     aliases: ['resume', "reprendre"],
-    description: "Relance la musique.",
+    description: {
+        fr: "Relance la musique.",
+        en: "Play the music again."
+    },
     /**
      *
      * @param {Snoway} client

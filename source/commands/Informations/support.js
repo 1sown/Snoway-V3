@@ -4,7 +4,10 @@ const Snoway = require('../../structures/client/index')
 module.exports = {
     name: "support",
     aliases: ["snoway"],
-    description: "Invite sur le support du bot !",
+    description: {
+        fr: "Invite sur le support du bot !",
+        en: "Invite to the bot support!"
+    },
     /**
      * 
      * @param {Snoway} client 

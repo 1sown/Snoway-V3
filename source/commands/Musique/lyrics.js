@@ -1,13 +1,15 @@
 const Genius = require('genius-lyrics');
 const { ActionRowBuilder, ButtonBuilder} = require('discord.js');
 const Discord = require('discord.js')
-const Snoway = require('../../structures/Client/index');
-
+const Snoway = require('../../structures/client/index')
 const geniusClient = new Genius.Client("XD8nZ8yc-r4uP9mFskLRWx8cV0SP-Nlau9nx0R8i-LJdmEYjx9a-PSoTWJthDLpe");
 
 module.exports = {
     name: "lyrics",
-    description: "Rechercher les paroles d'un titre !",
+    description: {
+        fr: "Rechercher les paroles d'un titre !",
+        en: "Search for lyrics!"
+    },
     /**
      * @param {Snoway} client
      * @param {Discord.Message} message

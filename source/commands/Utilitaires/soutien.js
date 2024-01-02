@@ -3,7 +3,10 @@ const Discord = require('discord.js');
 const ms = require('ms')
 module.exports = {
     name: 'soutien',
-    description: 'Permet de donner automatiquement un rôle aux membres ayant un message dans leurs statuts',
+    description: {
+        fr: 'Permet de donner automatiquement un rôle aux membres ayant un message dans leurs statuts',
+        en: 'Automatically assigns a role to members with a message in their status'
+    },
     /**
      * 
      * @param {Snoway} client 
@@ -21,33 +24,33 @@ module.exports = {
         const { embed, row } = await update();
         const reply = await message.channel.send({ embeds: [embed], components: [row] });
 
-      
+
         const collector = reply.createMessageComponentCollector()
-      
+
         collector.on('collect', async (i) => {
             try {
                 const interactionValue = i.values[0];
-        
+
                 if (interactionValue === 'state') {
-                    
+
                     await client.db.delete(`soutien_${message.guild.id}`);
                     const { embed: updatedEmbed, row: updatedRow } = await update();
                     await i.update({ embeds: [updatedEmbed], components: [updatedRow] });
-                }else if (interactionValue === 'state') {
+                } else if (interactionValue === 'state') {
                     db.status = !db.status;
-                   await client.db.set(`soutien_${message.guild.id}`, db);
+                    await client.db.set(`soutien_${message.guild.id}`, db);
                     const { embed: updatedEmbed, row: updatedRow } = await update();
                     await i.update({ embeds: [updatedEmbed], components: [updatedRow] });
                 } else if (interactionValue === 'role') {
                     const filter = response => response.author.id === message.author.id;
                     const sentMessage = await i.reply("Quel est **le nouveau rôle ?**");
-                
+
                     try {
                         const collected = await message.channel.awaitMessages({ filter, max: 1, time: ms("1m"), errors: ['time'] });
                         const content = collected.first().content.trim();
-                        const roleId = content.replace(/[<@&>]/g, ''); 
+                        const roleId = content.replace(/[<@&>]/g, '');
                         const role = message.guild.roles.cache.get(roleId);
-                
+
                         if (role) {
                             db.role = role.id;
                             client.db.set(`soutien_${message.guild.id}`, db);
@@ -62,11 +65,11 @@ module.exports = {
                         console.log(error);
                         message.channel.send("Temps de réponse expiré.");
                     }
-                
+
                 } else if (interactionValue === 'vanity') {
                     const filter = response => response.author.id === message.author.id;
                     const sentMessage = await i.reply("Quel est **le nouveau statut ?**");
-        
+
                     try {
                         const collected = await message.channel.awaitMessages({ filter, max: 1, time: ms("1m"), errors: ['time'] });
                         const msg = collected.first().content.trim();
@@ -85,9 +88,9 @@ module.exports = {
                 console.error(error);
             }
         });
-        
-      
-      
+
+
+
         async function update() {
             const role = message.guild.roles.cache.get(db.role);
             const embed = new Discord.EmbedBuilder()

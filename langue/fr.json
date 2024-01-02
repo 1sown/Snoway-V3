@@ -25,7 +25,7 @@
         "set": "La langue est maintenant définie sur: {langCode}"
     },
     "help": {
-        "description": "",
+        "description": "Aucune description disponible",
         "aide": "*Les variables entre les `<...>` sont obligatoires , alors que les `[...]` sont facultatives. Utilisez la commande `{prefix}help <commande>` pour obtenir plus d'informations.*",
         "help": "`{prefix}help <commande>` pour obtenir plus d'informations",
         "cmd": "Nombre de commandes : ",

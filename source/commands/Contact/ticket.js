@@ -18,12 +18,15 @@ module.exports = {
                 salon: null,
                 messageauto: null,
                 type: "select",
+                Suppauto: true,
                 messageid: null,
                 maxticket: 1,
                 leaveclose: false,
                 claimbutton: true,
                 buttonclose: true,
                 transcript: false,
+                rolerequis: null,
+                roleinterdit: null,
             }
 
             let modules = ''

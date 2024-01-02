@@ -4,9 +4,13 @@ const Snoway = require('../../structures/client');
 module.exports = {
     name: 'channel',
     aliases: ['channelinfos', 'channelinfo'],
-    description: 'Permet de voir les informations d\'un salon.',
+    description: {
+        fr: "Permet de voir les informations d\'un salon",
+        en: "View show information"
+    },
     usage: {
-        "channelinfo <salon>": "Permet de voir les informations d'un salon"
+        fr: {"channelinfo <salon>": "Permet de voir les informations d'un salon"},
+        en: {"channelinfo <channel>": "View show information"}
     },
     /**
      * 

@@ -7,9 +7,13 @@ const openai = new OpenAI({
 });
 module.exports = {
     name: 'chatgpt',
-    description: 'Permet de discuter avec le bot en utilisant l\'API ChatGPT-3 Turbo.',
+    description: {
+        fr: "Permet de discuter avec ChatGPT",
+        en: "Chat with ChatGPT"
+    },
     usage: {
-        "chatgpt <message>": "Permet de discute ChatGPT-3"
+        fr: {"chatgpt <message>": "Permet de discute ChatGPT-3"},
+        en: {"chatgpt <message>": "Allows ChatGPT-3 discussion"},
     },
     /**
      * @param {Snoway} client 

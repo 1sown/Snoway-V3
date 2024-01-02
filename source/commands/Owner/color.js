@@ -4,7 +4,10 @@ const Snoway = require('../../structures/client');
 module.exports = {
   name: 'color',
   aliases: ['theme'],
-  description: 'Change la couleur de l\'embed du bot sur le serveur',
+  description: {
+    fr: "Change la couleur de l\'embed du bot sur le serveur",
+    en: "Change the color of the bot's embed on the server"
+  },
   /**
    * 
    * @param {Snoway} client 

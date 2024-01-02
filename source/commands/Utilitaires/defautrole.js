@@ -6,8 +6,13 @@ module.exports = {
     aliases: ["defaultroles"],
     description: 'Configure le rôle par défaut pour les nouveaux membres.',
     usage: {
+        fr: {
         "defaultrole <rôles>": "Permet d'ajouter ou de retirer des rôles dans les rôles défaut",
         "defaultrole": "Affiche la liste des rôles donnés lorsqu'un membre rejoint",
+        }, en: {
+            "defaultrole <roles>": "Allows roles to be added to or removed from default roles",
+            "defaultrole": "Displays the list of roles given when a member joins",
+        }
     },
     /**
      * @param {Snoway} client 

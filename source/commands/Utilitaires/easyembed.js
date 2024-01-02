@@ -3,9 +3,16 @@ const Snoway = require('../../structures/client');
 
 module.exports = {
     name: 'easyembed',
-    description: 'Crée un embed simple',
+    description: {
+        fr: "Crée un embed simple",
+        en: "Create a simple embed"
+    },
     usage: {
+        fr: { 
         'easyembed <couleur> <texte>': "Crée un embed simple"
+        }, en: {
+         'easyembed <color> <text>': "Creates a simple embed"
+        }
     },
     /**
      * 

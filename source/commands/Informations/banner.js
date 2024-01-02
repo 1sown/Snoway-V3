@@ -5,14 +5,14 @@ module.exports = {
     name: 'banner',
     usage: {
         fr: { 
-        "banner [@user/ID]": "Obtenir la bannière d'un utilisateur."
+        "banner [@user/ID]": "Obtenir la bannière d'un utilisateur"
         }, en: {
-         "banner [@user/ID]": "Retrieve the banner of a user."
+         "banner [@user/ID]": "Retrieve the banner of a user"
         }
     },
     description: {
-        fr: 'Obtenir la bannière d\'un utilisateur.',
-        en: "Get a user's banner."
+        fr: 'Obtenir la bannière d\'un utilisateur',
+        en: "Get a user's banner"
     },
     /**
      * 

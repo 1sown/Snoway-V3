@@ -1,12 +1,14 @@
 const { useQueue } = require("discord-player");
 const { MessageActionRow, MessageSelectMenu, StringSelectMenuBuilder, ActionRowBuilder} = require("discord.js");
-const Snoway = require('../../structures/Client/index');
+const Snoway = require('../../structures/client/index')
 const { QueueRepeatMode } = require("discord-player");
 
 module.exports = {
     name: "repeat",
-    description: "Répéter la musique/queue ou désactiver le mode",
-    catégorie: 'music',
+    description: {
+        fr: "Répéter la musique/queue ou désactiver le mode",
+        en: "Repeat music/track or deactivate mode"
+    },
     /**
      * @param {Snoway} client
      * @param {Message} message

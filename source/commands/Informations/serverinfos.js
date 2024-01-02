@@ -4,7 +4,10 @@ const Snoway = require('../../structures/client');
 module.exports = {
     name: 'serverinfo',
     aliases: ['serverinfos', "si"],
-    description: "Affiche les informations du serveur",
+    description: {
+        fr: "Affiche les informations du serveur",
+        en: "Displays server information"
+    },
     /**
      * 
      * @param {Snoway} client 

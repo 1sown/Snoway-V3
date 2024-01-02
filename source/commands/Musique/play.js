@@ -4,8 +4,11 @@ const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index')
 module.exports = {
     name: "play",
-    description: "Permet de lancer une musique",
-    usage: {"play <musique>": "Permet de lancer une musique"},
+    description: {
+        fr: "Permet de lancer une musique",
+        en: "Play music"
+    },
+    usage: {fr: {"play <musique>": "Permet de lancer une musique"}, en: {"play <song>": "Play music"}},
     /**
      * 
      * @param {Snoway} client 

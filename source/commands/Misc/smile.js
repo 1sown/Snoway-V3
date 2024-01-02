@@ -2,9 +2,13 @@ const Discord = require('discord.js')
 const Snoway = require('../../structures/client/index')
 module.exports = {
   name: 'smile',
-  description: 'Envoie une image d\'un personnage qui sourit',
+  description: {
+    fr: "Envoie une image d\'un personnage qui sourit",
+    en: "Send a picture of a smiling character"
+  },
   usage: {
-    "smile <@user/id>": "Envoie une image d\'un personnage qui sourit"
+    fr: {"smile <@user/id>": "Envoie une image d\'un personnage qui sourit"},
+    en: {"smile <@user/id>": "Send a picture of a smiling character"},
   },
   /**
    * 

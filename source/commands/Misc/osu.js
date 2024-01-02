@@ -4,9 +4,13 @@ const Snoway = require('../../structures/client/index');
 
 module.exports = {
     name: 'osu',
-    description: 'Envoie les informations du profil osu! d\'un joueur.',
+    description: {
+        fr: "Envoie les informations du profil osu! d\'un joueur.",
+        en: "Sends a player's osu! d\'profile information."
+    },
     usage: {
-        "osu <@user/id>": "Envoie les informations du profil osu! d'un joueur"
+        fr: {"osu <@user/id>": "Envoie les informations du profil osu! d'un joueur"},
+        en: {"osu <@user/id>": "Sends a player's osu! d\'profile information."}
     },
     /**
      * 

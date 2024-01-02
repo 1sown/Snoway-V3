@@ -4,7 +4,10 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'mybot',
     aliases: ["mybots", "bot", "bots"],
-    description: 'Affiche vos bots',
+    description: {
+        fr: 'Affiche vos bots',
+        en: "Display your bots"
+    },
     /**
      * 
      * @param {Snoway} client 

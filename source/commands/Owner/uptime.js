@@ -3,7 +3,10 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'uptime',
-    description: 'Affiche depuis quand le bot est connecté.',
+    description: {
+        fr: "Affiche depuis quand le bot est connecté",
+        en: "Shows how long the bot has been connected"
+    },
     /**
    * 
    * @param {Snoway} client 

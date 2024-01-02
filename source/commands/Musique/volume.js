@@ -4,8 +4,13 @@ const Snoway = require("../../structures/client/index");
 
 module.exports = {
     name: "volume",
-    description: "Modifie le volume de la musique en cours de lecture.",
-    usage: {"volume <volume>": "Modifie le volume de la musique en cours de lecture."},
+    description: {
+        fr: "Modifie le volume de la musique en cours de lecture.",
+        en: "Changes the volume of the music currently playing."
+    },
+    usage: {
+        fr: {"volume <volume>": "Modifie le volume de la musique en cours de lecture."}, 
+        en: {"volume <volume>": "Changes the volume of the music currently playing."}},
     /**
      * 
      * @param {Snoway} client

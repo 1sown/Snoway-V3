@@ -3,10 +3,17 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'create',
-    description: 'Permet de copier un emoji pour l\'ajouter au serveur',
+    description: {
+        fr: "Permet de copier un emoji pour l\'ajouter au serveur",
+        en: "Copy an emoji to add it to the server"
+    },
     aliases: ["emoji"],
     usage: {
-        "emoji <1-50 émojis>": "Permet de copier un ou plusieurs emoji(s) pour les ajouter au serveur"
+        fr: {
+            "emoji <1-50 émojis>": "Permet de copier un ou plusieurs emoji(s) pour les ajouter au serveur"
+        }, en: {
+            "emoji <1-50 emojis>": "Allows you to copy one or more emoji(s) to add them to the server"
+        }
     },
     /**
      * 
@@ -35,7 +42,6 @@ module.exports = {
                         }
                     })
                     .catch((error) => {
-                        console.error(error)
                         message.channel.send({ content: "Une erreur s'est produite" });
                     });
             }

@@ -1,9 +1,9 @@
-const Valory = require("../../structures/client/index");
+const Snoway = require("../../structures/client/index");
 
 module.exports = {
     name: "ready",
     /**
-     * @param {Valory} client
+     * @param {Snoway} client
      */
     run: async (client) => {
         setInterval(() => {

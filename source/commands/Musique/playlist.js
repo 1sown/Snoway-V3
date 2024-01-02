@@ -4,14 +4,23 @@ const Snoway = require("../../structures/client/index");
 
 module.exports = {
     name: "playlist",
-    description: "Crée/delete/list,play vos playlists.",
+    description: "Crée/delete/list,play vos playlists",
     usage: {
-        "playlist create <nom>": "Crée une playlist",
-        "playlist play <nom>": "Joue vos musiques préférées",
-        "playlist add <nom_playlist> <song>": "Ajoute un song de la playlist",
-        "playlist del <nom_playlist> <song>": "Supprime un song de la playlist",
-        "playlist list": "Affiche la liste de vos playlists",
-        "playlist delete <nom>": "Supprime une playlist"
+        fr: {
+            "playlist create <nom>": "Crée une playlist",
+            "playlist play <nom>": "Joue vos musiques préférées",
+            "playlist add <nom_playlist> <song>": "Ajoute un song de la playlist",
+            "playlist del <nom_playlist> <song>": "Supprime un song de la playlist",
+            "playlist list": "Affiche la liste de vos playlists",
+            "playlist delete <nom>": "Supprime une playlist"
+        }, en: {
+            "playlist create <name>": "Creates a playlist",
+            "playlist play <name>": "Plays your favorite music",
+            "playlist add <playlist_name> <song>": "Adds a song from the playlist",
+            "playlist del <playlist_name> <song>": "Deletes a song from the playlist",
+            "playlist list": "Displays the list of your playlists",
+            "playlist delete <name>": "Deletes a playlist"
+        }
     },
     /**
      * @param {Snoway} client
@@ -20,7 +29,7 @@ module.exports = {
      */
     run: async (client, message, args) => {
         return message.reply('Commande en dev...')
-        
+
         try {
             const subCommand = args[0];
 

@@ -5,12 +5,12 @@ module.exports = {
   name: 'avatar',
   aliases: ['pic', "pp"],
   description: {
-    fr: "Permet de voir la photo de profil d\'un utilisateur.",
+    fr: "Permet de voir la photo de profil d\'un utilisateur",
     en: "View a user's profile picture"
   },
   usage: {
     fr: {
-      "pic [mention/id]": "Permet de voir la photo de profil d'un utilisateur."
+      "pic [mention/id]": "Permet de voir la photo de profil d'un utilisateur"
     }, en: {
       "pic [mention/id]": "View a user's profile photo"
     }

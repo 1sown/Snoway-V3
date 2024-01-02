@@ -1,7 +1,10 @@
 const Discord = require('discord.js')
 module.exports = {
     name: '8ball',
-    description: "Pose une question au bot",
+    description: {
+      fr: "Pose une question au bot",
+      en: "Ask the bot a question"
+    },
     /**
      * 
      * @param {Snoway} client 

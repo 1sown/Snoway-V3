@@ -4,10 +4,14 @@ module.exports = {
     name: 'setpic',
     aliases: ["setavatar", "avatar"],
     usage: {
-        "setpic <image/lien>": "Définir l\'avatar du bot."
+        fr: {"setpic <image/lien>": "Définir l\'avatar du bot"},
+        en: {"setpic <image/lien>": "Define the bot's avatar"}
     }, 
-    description: 'Définir l\'avatar du bot.',
-    run: async (client, message, args, commandName) => {
+    description: {
+        fr: "Définir l\'avatar du bot",
+        en: "Define the bot's avatar"
+    },
+    run: async (client, message, args) => {
         let avatarURL;
 
         if (message.attachments.size > 0) {

@@ -1,7 +1,10 @@
 const {EmbedBuilder} = require('discord.js')
 module.exports = {
   name: 'fivem',
-  description: 'Connecte votre serveur FiveM.',
+  description: {
+    fr: "Connecte votre serveur FiveM.",
+    en: "Connect your FiveM server."
+  },
   /**
    * 
    * @param {Snoway} client 

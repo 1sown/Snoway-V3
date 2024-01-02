@@ -4,10 +4,18 @@ const Snoway = require('../../structures/client');
 
 module.exports = {
     name: 'saveembed',
-    description: 'Sauvegarde un message par son ID',
+    description: {
+        fr:'Sauvegarde un message par son ID',
+        en: "Save a message by its ID"
+    },
     usage: {
-        "saveembed <nom> <messageId>": "Sauvegarde un message par son ID",
-        "saveembed": "Affiche tous les embeds enregistrer"
+        fr: {
+            "saveembed <nom> <messageId>": "Sauvegarde un message par son ID",
+            "saveembed": "Affiche tous les embeds enregistrer"
+        }, en: {
+            "saveembed <name> <messageId>": "Saves a message by its ID",
+            "saveembed": "Displays all saved embeds"
+        }
     },
     /**
      * 
@@ -24,12 +32,12 @@ module.exports = {
             }
             const embedList = embedNames.map(embed => embed.name).join('\n ');
             const embed = new Discord.EmbedBuilder()
-            .setColor(client.color)
-            .setFooter(client.footer)
-            .setDescription(embedList)
-            .setTitle('List des embeds')
-            
-            return message.channel.send({embeds: [embed]});
+                .setColor(client.color)
+                .setFooter(client.footer)
+                .setDescription(embedList)
+                .setTitle('List des embeds')
+
+            return message.channel.send({ embeds: [embed] });
         }
 
         const name = args[0];

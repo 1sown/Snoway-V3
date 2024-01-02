@@ -4,8 +4,14 @@ const Snoway = require('../../structures/client/index')
 module.exports = {
     name: "userinfo",
     aliases: ["ui"],
-    description: "Permet d'obtenir des informations sur un utilisateur",
-    usages: "userinfo <id/mention>",
+    description: {
+        fr: "Permet d'obtenir des informations sur un utilisateur",
+        en: "To obtain information about a user"
+    },
+    usage: {
+        fr: {"userinfo <id/mention>": "Permet d'obtenir des informations sur un utilisateur"},
+        en: {"userinfo <id/mention>": "To obtain information about a user"}
+    },
     /**
      * 
      * @param {Snoway} client 

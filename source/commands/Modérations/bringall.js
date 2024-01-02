@@ -2,9 +2,13 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'bringall',
-    description: 'Déplace tous les membres dans un salon vocal spécifié.',
+    description: {
+        fr: 'Déplace tous les membres dans un salon vocal spécifié',
+        en: "Moves all members to a specified vocal salon"
+    },
     usage: {
-        'bringall <salon>': "Permet de déplacer tout les membres en vocal dans un autre"
+        fr: {'bringall <salon>': "Permet de déplacer tout les membres en vocal dans un autre"},
+        en: {'bringall <salon>': "Moves all members to a specified vocal salon"}
     },
     /**
      * 

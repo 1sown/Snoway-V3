@@ -4,7 +4,10 @@ const Snoway = require('../../structures/client');
 module.exports = {
   name: 'vocal',
   aliases: ['vc'],
-  description: "Permet d'afficher toutes les statistiques vocales du serveur",
+  description: {
+    fr: "Permet d'afficher toutes les statistiques vocales du serveur",
+    en: "Displays all server voice statistics"
+  },
   /**
    * 
    * @param {Snoway} client 

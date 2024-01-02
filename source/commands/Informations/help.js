@@ -3,12 +3,15 @@ const fs = require('fs');
 const Snoway = require('../../structures/client');
 module.exports = {
     name: "help",
-    description: "Affiche les commandes du bot",
+    description: {
+        fr:"Affiche les commandes du bot",
+        en: "Displays bot commands"
+    },
     usage: {
         fr: {
-            "help [commande]": "Affiche les commandes ou une commande du bot."
+            "help [commande]": "Affiche les commandes ou une commande du bot"
         }, en: {
-            "help [command]": "Displays commands or a bot command."
+            "help [command]": "Displays commands or a bot command"
         }
     },
     /**
@@ -74,13 +77,13 @@ module.exports = {
 
                 cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
 
-                const generetapage = (pageactuellement) => {
+                const generetapage =  (pageactuellement) => {
                     const fichiertasoeur = cmddanslefichier[pageactuellement];
                     const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
                     const categoryCommands = cmdFiles.map(file => {
                         const command = require(`../${fichiertasoeur}/${file}`);
                         let usages = null;
-
+                        let descriptions = null
                         if (command.usage) {
                             switch (lang) {
                                 case "fr":
@@ -94,8 +97,19 @@ module.exports = {
                             }
                         }
 
+                        switch (lang) {
+                            case "fr":
+                                descriptions = command.description.fr;
+                                break;
+                            case "en":
+                                descriptions = command.description?.en;
+                                break;
+                            default:
+                                descriptions = command.description.fr;
+                        }
+
                         const usage = usages || {
-                            [command.name]: command.description || "Aucune description disponible"
+                            [command.name]: descriptions || "Error"
                         };
 
                         let description = '';

@@ -7,7 +7,10 @@ const fsPromises = require('fs').promises;
 module.exports = {
   name: 'backup',
   aliases: ["bk", "bakp"],
-  description: 'Affiche la latence du bot et de l\'API de Discord.',
+  description: {
+    fr: "Crée/delete/list/load/clear vos bakups",
+    en: "Create/delete/list/load/clear your bakups"
+  },
   usage: {
     fr: {
         "backup create <nom>": "Crée une backup pour le serveur",

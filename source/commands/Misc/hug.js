@@ -3,9 +3,13 @@ const Snoway = require('../../structures/client/index')
 
 module.exports = {
     name: 'hug',
-    description: 'Envoie une image de deux personnages qui se font un câlin',
+    description: {
+        fr: 'Envoie une image de deux personnages qui se font un câlin',
+        en: 'Send an image of two people cuddling'
+    },
     usage: {
-        'hug <@user/id>': 'Envoie une image de deux personnages qui se font un câlin',
+       fr:{'hug <@user/id>': 'Envoie une image de deux personnages qui se font un câlin'},
+       en:{'hug <@user/id>': 'Send an image of two people cuddling'}
     },
     /**
 * 

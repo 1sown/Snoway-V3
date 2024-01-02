@@ -5,7 +5,10 @@ const Snoway = require('../../structures/client/index');
 module.exports = {
     name: 'servers',
     aliases: ['server', 'servers'],
-    description: 'Affiche la liste des serveurs sur lesquels le bot est présent',
+    description: {
+        fr: "Affiche la liste des serveurs sur lesquels le bot est présent",
+        en: "Displays the list of servers on which the bot is present"
+    },
     /**
      * 
      * @param {Snoway} client 

@@ -1,11 +1,14 @@
 const { useQueue, useMainPlayer } = require("discord-player");
 const Discord = require('discord.js');
-const Snoway = require("../../structures/Client/index");
+const Snoway = require('../../structures/client/index')
 
 module.exports = {
     name: "pause",
     aliases: ["stop"],
-    description: "Permet de couper la musique",
+    description: {
+        fr: "Permet de couper la musique",
+        en: "Mutes the music"
+    },
     /**
      * @param {Snoway} client
      * @param {Discord.Message} message

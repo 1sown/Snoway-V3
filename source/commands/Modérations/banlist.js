@@ -3,6 +3,10 @@ const Snoway = require('../../structures/client/index');
 
 module.exports = {
     name: 'banlist',
+    description: {
+        fr: 'Affiche tous les bans du discord',
+        en: "Display all discord banns"
+    },
     aliases: ['listban'],
     /**
      * 

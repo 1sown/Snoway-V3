@@ -23,7 +23,7 @@
         "set": "The language is now set to: {langCode}"
     },
     "help": {
-        "description": "",
+        "description": "No description available",
         "aide": "*Variables between `<...>` are mandatory, while `[...]` are optional. Use the command `{prefix}help <command>` for more information.*",
         "help": "`{prefix}help <commande>` for more information",
         "cmd": "Number of commands: ",

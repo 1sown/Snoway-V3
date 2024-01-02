@@ -3,8 +3,8 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilde
 module.exports = {
   name: 'allbots',
   description: {
-    fr: "Liste tous les bots sur le serveur.",
-    en: "Lists all bots on the server."
+    fr: "Liste tous les bots sur le serveur",
+    en: "Lists all bots on the server"
 },
   run: async (client, message, args, commandName) => {
 

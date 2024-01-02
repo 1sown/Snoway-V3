@@ -2,7 +2,10 @@ const Discord = require('discord.js')
 const Snoway = require('../../structures/client/index')
 module.exports = {
     name: 'randomuser',
-    description: 'Tire un membre du serveur au hasard',
+    description: {
+        fr: "Tire un membre du serveur au hasard",
+        en: "Shoot a server member at random"
+    },
     /**
      * 
      * @param {Snoway} client 

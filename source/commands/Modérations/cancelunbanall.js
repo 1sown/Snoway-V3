@@ -2,7 +2,10 @@ const Snoway = require("../../structures/client");
 
 module.exports = {
     name: 'cancelunbanall',
-    description: 'Annule l\'unbanall de tous les bans.',
+    description: {
+        fr: 'Annule l\'unbanall de tous les bans.',
+        en: "Cancels the unbanall of all banns."
+    },
     /**
      * 
      * @param {Snoway} client 
