@@ -28,36 +28,37 @@ module.exports = {
         if (args.length === 0) {
             const embedNames = await client.db.get('embeds');
             if (!embedNames || embedNames.length === 0) {
-                return message.channel.send("Aucun embed enregistré.");
+                return message.channel.send(await client.lang('savembed.none'));
             }
             const embedList = embedNames.map(embed => embed.name).join('\n ');
             const embed = new Discord.EmbedBuilder()
                 .setColor(client.color)
                 .setFooter(client.footer)
                 .setDescription(embedList)
-                .setTitle('List des embeds')
+                .setTitle(await client.lang('savembed.embed.title'))
 
             return message.channel.send({ embeds: [embed] });
         }
 
         const name = args[0];
         const messageId = args[1];
-        const existingEmbed = client.db.get(`embeds.${name}`);
+        const existingEmbed = await client.db.get(`embeds.${name}`);
         if (existingEmbed) {
-            return message.channel.send(`Un embed avec le nom \`${name}\` existe déjà.`);
+            const response = (await client.lang('savembed.presencedb')).replace("{name}", `\`${name}\``)
+            return message.channel.send(response);
         }
 
         const targetMessage = await message.channel.messages.fetch(messageId)
             .catch(err => null);
 
-        if (!targetMessage) {
-            return message.channel.send("Message non trouvé. Assurez-vous que l'ID du message est correct.");
+        if (!targetMessage || !messageId) {
+            return message.channel.send(await client.lang('savembed.nomessage'));
         }
 
-        const embedInfo = targetMessage.embeds[0];
+        const embedInfo = targetMessage?.embeds[0] || null;
 
         if (!embedInfo) {
-            return message.channel.send("Le message spécifié ne contient pas d'embed.");
+            return message.channel.send(await client.lang('savembed.noembed'));
         }
 
         const embed = {
@@ -106,6 +107,6 @@ module.exports = {
             ...embed,
         });
 
-        message.channel.send(`L'embed vient d'être enregistré sous le nom \`${name}\``);
+        message.channel.send(`${await client.lang('savembed.save')} \`${name}\``);
     },
 };

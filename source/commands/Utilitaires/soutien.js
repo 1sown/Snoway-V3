@@ -28,22 +28,23 @@ module.exports = {
         const collector = reply.createMessageComponentCollector()
 
         collector.on('collect', async (i) => {
+            if(i.user.id !== message.author.id) {
+                return i.reply({
+                    content: await client.lang('interaction'),
+                    flags: 64
+                })
+            }
             try {
                 const interactionValue = i.values[0];
 
-                if (interactionValue === 'state') {
-
-                    await client.db.delete(`soutien_${message.guild.id}`);
-                    const { embed: updatedEmbed, row: updatedRow } = await update();
-                    await i.update({ embeds: [updatedEmbed], components: [updatedRow] });
-                } else if (interactionValue === 'state') {
+                 if (interactionValue === 'state') {
                     db.status = !db.status;
                     await client.db.set(`soutien_${message.guild.id}`, db);
                     const { embed: updatedEmbed, row: updatedRow } = await update();
                     await i.update({ embeds: [updatedEmbed], components: [updatedRow] });
                 } else if (interactionValue === 'role') {
                     const filter = response => response.author.id === message.author.id;
-                    const sentMessage = await i.reply("Quel est **le nouveau rôle ?**");
+                    const sentMessage = await i.reply(await client.lang('soutien.newrole'));
 
                     try {
                         const collected = await message.channel.awaitMessages({ filter, max: 1, time: ms("1m"), errors: ['time'] });
@@ -59,16 +60,16 @@ module.exports = {
                             const { embed: updatedEmbed, row: updatedRow } = await update();
                             await reply.edit({ embeds: [updatedEmbed], components: [updatedRow] });
                         } else {
-                            message.channel.send("> `❌` Erreur : Rôle invalide !");
+                            message.channel.send(await client.lang('soutien.norole'));
                         }
                     } catch (error) {
                         console.log(error);
-                        message.channel.send("Temps de réponse expiré.");
+                        message.channel.send(await client.lang('soutien.noreponse'));
                     }
 
                 } else if (interactionValue === 'vanity') {
                     const filter = response => response.author.id === message.author.id;
-                    const sentMessage = await i.reply("Quel est **le nouveau statut ?**");
+                    const sentMessage = await i.reply(await client.lang('soutien.newstatus'));
 
                     try {
                         const collected = await message.channel.awaitMessages({ filter, max: 1, time: ms("1m"), errors: ['time'] });
@@ -81,7 +82,7 @@ module.exports = {
                         return await reply.edit({ embeds: [updatedEmbed], components: [updatedRow] });
                     } catch (error) {
                         console.log(error)
-                        message.channel.send("Temps de réponse expiré.");
+                        message.channel.send(await client.lang('soutien.noreponse'));
                     }
                 }
             } catch (error) {
@@ -96,11 +97,11 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setColor(client.color)
                 .setFooter(client.footer)
-                .setTitle(`Paramètres du soutien`)
+                .setTitle(await client.lang('soutien.embed.title'))
                 .addFields(
-                    { name: "Status", value: db.status ? "\`✅\`" : "\`❌\`" },
-                    { name: "Rôle à donner", value: role ? `${role} | \`${role.id}\`` : "\`Aucun\`" },
-                    { name: "Vanity", value: db.vanity ? `\`${db.vanity}\`` : "\`Non configuré\`" }
+                    { name: await client.lang('soutien.embed.status'), value: db.status ? "\`✅\`" : "\`❌\`" },
+                    { name: await client.lang('soutien.embed.role'), value: role ? `${role} | \`${role.id}\`` : `\`${await client.lang('soutien.embed.noconfig')}\`` },
+                    { name: await client.lang('soutien.embed.vanity'), value: db.vanity ? `\`${db.vanity}\`` : `\`${await client.lang('soutien.embed.noconfig')}\`` }
                 );
 
             const row = new Discord.ActionRowBuilder()
@@ -109,17 +110,17 @@ module.exports = {
                         .setCustomId('soutien')
                         .addOptions([
                             {
-                                label: "Activé/désactivé",
+                                label: await client.lang('soutien.select.status'),
                                 value: "state",
                                 emoji: "✅"
                             },
                             {
-                                label: "Rôle à donner",
+                                label: await client.lang('soutien.select.role'),
                                 value: "role",
                                 emoji: "📥"
                             },
                             {
-                                label: "Vanity",
+                                label: await client.lang('soutien.select.vanity'),
                                 value: "vanity",
                                 emoji: "🧷"
                             },

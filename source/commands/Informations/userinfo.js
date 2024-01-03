@@ -68,7 +68,6 @@ module.exports = {
             'Staff': "Discord Staff",
             'System': "Discord System",
             'BugHunterLevel2': 'Bug Hunter Level 2',
-            'BugHunterLevel3': 'Bug Hunter Level 3',
         }
         const badges = user.flags.toArray();
         const userBadges = badges
@@ -92,7 +91,7 @@ module.exports = {
         const activities = member.presence?.activities
             ? member.presence.activities
                 .filter(activity => activity.type !== 4)
-                .map((activity) => `- \`${activity.name}\``)
+                .map((activity) => `- \`${activity.name} (${activity.state})\``)
             : [];
 
         let status = member.presence?.status || 'offline';

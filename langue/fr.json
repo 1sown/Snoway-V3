@@ -16,7 +16,11 @@
             "title": "Owners"
         }
     },
-    "unowner": {},
+    "unowner": {
+        "nouser": "Utilisateur introuvable.",
+        "nowoner": "Cet utilisateur n'est pas un owner.",
+        "remove": "n'est plus un owner."
+    },
     "langue": {
         "deja": "La langue est déjà définie sur : {langCode}",
         "erreur": "Une erreur est survenue.",
@@ -34,5 +38,62 @@
         "inconnue": "Cette commande n'existe pas. Utilisez `{prefix}help` pour voir la liste des commandes.",
         "command": "Commande:",
         "button": "Serveur support"
+    },
+    "soutien": {
+        "newrole": "Quel est **le nouveau rôle ?**",
+        "newstatus": "Quel est **le nouveau statut ?**",
+        "norole": "> `❌` Erreur : Rôle invalide !",
+        "noreponse": "Temps de réponse expiré.",
+        "embed": {
+            "title": "Paramètres du soutien",
+            "status": "Status",
+            "role": "Rôle à donner",
+            "vanity": "Vanity",
+            "noconfig": "Non configuré"
+        },
+        "select": {
+            "vanity": "Vanity",
+            "role": "Rôle à donner",
+            "status": "Activé/désactivé"
+        }
+    },
+    "sethelp": {
+        "menu": "Sélectionnez le type de help",
+        "set": "Type de help modifié.",
+        "description": "Sélectionnez le type de help que vous souhaitez utiliser."
+    },
+    "savembed": {
+        "none": "Aucun embed enregistré.",
+        "presencedb": "Un embed avec le nom `{name}` existe déjà.",
+        "nomessage": "Message non trouvé. Assurez-vous que l'ID du message est correct.",
+        "save": "L'embed vient d'être enregistré sous le nom",
+        "noembed": "Le message spécifié ne contient pas d'embed.",
+        "embed": {
+            "title": "List des embeds"
+        }
+    },
+    "loadembed": {
+        "noembed": "Aucun embed enregistré.",
+        "noresult": "Aucun embed enregistré avec le nom"
+    },
+    "prefix": {
+        "set": "🛠️ *Prefix modifié en :*",
+        "invalide": "> `❌` Erreur : Le préfixe donné est déjà celui du serveur.",
+        "noperfix": "> `❌` Erreur : Veuillez précisez un `préfix`"
+    },
+    "mybot": {
+        "description": "> Pour distinguer vos bots de ceux de vos amis, des emojis différents sont utilisés : {buyers} pour représenter vos bots et {owners} pour ceux de vos amis.",
+        "aucun": "Vous n'avez aucun bot !",
+        "nobot": "Bot introuvable",
+        "embed": {
+            "title": "Vos Bots"
+        }
+    },
+    "emoji": {
+        "create": "ont été créé"
+    },
+    "essyembed": {
+        "invalide": "Couleur non valide.",
+        "usage": "easyembed <couleur> <texte>"
     }
 }

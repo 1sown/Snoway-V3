@@ -30,10 +30,11 @@ module.exports = {
             const module = await client.db.get(`module-help`) || 'normal'
             const fileEmojis = {
                 Informations: '🔍',
-                Buyers: '🎭',
+                Buyers: '🔰',
                 Modérations: '⚔',
                 Contact: "✉",
                 Utilitaires: '🛠',
+                Permissions: "🎭",
                 Musique: '🎶',
                 Logs: '📁',
                 Antiraid: '🛡',
@@ -59,6 +60,7 @@ module.exports = {
                     'Misc',
                     'Contact',
                     'Musique',
+                    'Permissions',
                     'Owner',
                     'Buyers'
                 ];
@@ -71,8 +73,9 @@ module.exports = {
                     'Misc': 5,
                     'Contact': 6,
                     'Musique': 7,
-                    'Owner': 8,
-                    'Buyers': 9,
+                    'Permissions': 8,
+                    'Owner': 9,
+                    'Buyers': 10,
                 };
 
                 cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
@@ -234,7 +237,7 @@ module.exports = {
                 }
 
             const usage = usages || {
-                [command.name]: description || "Aucune description disponible"
+                [command.name]: description || await client.lang('help.description')
             };
             const fields = [];
 

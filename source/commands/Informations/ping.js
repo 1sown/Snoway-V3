@@ -3,7 +3,7 @@ const Snoway = require('../../structures/client');
 
 module.exports = {
   name: 'ping',
-  aliases: ['latency', "latence"],
+  aliases: ['latency', "latence", "ms"],
   description: {
     fr: "Affiche la latence du bot",
     en: "Displays bot latency"

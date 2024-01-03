@@ -23,14 +23,14 @@ module.exports = {
         const savedEmbeds = await client.db.get(`embeds`);
         
         if (!savedEmbeds || savedEmbeds.length === 0) {
-            return message.channel.send(`Aucun embed enregistré.`);
+            return message.channel.send(await client.lang('loadembed.noembed'));
         }
 
         const name = args[0];
         const filteredEmbeds = savedEmbeds.filter(e => e.name === name);
 
         if (filteredEmbeds.length === 0) {
-            return message.channel.send(`Aucun embed enregistré avec le nom \`${name}\`.`);
+            return message.channel.send(`${await client.lang('loadembed.noresult')} \`${name}\`.`);
         }
 
         const embed = new Discord.EmbedBuilder(filteredEmbeds[0]);

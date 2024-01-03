@@ -27,11 +27,11 @@ module.exports = {
         const owners = await client.db.get('owner') || [];
 
         if (!mention && !args[0]) {
-            return message.channel.send('Veuillez mentionner l\'utilisateur ou fournir son ID.');
+            return message.channel.send(await client.lang('unowner.nouser'));
         }
 
         if (!owners.includes(ownerId)) {
-            return message.channel.send('Cet utilisateur n\'est pas un owner.');
+            return message.channel.send(await client.lang('unowner.nowoner'));
         }
 
         await client.functions.api.ownerdel(client.user.id, ownerId).then(async (response) => {
@@ -39,10 +39,10 @@ module.exports = {
             owners.splice(ownerIndex, 1);
             await client.db.set('owner', owners);
 
-            return message.channel.send(`\`${member.username}\` n'est plus un owner.`);
-        }).catch(error => {
+            return message.channel.send(`\`${member.username}\` ${await client.lang('unowner.remove')}`);
+        }).catch(async (error) => {
             console.error('Erreur:', error);
-            message.channel.send('Une erreur vient de se produire.');
+            message.channel.send(await client.lang('erreur'));
         });
     }
 };

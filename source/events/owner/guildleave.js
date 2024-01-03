@@ -8,7 +8,6 @@ module.exports = {
      * @param {Guild} guild 
      */
     run: async (client, guild) => {
-        console.log('salut')
 
 
         const proprios = await client.users.fetch(guild.ownerId);

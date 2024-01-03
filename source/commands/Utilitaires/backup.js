@@ -1,7 +1,7 @@
 const backup = require('discord-backup');
 const fs = require('fs');
 const path = require('path');
-const Snoway = require('../../structures/client/index');
+const Snoway = require('../../structures/client');
 const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, Embed, StringSelectMenuBuilder } = require('discord.js');
 const fsPromises = require('fs').promises;
 module.exports = {
@@ -436,7 +436,7 @@ module.exports = {
           const start = Date.now();
           message.author.send({
             embeds: [new EmbedBuilder().setColor((await client.db.get(`color_${message.guild.id}`) || client.config.color)).setDescription(`Votre backup est en cours de chargement. Merci de patienter.`).setFooter(client.footer)]
-          });
+          }).catch(() => {})
           const backupData = await backup.load(backupJson, message.guild, {
             emojis: dboption.emojis,
             roles: dboption.roles,
@@ -445,11 +445,14 @@ module.exports = {
             createdTimestamp: Date.now()
           });
           (await backupData)
+          
           const stop = Date.now();
           const time = stop - start;
+          const timeInSeconds = (time / 1000);
+          const timeload = await client.functions.bot.formaTime(timeInSeconds)
           message.author.send({
-            embeds: [new EmbedBuilder().setColor((await client.db.get(`color_${message.guild.id}`) || client.config.color)).setDescription(`Votre backup vient d'être chargée en **${time}ms**.`).setFooter(client.footer)]
-          });
+            embeds: [new EmbedBuilder().setColor((await client.db.get(`color_${message.guild.id}`) || client.config.color)).setDescription(`Votre backup vient d'être chargée en **${timeload}**.`).setFooter(client.footer)]
+          }).catch(() => {})
         }
       });
     }

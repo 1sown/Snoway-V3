@@ -1,23 +1,29 @@
 {
     "erreur": "An error has just occurred.",
+    "interaction": "You are not authorized to use this interaction",
     "ping": {
         "ping": "My ping is:"
     },
     "owner": {
-        "clear": "All owners have been successfully deleted.",
+        "clear": "All owners have been successfully removed.",
         "set": "is now an owner.",
-        "buyerowner": "You cannot own it yourself",
+        "buyerowner": "You cannot own yourself",
         "deleteowner": "is no longer an owner.",
         "nouser": "User not found.",
         "introuvable": "Not found",
-        "nowoner": "No owner defined.",
+        "nowoner": "No owner set.",
         "embed": {
             "title": "Owners"
         }
     },
+    "unowner": {
+        "nouser": "User not found.",
+        "nowoner": "This user is not an owner.",
+        "remove": "is no longer an owner."
+    },
     "langue": {
         "deja": "The language is already set to: {langCode}",
-        "erreur": "An error occurred.",
+        "erreur": "An error has occurred.",
         "invalide": "Invalid language.",
         "nolang": "Please provide a language...",
         "set": "The language is now set to: {langCode}"
@@ -25,13 +31,69 @@
     "help": {
         "description": "No description available",
         "aide": "*Variables between `<...>` are mandatory, while `[...]` are optional. Use the command `{prefix}help <command>` for more information.*",
-        "help": "`{prefix}help <commande>` for more information",
+        "help": "`{prefix}help <command>` for more information",
         "cmd": "Number of commands: ",
         "prefix": "My prefix on this server is:",
-        "nocmd": "No commands",
+        "nocmd": "No command",
         "inconnue": "This command does not exist. Use `{prefix}help` to see the list of commands.",
         "command": "Command:",
         "button": "Support Server"
+    },
+    "soutien": {
+        "newrole": "What is **the new role?**",
+        "newstatus": "What is **the new status?**",
+        "norole": "> `❌` Error: Invalid role!",
+        "noreponse": "Response time expired.",
+        "embed": {
+            "title": "Support Settings",
+            "status": "Status",
+            "role": "Role to give",
+            "vanity": "Vanity",
+            "noconfig": "Not configured"
+        },
+        "select": {
+            "vanity": "Vanity",
+            "role": "Role to give",
+            "status": "Enabled/disabled"
+        }
+    },
+    "sethelp": {
+        "menu": "Select the type of help",
+        "set": "Type of help modified.",
+        "description": "Select the type of help you want to use."
+    },
+    "savembed": {
+        "none": "No embeds saved.",
+        "presencedb": "An embed with the name `{name}` already exists.",
+        "nomessage": "Message not found. Make sure the message ID is correct.",
+        "save": "The embed has just been saved under the name",
+        "noembed": "The specified message does not contain an embed.",
+        "embed": {
+            "title": "List of embeds"
+        }
+    },
+    "loadembed": {
+        "noembed": "No embeds saved.",
+        "noresult": "No embed saved with the name"
+    },
+    "prefix": {
+        "set": "🛠️ *Prefix modified to:*",
+        "invalide": "> `❌` Error: The given prefix is already the server's prefix.",
+        "noperfix": "> `❌` Error: Please specify a `prefix`"
+    },
+    "mybot": {
+        "description": "> To distinguish your bots from those of your friends, different emojis are used: {buyers} to represent your bots and {owners} for those of your friends.",
+        "aucun": "You have no bots!",
+        "nobot": "Bot not found",
+        "embed": {
+            "title": "Your Bots"
+        }
+    },
+    "emoji": {
+        "create": "have been created"
+    },
+    "essyembed": {
+        "invalide": "Invalid color.",
+        "usage": "easyembed <color> <text>"
     }
-    
 }

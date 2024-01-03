@@ -25,6 +25,7 @@ module.exports = class Snoway extends Client {
     this.player.extractors.loadDefault();
 
     this.functions = require('../Functions/index')
+    this.utils = require('../Utils/index')
     this.config = require('../../../config/config');
 
     this.support = 'https://discord.gg/Snoway'
@@ -73,7 +74,9 @@ module.exports = class Snoway extends Client {
   connect() {
     return super.login(this.config.token).catch(async (err) => {
       console.log(err)
-    });
+    }).then(() => {
+      this.database = new (require("../Database/index"))(this, db);
+    })
   };
 
 

@@ -62,6 +62,33 @@ module.exports = {
         return response.data
     },
 
+
+    async formaTime(temps) {
+        let time 
+        if (temps < 60) {
+            time = `${temps} secondes`;
+        } else if (temps < 3600) {
+            const minutes = Math.floor(temps / 60);
+            const seconds = temps % 60;
+            time = `${minutes} minute${minutes !== 1 ? 's' : ''} et ${seconds} seconde${seconds !== 1 ? 's' : ''}`;
+        } else if (temps < 86400) {
+            const heures = Math.floor(temps / 3600);
+            const minutes = Math.floor((temps % 3600) / 60);
+            time = `${heures} heure${heures !== 1 ? 's' : ''}, ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+        } else if (temps < 31536000) {
+            const jours = Math.floor(temps / 86400);
+            const heures = Math.floor((temps % 86400) / 3600);
+            time = `${jours} jour${jours !== 1 ? 's' : ''}, ${heures} heure${heures !== 1 ? 's' : ''}`;
+        } else {
+            const années = Math.floor(temps / 31536000);
+            const jours = Math.floor((temps % 31536000) / 86400);
+            time = `${années} an${années !== 1 ? 's' : ''}, ${jours} jour${jours !== 1 ? 's' : ''}`;
+        }
+    
+        return time;
+    
+    },
+
     async color(colorArg) {
         const colorMap = {
             "rouge": "#FF0000",

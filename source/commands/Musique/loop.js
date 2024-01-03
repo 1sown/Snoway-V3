@@ -5,6 +5,7 @@ const { QueueRepeatMode } = require("discord-player");
 
 module.exports = {
     name: "repeat",
+    aliases: ['loop'],
     description: {
         fr: "Répéter la musique/queue ou désactiver le mode",
         en: "Repeat music/track or deactivate mode"

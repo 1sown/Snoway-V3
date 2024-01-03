@@ -35,14 +35,14 @@ module.exports = {
                 const url = `https://cdn.discordapp.com/emojis/${emojiId + extension}`;
 
                 message.guild.emojis.create({ attachment: url, name: emojiId })
-                    .then((emoji) => {
+                    .then(async (emoji) => {
                         creeemojis++;
                         if (creeemojis === totalEmojis) {
-                            message.channel.send(`${creeemojis} émoji${creeemojis !== 1 ? "s" : ""} ont été créé${creeemojis !== 1 ? "s" : ""}`);
+                            message.channel.send(`${creeemojis} émoji${creeemojis !== 1 ? "s" : ""} ${await client.lang('emoji.create')}${creeemojis !== 1 ? "s" : ""}`);
                         }
                     })
-                    .catch((error) => {
-                        message.channel.send({ content: "Une erreur s'est produite" });
+                    .catch(async (error) => {
+                        message.channel.send({ content: await client.lang('erreur') });
                     });
             }
         }

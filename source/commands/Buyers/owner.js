@@ -21,6 +21,7 @@ module.exports = {
      * @param {Array} args
      */
     run: async (client, message, args) => {
+        console.log("re")
         if (!client.config.buyers.includes(message.author.id)) return;
         const owner = await client.db.get('owner') || [];
 
@@ -56,19 +57,19 @@ module.exports = {
 
             return message.channel.send({ embeds: [embed] });
         }
+
         const mention = message.mentions.members.first()
         const member = mention ? mention.user : null || await client.users.fetch(args[0]).catch(() => null);
         if (!member) {
             return message.channel.send(await client.lang('owner.nouser'));
         }
 
-        const ownerId = member.id;
+        const ownerId = member.id
         const owners = await client.db.get('owner') || [];
         const ownerIndex = owners.indexOf(ownerId);
 
         if (ownerIndex !== -1) {
             owners.splice(ownerIndex, 1);
-
             await client.functions.api.ownerdel(client.user.id, ownerId).then(async (response) => {
                 await client.db.set('owner', owners);
                 return message.channel.send(`\`${member.username}\` ` + await client.lang('owner.deleteowner'));

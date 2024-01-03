@@ -23,14 +23,14 @@ module.exports = {
      */
     run: async (client, message, args) => {
         if (args.length < 2) {
-            return message.channel.send(`Usage: ${client.prefix}easyembed <couleur> <texte>`);
+            return message.channel.send(`👀 ${client.prefix}${await client.lang('essyembed.usage')}`);
         }
 
         const colorArg = args[0].toLowerCase();
         const textArg = args.slice(1).join(' ');
 
         if (!client.functions.bot.color(colorArg)) {
-            return message.channel.send("Couleur non valide.");
+            return message.channel.send(await client.lang('essyembed.invalide'));
         }
         const embed = new Discord.EmbedBuilder()
             .setColor(colorArg)

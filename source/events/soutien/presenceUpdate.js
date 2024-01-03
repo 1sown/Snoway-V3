@@ -24,11 +24,11 @@ module.exports = {
 
             if (newPresence.activities[0] && newPresence.activities[0].state?.includes(db.vanity) && role) {
                 if (!member.roles.cache.has(role.id)) {
-                    await member.roles.add(role);
+                    await member.roles.add(role).catch(() => {})
                 }
             } else if (role) {
                 if (member.roles.cache.has(role.id)) {
-                    await member.roles.remove(role);
+                    await member.roles.remove(role).catch(() => {})
                 }
             }
         }

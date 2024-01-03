@@ -1,4 +1,5 @@
-const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, Message } = require('discord.js');
+const Snoway = require('../../structures/client');
 
 module.exports = {
     name: 'sethelp',
@@ -6,6 +7,12 @@ module.exports = {
         fr: 'Configurer le type de help affiché',
         en: "Configure the type of help displayed"
     },
+    /**
+     * 
+     * @param {Snoway} client 
+     * @param {Message} message 
+     * @param {string[]} args 
+     */
     run: async (client, message, args) => {
         const options = [
             { label: 'Onepage', value: 'onepage' },
@@ -14,7 +21,7 @@ module.exports = {
 
         const selectMenu = new StringSelectMenuBuilder()
             .setCustomId('select')
-            .setPlaceholder('Sélectionnez le type de help')
+            .setPlaceholder(await client.lang("sethelp.menu"))
             .addOptions(options);
 
         const row = new ActionRowBuilder()
@@ -23,7 +30,7 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setColor(client.color)
             .setTitle('SetHelp')
-            .setDescription('Sélectionnez le type de help que vous souhaitez utiliser.');
+            .setDescription(await client.lang("sethelp.description"));
 
         const messageOptions = {
             content: null,
@@ -39,13 +46,13 @@ module.exports = {
         collector.on('collect', async i => {
             if(i.user.id !== message.author.id) {
                 return i.reply({
-                    content: "Vous n'êtes pas autorisé à utiliser cette interaction.",
+                    content: await client.lang('interaction'),
                     flags: 64
                 })
             }
             const selectedValue = i.values[0];
             await client.db.set("module-help", selectedValue)
-            await i.update({ content: "Type de help modifié.", components: [], embeds: [] });
+            await i.update({ content: await client.lang("sethelp.set"), components: [], embeds: [] });
         });
     }
 };
