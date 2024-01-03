@@ -103,7 +103,7 @@ module.exports = {
 
         collector.on('collect', async i => {
             if (i.user.id !== message.author.id) {
-                i.reply({ content: "Tu n'es pas autorisé à interagir avec cette interaction !", ephemeral: true });
+                i.reply({ content: "Tu n'es pas autorisé à interagir avec cette interaction !"});
                 return;
             }
 

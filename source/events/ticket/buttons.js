@@ -1,5 +1,5 @@
 const { ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
-const Snoway = require('../../structures/client');
+const Snoway = require('../../structures/client/index.js');
 const Discord = require('discord.js');
 const discordTranscripts = require('discord-html-transcripts');
 module.exports = {

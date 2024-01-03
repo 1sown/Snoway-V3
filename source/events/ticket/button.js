@@ -1,5 +1,5 @@
 const { ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
-const Snoway = require('../../structures/client');
+const Snoway = require('../../structures/client/index.js');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
                 const resul = tickeruser.find(ticket => ticket.author === interaction.user.id);
                 
                 if (resul && tickeruser.length >= db?.maxticket) {
-                    return await interaction.editReply({ content: `Vous avez déjà atteint le nombre maximal de tickets ouverts !`, ephemeral: true });
+                    return await interaction.editReply({ content: `Vous avez déjà atteint le nombre maximal de tickets ouverts !`});
                 }
           
 

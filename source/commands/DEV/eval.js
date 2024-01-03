@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const util = require('util');
-const Snoway = require('../../structures/client');
+const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
     name: 'eval',

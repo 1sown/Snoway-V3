@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const Snoway = require('../../structures/client');
+const Snoway = require('../../structures/client/index.js');
 module.exports = {
     name: 'member',
     description: {

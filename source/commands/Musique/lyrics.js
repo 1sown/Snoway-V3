@@ -51,7 +51,7 @@ module.exports = {
 
                 collector.on('collect', async (interaction) => {
                     if (interaction.user.id !== message.author.id) {
-                        return interaction.reply({ content: "Tu n'as pas la permission d'intéragir avec cette interaction", ephemeral: true });
+                        return interaction.reply({ content: "Tu n'as pas la permission d'intéragir avec cette interaction"});
                     }
 
                     if (interaction.customId === 'previous') {
@@ -80,7 +80,7 @@ module.exports = {
                     });
                 });
             } else {
-                message.reply({ content: lyrics, ephemeral: true });
+                message.reply({ content: lyrics});
             }
         } catch (error) {
             console.error('Erreur dans la commande lyrics :', error);

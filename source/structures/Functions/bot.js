@@ -1,4 +1,4 @@
-const Snoway = require('../Client/index');
+const Snoway = require('../../structures/client/index.js');
 const axios = require('axios');
 const config = require('./config')
 const config_bot = require('../../../config/config')

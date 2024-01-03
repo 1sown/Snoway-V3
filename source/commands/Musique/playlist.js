@@ -114,7 +114,7 @@ module.exports = {
                                 .setDisabled(page === totalPages)
                         );
 
-                    const reply = await message.reply({ embeds: [embed], components: [row], ephemeral: true });
+                    const reply = await message.reply({ embeds: [embed], components: [row]});
 
                     const collector = reply.createMessageComponentCollector({ time: 180000 });
 

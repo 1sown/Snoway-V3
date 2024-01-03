@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const Snoway = require('../../structures/client');
+const Snoway = require('../../structures/client/index.js');
 module.exports = {
     name: "owner",
     description: {
@@ -21,7 +21,6 @@ module.exports = {
      * @param {Array} args
      */
     run: async (client, message, args) => {
-        console.log("re")
         if (!client.config.buyers.includes(message.author.id)) return;
         const owner = await client.db.get('owner') || [];
 

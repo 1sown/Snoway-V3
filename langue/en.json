@@ -95,5 +95,80 @@
     "essyembed": {
         "invalide": "Invalid color.",
         "usage": "easyembed <color> <text>"
+    },
+    "defautrole": {
+        "add": "has just been added to the default role.",
+        "remove": "has been removed from the default roles.",
+        "no": "The role `{RoleName}` does not exist.",
+        "embed": {
+            "title": "Default Role",
+            "aucun": "No roles"
+        }
+    },
+    "backup": {
+        "create": {
+            "noname": "Please provide a name for the backup",
+            "deja": "A backup with this name already exists",
+            "erreur": ":x: An error occurred.",
+            "succes": "The backup of the server `{GuildName}` has been generated in **{Time}ms**."
+        },
+        "delete": {
+            "noname": "Please provide the name of a backup",
+            "erreur": ":x: An error occurred.",
+            "succes": "👀 The backup `{BackupName}` has been successfully deleted.",
+            "invalide": "Invalid or nonexistent backup name..."
+        },
+        "clear": {
+            "no": "No backups found!",
+            "erreur": ":x: An error occurred.",
+            "succes": "Your backups have been successfully deleted!"
+        },
+        "list": {
+            "aucune": "There are no backups.",
+            "embed": {
+                "title": "List of Backups"
+            },
+            "backup": {
+                "code": "Code",
+                "server": "Server Name",
+                "taile": "Size",
+                "role": "Roles",
+                "categorie": "Category",
+                "channels": "Channels",
+                "cree": "Created"
+            }
+        },
+        "load": {
+            "start": "Your backup is currently being loaded. Please be patient.",
+            "end": "Your backup has just been loaded in",
+            "no": "Please provide the name of a backup",
+            "invalide": "Invalid or nonexistent backup name.",
+            "select": {
+                "role": "Load roles",
+                "salon": "Load channels",
+                "emoji": "Load emojis",
+                "bans": "Load bans",
+                "place": "Select backup options..."
+            },
+            "embed": {
+                "title": "Loading a backup",
+                "description": "__Option loading__"
+            },
+            "backup": {
+                "info": "Backup Information",
+                "role": "Roles",
+                "date": "Date",
+                "categorie": "Category",
+                "channels": "Channels"
+            },
+            "option": {
+                "none": "None",
+                "role": "Roles",
+                "channels": "Channels",
+                "bans": "Bans",
+                "emoji": "Emojis"
+            }
+        }        
     }
+    
 }

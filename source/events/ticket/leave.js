@@ -1,6 +1,6 @@
 
 const { ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
-const Snoway = require('../../structures/client');
+const Snoway = require('../../structures/client/index.js');
 module.exports = {
     name: "guildMemberRemove",
     /**
