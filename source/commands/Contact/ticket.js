@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index')
-const ms = require('ms')
+const ms = require('../../structures/Utils/ms'); 
 module.exports = {
     name: 'ticket',
     aliases: ["tickets"],

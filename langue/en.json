@@ -168,7 +168,18 @@
                 "bans": "Bans",
                 "emoji": "Emojis"
             }
-        }        
+        }
+    },
+    "remid": {
+        "hello": "Hello",
+        "rappelle": "I'm here to remind you of:",
+        "set": "Reminder set. I will remind you in",
+        "temps": "Please specify a valid duration for the reminder."
+    },
+    "activity": {
+        "clear": "The activiter was clear!",
+        "ou": "or",
+        "set": "The bot's activity has been changed to",
+        "invalide": "Please specify a valid activity type:"
     }
-    
 }

@@ -16,9 +16,13 @@ getNow = () => {
 module.exports = {
   name: 'tempmute',
   aliases: ["timeout"],
-  description: 'Permet de mute temporairement un membre du serveur',
+  description: {
+    fr: 'Permet de mute temporairement un membre du serveur',
+    en: "Allows you to temporarily mute a server member"
+  },
   usage: {
-    "tempmute <utilisateur/id> <temps> [raison]": "Permet de mute temporairement un membre du serveur"
+    fr: {"tempmute <utilisateur/id> <temps> [raison]": "Permet de mute temporairement un membre du serveur"},
+    en: {"tempmute <user/id> <time> [reason]": "Allows you to temporarily mute a server member"}
   },
   run: async (client, message, args) => {
     try {

@@ -1,6 +1,6 @@
 const Snoway = require("../../structures/client");
 const Discord = require('discord.js');
-const ms = require('ms')
+const ms = require('../../structures/Utils/ms'); 
 module.exports = {
     name: 'soutien',
     description: {

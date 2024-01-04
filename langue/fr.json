@@ -169,5 +169,17 @@
                 "emoji": "Emojis"
             }
         }
+    }, 
+    "remid": {
+        "hello": "Salut",
+        "rappelle": "je viens vous rappeler de:",
+        "set": "Rappel enregistré. Je vous rappellerai dans",
+        "temps":"Veuillez spécifier une durée valide pour le rappel."
+    },
+    "activity": {
+        "clear": "L'activiter a bien était clear !",
+        "ou": "ou",
+        "set": "L'activité du bot a été changée en",
+        "invalide": "Veuillez spécifier un type d'activité valide :"
     }
 }

@@ -4,7 +4,10 @@ const Snoway = require('../../structures/client/index');
 module.exports = {
     name: "renew",
     aliases: ["purge"],
-    description: "Permet de récréer un salon",
+    description: {
+        fr: "Permet de récréer un salon",
+        en: "Allows you to recreate a living room"
+    },
     /**
      * 
      * @param {Snoway} client 

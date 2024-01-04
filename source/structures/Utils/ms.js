@@ -1,6 +1,10 @@
 /*
- Module Ms (non fait par moi)
- Lien "https://www.npmjs.com/package/ms?activeTab=readme" */
+ Module Ms (non fait par moi, juste traduis :))
+ Lien "https://www.npmjs.com/package/ms" */
+
+/**
+ * Helpers.
+ */
 
 var s = 1000;
 var m = s * 60;
@@ -9,7 +13,21 @@ var d = h * 24;
 var w = d * 7;
 var y = d * 365.25;
 
-function ms(val, options) {
+/**
+ * Parse or format the given `val`.
+ *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} [options]
+ * @throws {Error} throw an error if val is not a non-empty string or a number
+ * @return {String|Number}
+ * @api public
+ */
+
+module.exports = function (val, options) {
   options = options || {};
   var type = typeof val;
   if (type === 'string' && val.length > 0) {
@@ -21,7 +39,15 @@ function ms(val, options) {
     'val is not a non-empty string or a valid number. val=' +
       JSON.stringify(val)
   );
-}
+};
+
+/**
+ * Parse the given `str` and return milliseconds.
+ *
+ * @param {String} str
+ * @return {Number}
+ * @api private
+ */
 
 function parse(str) {
   str = String(str);
@@ -80,6 +106,14 @@ function parse(str) {
   }
 }
 
+/**
+ * Short format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
 function fmtShort(ms) {
   var msAbs = Math.abs(ms);
   if (msAbs >= d) {
@@ -97,28 +131,36 @@ function fmtShort(ms) {
   return ms + 'ms';
 }
 
+/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
 function fmtLong(ms) {
   var msAbs = Math.abs(ms);
   if (msAbs >= d) {
-    return plural(ms, msAbs, d, 'day');
+    return plural(ms, msAbs, d, 'jour');
   }
   if (msAbs >= h) {
-    return plural(ms, msAbs, h, 'hour');
+    return plural(ms, msAbs, h, 'heure');
   }
   if (msAbs >= m) {
     return plural(ms, msAbs, m, 'minute');
   }
   if (msAbs >= s) {
-    return plural(ms, msAbs, s, 'second');
+    return plural(ms, msAbs, s, 'seconde');
   }
   return ms + ' ms';
 }
+
+/**
+ * Pluralization helper.
+ */
 
 function plural(ms, msAbs, n, name) {
   var isPlural = msAbs >= n * 1.5;
   return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
-
-module.exports = {
-    ms
-};

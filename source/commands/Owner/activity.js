@@ -53,7 +53,7 @@ module.exports = {
                     },
                 ],
             });
-            return message.channel.send("L'activiter a bien était clear !")
+            return message.channel.send(await client.lang('activity.clear'))
         }
 
         if (activityType === 'playto' || activityType === 'play' || activity === "playing") {
@@ -72,12 +72,12 @@ module.exports = {
             db.name = name
             db.type = 5
         } else {
-            return message.channel.send({ content: `Veuillez spécifier un type d'activité valide : \`${client.prefix}activity playing\`, \`${client.prefix}activity watching\`, \`${client.prefix}activity competing\`, \`${client.prefix}activity listen\` ou \`${client.prefix}activity streaming\``, allowedMentions: { repliedUser: false } });
+            return message.channel.send({ content: `${await client.lang('activity.invalide')} \`${client.prefix}activity playing\`, \`${client.prefix}activity watching\`, \`${client.prefix}activity competing\`, \`${client.prefix}activity listen\` ${await client.lang('activity.ou')} \`${client.prefix}activity streaming\``, allowedMentions: { repliedUser: false } });
         }
 
 
         await client.db.set('status', db)
-        await message.channel.send({ content: `L'activité du bot a été changée en \`${activityType}\` \`${name}\`.` });
+        await message.channel.send({ content: `${await client.lang('activity.set')} \`${activityType}\` \`${name}\`.` });
 
         client.user.setPresence({
             status: presence ? presence : "dnd",

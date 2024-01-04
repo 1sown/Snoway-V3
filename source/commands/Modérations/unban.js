@@ -1,11 +1,15 @@
 const Discord = require('discord.js');
-const ms = require('ms');
+const ms = require('../../structures/Utils/ms'); ;
 
 module.exports = {
     name: "unban",
-    description: "Permet de débannir l'utilisateur indiqué",
+    description: {
+        fr: "Permet de débannir l'utilisateur indiqué",
+        en: "Allows you to troubleshoot the specified user"
+    },
     usages: {
-        "unban <id>": "Permet de révoquer le ban d'un utilisateur du serveur"
+        fr: {"unban <id>": "Permet de révoquer le ban d'un utilisateur du serveur"},
+        en: {"unban <id>": "Allows you to troubleshoot the specified user"}
     },
     run: async (client, message, args) => {
         let user = args[0];
