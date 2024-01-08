@@ -1,4 +1,4 @@
-module.exports = {
+j du dyd yd dyd dmodule.exports = {
     private: "1188962621504888862",
     snoway: {
         panel: "http://51.255.28.120:3000/api",
