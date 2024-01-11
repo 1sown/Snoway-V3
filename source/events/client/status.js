@@ -8,6 +8,7 @@ module.exports = {
      * @param {Snoway} client
      */
     run: async (client) => {
+        // Change le status du bot 
         setInterval(async () => {
             const db = await client.db.get(`status`)
             const presenceOptions = {
