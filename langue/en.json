@@ -2,7 +2,7 @@
     "erreur": "An error has just occurred.",
     "interaction": "You are not authorized to use this interaction",
     "ping": {
-        "ping": "My ping is: mother fockeur"
+        "ping": "My ping is:"
     },
     "owner": {
         "clear": "All owners have been successfully removed.",
@@ -202,4 +202,6 @@
         "stop": "Operation canceled.",
         "demande": "Do you really want me to leave the server: **{GuildName}**? Reply with `yes` or `no`."
     }
+    
+    
 }

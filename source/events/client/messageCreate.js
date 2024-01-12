@@ -63,7 +63,7 @@ module.exports = {
         }
 
         if (!message.member.roles.cache.some(role => foundPermission.role.includes(role.id))) {
-          return message.reply("Tu n'as pas la permission d'utiliser cette commande (2).");
+          return message.reply("Tu n'as pas la permission d'utiliser cette commande.");
         }
       }
     }

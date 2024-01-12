@@ -8,7 +8,6 @@ module.exports = {
      * @param {Snoway} client
      */
     run: async (client) => {
-        // Change le status du bot 
         setInterval(async () => {
             const db = await client.db.get(`status`)
             const presenceOptions = {
@@ -16,7 +15,7 @@ module.exports = {
                 activities: [{
                     name: db?.name || "Snoway V" + client.version,
                     type: db?.type || 1,
-                    url: "https://twitch.tv/oni0145"
+                    url: "https://twitch.tv/oni145"
 
                 }]
             };
