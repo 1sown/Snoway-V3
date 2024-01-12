@@ -47,30 +47,41 @@ module.exports = class Snoway extends Client {
         const langFilePath = `../../../langue/${langCode}.json`;
         const keys = key.split(".");
         let text;
+    
+        let errorMessage;
+        switch (langCode) {
+          case "en":
+            errorMessage = "No translation for this text. Please contact the developers!";
+            break;
+          default:
+            errorMessage = "Aucune traduction pour ce texte. Merci de contacter les développeurs !";
+        }
 
         try {
           text = require(langFilePath);
         } catch (error) {
+          
           console.error(
             `Impossible de charger le fichier de langue pour la langue "${langCode}" : ${error.message}`
           );
-          return resolve("");
+    
+          return resolve(errorMessage);
         }
-
+    
         for (const key of keys) {
           text = text[key];
           if (!text) {
             console.error(
               `Impossible de trouver une traduction pour "${key}", langue : ${langCode}`
             );
-            return resolve("");
+            return resolve(errorMessage);
           }
         }
-
+    
         return resolve(text);
       });
     }
-  }
+  }    
   connect() {
     return super.login(this.config.token).catch(async (err) => {
       console.log(err)

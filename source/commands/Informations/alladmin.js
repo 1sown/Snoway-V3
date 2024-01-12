@@ -1,12 +1,17 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder, PermissionsBitField, PermissionOverwrites, PermissionFlagsBits } = require('discord.js');
-
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, Message, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
+const {Snoway} = require('../../structures/client/index')
 module.exports = {
     name: 'alladmin',
     description: {
         fr: "Liste tous les membres avec la permission d\'administrateur",
         en: "Lists all members with administrator permission"
     },
-    run: async (client, message, args, commandName) => {
+    /**
+     *
+     * @param {Snoway} client
+     * @param {Message}message
+     */
+    run: async (client, message) => {
 
         const adminMembers = message.guild.members.cache.filter((member) => member.permissions.has(PermissionFlagsBits.Administrator));
 

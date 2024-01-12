@@ -15,10 +15,10 @@ module.exports = {
         let name = args.join(" ");
 
         if (!name) return;
-        if (name.length > 32) return message.channel.send("Le nom est trop long.");
-        if (name.length < 2) return message.channel.send("Le nom est trop court.");
+        if (name.length > 32) return message.channel.send(`${await client.lang('name.long')}`);
+        if (name.length < 2) return message.channel.send(`${await client.lang('name.court')}`);
 
         client.user.setUsername(name);
-        message.channel.send("J'ai bien changé mon nom en : " + `${name}`);
+        message.channel.send(`${await client.lang('name.set')} ` + `${name}`);
     }
 };

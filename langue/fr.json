@@ -1,4 +1,5 @@
 {
+    "notard": "Aucune traduction pour ce texte. Merci de contacter les développeurs !",
     "erreur": "Une erreur vient de se produire.",
     "interaction": "Vous n'êtes pas autorisé à utiliser cette interaction",
     "ping": {
@@ -181,5 +182,25 @@
         "ou": "ou",
         "set": "L'activité du bot a été changée en",
         "invalide": "Veuillez spécifier un type d'activité valide :"
+    },
+    "uptime": "je suis connecté depuis",
+    "server": {
+        "start": "Recherche en cours...",
+        "embed": {
+            "title": "Liste de mes serveurs",
+            "description": "> Voici la liste de mes serveurs"
+        }
+    },
+    "name": {
+        "set": "J'ai bien changé mon nom en :",
+        "long": "Le nom est trop long.",
+        "court": "Le nom est trop court."
+    },
+    "leave": {
+        "none": "Je n'ai pas pu trouver la guilde spécifiée ou actuelle.",
+        "non": "Annulation.",
+        "good": "J'ai bien quitté le serveur",
+        "stop": "Opération annulée.",
+        "demande": "Voulez-vous vraiment que je quitte le serveur : **{GuildName}**, répondre par `oui` ou `non` ?"
     }
 }

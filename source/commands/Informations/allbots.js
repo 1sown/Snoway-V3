@@ -2,6 +2,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilde
 
 module.exports = {
   name: 'allbots',
+  aliases: ["allbot"],
   description: {
     fr: "Liste tous les bots sur le serveur",
     en: "Lists all bots on the server"

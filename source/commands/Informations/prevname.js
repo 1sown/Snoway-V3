@@ -26,7 +26,7 @@ module.exports = {
                 member = await client.users.fetch(args[0]);
             } catch (error) {
                 console.error(error);
-                return message.channel.send("Je n'ai pas pu trouver cet utilisateur.");
+                return message.channel.send(await client.lang('prevname.nouser'));
             }
         }
 

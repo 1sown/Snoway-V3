@@ -181,5 +181,27 @@
         "ou": "or",
         "set": "The bot's activity has been changed to",
         "invalide": "Please specify a valid activity type:"
+    },
+    "uptime": "I have been connected for",
+    "server": {
+        "start": "Searching in progress...",
+        "embed": {
+            "title": "List of my servers",
+            "description": "> Here is the list of my servers"
+        }
+    },
+    "name": {
+        "set": "I have successfully changed my name to:",
+        "long": "The name is too long.",
+        "court": "The name is too short."
+    },
+    "leave": {
+        "none": "I couldn't find the specified guild or the current guild.",
+        "non": "Cancellation.",
+        "good": "I have successfully left the server.",
+        "stop": "Operation canceled.",
+        "demande": "Do you really want me to leave the server: **{GuildName}**? Reply with `yes` or `no`."
     }
+    
+    
 }

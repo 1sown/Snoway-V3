@@ -15,9 +15,9 @@ module.exports = {
    * @returns 
    */
     run: async (client, message, args) => {
-        const uptime = `<t:${Math.floor(Date.now() / 1000 - client.uptime / 1000)}:F>`;
+        const uptime = `<t:${Math.floor(Date.now() / 1000 - client.uptime / 1000)}:R>`;
         message.reply({
-            content: `je suis connecté depuis ${uptime}`
+            content: `${await client.lang('uptime')} ${uptime}`
         })
     },
 };

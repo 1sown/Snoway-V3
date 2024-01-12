@@ -16,7 +16,7 @@ module.exports = {
      */
     run: async (client, message, args) => {
         const queue = useQueue(message.guild.id);
-        if (!queue || !queue.currentTrack) {
+        if (!queue || !queue.musiquencours) {
             const embed = new EmbedBuilder()
                 .setColor(client.color)
                 .setFooter(client.footer)
@@ -53,7 +53,7 @@ module.exports = {
         const itemPerPage = 5;
         const totalPages = Math.ceil((queue.tracks.data.length || 1) / itemPerPage);
         let currentPage = 1;
-        const currentTrack = queue.currentTrack;
+        const musiquencours = queue.musiquencours;
 
         const generateEmbed = (page) => {
             const startIndex = (page - 1) * itemPerPage;
@@ -63,8 +63,8 @@ module.exports = {
             const queueEmbed = new EmbedBuilder()
                 .setColor(client.color)
                 .setTitle("Queue")
-                .setThumbnail(currentTrack.thumbnail.url || currentTrack.thumbnail)
-                .addFields({ name: "Musique Actuelle", value: `[${currentTrack.title} - (${currentTrack.durationFormatted || currentTrack.duration})](${currentTrack.url})` });
+                .setThumbnail(musiquencours.thumbnail.url || musiquencours.thumbnail)
+                .addFields({ name: "Musique Actuelle", value: `[${musiquencours.title} - (${musiquencours.durationFormatted || musiquencours.duration})](${musiquencours.url})` });
 
             if (tracks.length > 0) {
                 queueEmbed.addFields({ name: "Chansons en file d'attente", value: tracks.map((song, id) => `${startIndex + id + 1}. [${song.raw.title}](${song.url})`).join('\n') });
@@ -72,7 +72,7 @@ module.exports = {
                 queueEmbed.addFields({ name: "Chansons en file d'attente", value: "Aucune autre musique" });
             }
 
-            queueEmbed.setFooter({ text: `${client.footer.text} - Page ${page}/${totalPages}`, iconUrl: currentTrack.thumbnail });
+            queueEmbed.setFooter({ text: `${client.footer.text} - Page ${page}/${totalPages}`, iconUrl: musiquencours.thumbnail });
 
             const row = new ActionRowBuilder()
             .addComponents(
@@ -97,9 +97,9 @@ module.exports = {
         };
 
         const { queueEmbed, row } = generateEmbed(currentPage);
-        const queueEmbedMessage = await message.reply({ embeds: [queueEmbed], components: [row] });
+        const embed = await message.reply({ embeds: [queueEmbed], components: [row] });
 
-        const collector = queueEmbedMessage.createMessageComponentCollector();
+        const collector = embed.createMessageComponentCollector();
 
         collector.on('collect', async i => {
             if (i.user.id !== message.author.id) {

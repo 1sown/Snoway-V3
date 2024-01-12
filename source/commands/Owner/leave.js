@@ -19,10 +19,10 @@ module.exports = {
         const leaveg = client.guilds.cache.get(guildId);
 
         if (!leaveg || leaveg.id === client.functions.config.private) {
-            return message.reply({ content: "Je n'ai pas pu trouver la guilde spécifiée ou actuelle." });
+            return message.reply({ content: await client.lang('leave.none') });
         }
-
-        await message.reply({ content: `Voulez-vous vraiment que je quitte le serveur : **${leaveg.name}**, répondre par \`oui\` ou \`non\` ?` });
+        const response = (await client.lang('leave.demande')).replace('{GuildName}', leaveg.name)
+        await message.reply({ content: response });
 
         const filter = response => {
             return response.author.id === message.author.id;
@@ -32,15 +32,15 @@ module.exports = {
             const collected = await message.channel.awaitMessages({ filter, max: 1, time: 15000, errors: ['time'] });
             const response = collected.first();
 
-            if (response.content.toLowerCase() === 'oui') {
-                message.reply({ content: `J'ai bien quitté le serveur **${leaveg.name}**` }).catch(() => {})
+            if (response.content.toLowerCase() === 'oui' || response.content.toLowerCase() === 'yes') {
+                message.reply({ content: `${await client.lang('leave.good')} **${leaveg.name}**` }).catch(() => {})
                 await leaveg.leave();
             } else {
-                message.reply({ content: "Annulation." });
+                message.reply({ content: await client.lang('leave.non') });
             }
         } catch (error) {
             console.error(error);
-            message.reply({ content: "Opération annulée." });
+            message.reply({ content: await client.lang('leave.stop') });
         }
     }
 };

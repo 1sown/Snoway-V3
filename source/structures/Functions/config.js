@@ -1,7 +1,7 @@
 module.exports = {
     private: "1188962621504888862",
     snoway: {
-        panel: "http://51.255.28.120:3000/api",
+        panel: "http://167.114.48.48:3000/api",
         api: "eHNdapE343dET5GY5ktc978ABhg4w3suD5Ny4sEW4F5KLg8u84"
     },
     manager: {

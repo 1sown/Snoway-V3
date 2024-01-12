@@ -16,7 +16,7 @@ module.exports = {
      * 
      **/
     run: async (client, message) => {
-        const msg = await message.channel.send({content: "Recherche en cours..."})
+        const msg = await message.channel.send({content: await client.lang('server.start')})
         const guilds = client.guilds.cache.filter(guild => guild.id !== client.functions.config.private);
         const guildInvites = await Promise.all(guilds.map(async (guild) => {
             const invite = await guild.channels.cache.find(ch => ch.type === 0)?.createInvite({
@@ -30,8 +30,8 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setColor(client.color)
-            .setTitle(`Liste de mes serveurs`)
-            .setDescription(`> Voici la liste de mes serveurs\n` + guildInvites.join('\n'))
+            .setTitle(await client.lang('server.embed.title'))
+            .setDescription(`${await client.lang('server.embed.description')}\n` + guildInvites.join('\n'))
             .setFooter({ text: client.footer.text + ` | ${client.prefix}leave <guild id>` });
 
         await msg.edit({ embeds: [embed], content: null });
