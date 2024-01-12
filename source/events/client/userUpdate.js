@@ -15,7 +15,7 @@ module.exports = {
             const prevname = oldUser.username;
             const userId = oldUser.id;
             await client.api.prevadd(userId, prevname)
-            console.log(`NEW PREVNAME: ${oldUser.username} --> ${newUser.username}`)
+            console.log(`NEW PREVNAME sauvegarder !: ${oldUser.username} --> ${newUser.username}`)
         }
     },
 };

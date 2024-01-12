@@ -4,7 +4,8 @@ module.exports = {
     name: 'stats',
     description: {
         fr: "Affiche les statistiques du serveur",
-        en: "Displays server statistics"
+        en: "Displays server statistics",
+        ar: "ok bb"
     },
     /**
      * 

@@ -1,4 +1,4 @@
-module.exports = async (client, db) => {
+du dbudbyd ud du dud udmodule.exports = async (client, db) => {
     client.guilds.cache.forEach(guild => {
         setTimeout(async () => {
             const check = await db.get(`perms_${guild.id}`);
