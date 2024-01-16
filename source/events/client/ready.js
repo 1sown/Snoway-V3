@@ -25,12 +25,14 @@ module.exports = {
     const channel = client.channels.cache.size
     const userbot = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0).toLocaleString()
     console.log(`[BOT]      : ${tag} (${id}) est connecté à ${getNow().time}`);
-    console.log(`[LIGNES]   : ${ligne.ligne().toLocaleString()}`);
-    console.log(`[VERSION]  : ${client.version}`)
+    console.log(`[LANGUE]   : ${await client.db.get(`langue`)}`)
     console.log(`[COMMANDS] : ${client.commands.size}`)
     console.log(`[GUILDS]   : ${client.guilds.cache.size}`);
     console.log(`[CHANNELS] : ${channel}`);
     console.log(`[USERS]    : ${userbot}`);
+    console.log(`[LIGNES]   : ${ligne.ligne().toLocaleString()}`);
+    console.log(`[VERSION]  : ${client.version}`)
+    console.log("-------------------------------");
     console.log('Snoway est prêt');
     console.log("-------------------------------");
     const restartChannelId = await client.db.get(`restartchannel`);

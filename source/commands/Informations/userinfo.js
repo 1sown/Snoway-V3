@@ -1,6 +1,6 @@
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js')
 const Snoway = require('../../structures/client/index')
-
+const Discord = require('discord.js')
 module.exports = {
     name: "userinfo",
     aliases: ["ui"],
@@ -9,13 +9,13 @@ module.exports = {
         en: "To obtain information about a user"
     },
     usage: {
-        fr: {"userinfo <id/mention>": "Permet d'obtenir des informations sur un utilisateur"},
-        en: {"userinfo <id/mention>": "To obtain information about a user"}
+        fr: { "userinfo <id/mention>": "Permet d'obtenir des informations sur un utilisateur" },
+        en: { "userinfo <id/mention>": "To obtain information about a user" }
     },
     /**
      * 
      * @param {Snoway} client 
-     * @param {Snoway} message 
+     * @param {Discord.Message} message 
      * @param {Snoway} args 
      * @returns 
      */
@@ -37,6 +37,7 @@ module.exports = {
         const user = target.user;
         const member = target;
         let text = "Aucun rôle";
+        const author = message.author.id === user.id
 
         if (member) {
             const roles = member.roles.cache
@@ -117,14 +118,15 @@ module.exports = {
         );
 
         let platfor = platforms.map(platform => {
-
             if (platform === 'desktop') return '🖥️ Ordinateur';
             if (platform === 'mobile') return '📱 Téléphone';
             if (platform === 'web') return '🌐 Navigateur';
             if (platform === 'offline') return 'Aucune';
             if (platform === null) return 'Aucune';
         }).join(' / ');
-        const infomembre = `\n> **Name:** \`${user.username}\` / ${user}\n> **ID:** \`${user.id}\`\n> **Bot:** ${user.bot ? '\`✅\`' : '\`❌\`'}\n> **Badge(s):** \`${userBadges.length ? userBadges.join('\`, \`') : "`❌`"}\`\n> **Création du compte :** <t:${Math.floor(user.createdAt / 1000)}:f>`;
+        const prevname = await client.functions.api.prevget(user.id)        
+        const lastprev = lastprevname(prevname);
+        const infomembre = `\n> **Name:** \`${user.discriminator === 0 ? user.username : user.tag}\` / ${user}\n> **ID:** \`${user.id}\`\n> **Prevname${prevname.prevnames.length < 1 ? "" : "s"}:** \`${lastprev || "Aucun"}\` (\`${prevname.prevnames.length}\`)\n> **Bot:** ${user.bot ? '\`✅\`' : '\`❌\`'}\n> **Badge(s):** \`${userBadges.length ? userBadges.join('\`, \`') : "`❌`"}\`\n> **Création du compte :** <t:${Math.floor(user.createdAt / 1000)}:f>`;
         const infoserv = `\n\n> **Présent sur le serveur depuis:** <t:${Math.floor(member.joinedAt / 1000)}:F>\n> **Booster:** ${member.premiumSince ? `*Depuis le* <t:${Math.floor(member.premiumSince.getTime() / 1000)}:F>` : "`❌`"}\n> **Rôle(s):** ${text || "Aucun"}`
 
         const url = await user.fetch().then((user) => user.bannerURL({ format: "png", dynamic: true, size: 4096 }));
@@ -132,12 +134,72 @@ module.exports = {
             .setColor(client.color)
             .setTitle(`Informations sur ${user.username}`)
             .setThumbnail(user.avatarURL())
-            .setDescription(`**__Informations Principales__**\n${infomembre}\n\n**__Activité(s) en cours__**\n\n> **Status:** (\`${status}\`) \`${statusperso}\`\n> **Platforme:** \`${platfor || "Aucune"}\`\n> **Activité:**\n${activities.join('\n') || "> - **Aucune activité**"}\n\n__**Informations sur le serveur**__ ${infoserv}`)
+            .setDescription(`**__Informations Principales__**\n${infomembre}\n\n**__Activité(s) en cours__**\n\n> **Status:** (\`${status}\`) \`${statusperso}\`\n> **Platforme:** \`${platfor || "Aucune"}\`\n> **Activité: ${activities.length !== 0 ? `(${activities.length})` : ""}**\n${activities.join('\n') || "> - **Aucune activité**"}\n\n__**Informations sur le serveur**__ ${infoserv}`)
             .setImage(url)
             .setFooter(client.footer)
             .setImage(user.bannerURL({ format: 'png', size: 4096 }))
             .setTimestamp();
 
-        await message.reply({ embeds: [embed] });
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('del')
+                    .setStyle(2)
+                    .setEmoji(client.functions.emoji.del),
+                new ButtonBuilder()
+                    .setCustomId('prevnames')
+                    .setStyle(2)
+                    .setLabel('Affiche les prevnames')
+            )
+        const reply = await message.reply({ embeds: [embed], components: [row] });
+
+        const collector = reply.createMessageComponentCollector()
+
+        collector.on('collect', async (i) => {
+            if (i.user.id !== message.author.id) {
+                if (i.user.id !== user.id) {
+                    return i.reply({
+                        content: await client.lang('interaction'),
+                        flags: 64
+                    })
+                }
+            }
+
+            if (i.customId === 'del') {
+                i.message.delete()
+            }
+            if(i.customId === "prevnames") {
+                if (prevname.prevnames.length === 0) {
+                    return i.reply({
+                        flags: 64,
+                        content: author ? "Vous n'avez pas de prevname." : `${user.username} n'a pas de prevname.`
+                    });
+                }
+
+                const embed = new EmbedBuilder()
+                .setColor(client.color)
+                .setTitle(author ? "Vos Prevname" : `Prevname de ${user.username}`)
+                .setDescription(prevname.prevnames.map((entry, index) => `**${index + 1} -** <t:${Math.floor(entry.temps)}:d> - [\`${entry.prevname}\`](https://discord.com/users/${user.id})`).join('\n'))
+
+                i.reply({
+                    embeds: [embed],
+                    flags: 64
+                })
+            }
+        })
     }
+}
+
+
+function lastprevname(data) {
+    const prevnames = data.prevnames || [];
+
+    if (prevnames.length === 0) {
+        return null; 
+    }
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const sortedPrevnames = prevnames.sort((a, b) => b.temps - a.temps);
+    const latestPrevname = sortedPrevnames.find(prev => prev.temps <= currentTimestamp);
+
+    return latestPrevname ? latestPrevname.prevname : null;
 }

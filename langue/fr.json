@@ -83,7 +83,6 @@
         "noperfix": "> `❌` Erreur : Veuillez précisez un `préfix`"
     },
     "mybot": {
-        "description": "> Pour distinguer vos bots de ceux de vos amis, des emojis différents sont utilisés : {buyers} pour représenter vos bots et {owners} pour ceux de vos amis.",
         "aucun": "Vous n'avez aucun bot !",
         "nobot": "Bot introuvable",
         "embed": {
@@ -202,5 +201,10 @@
         "good": "J'ai bien quitté le serveur",
         "stop": "Opération annulée.",
         "demande": "Voulez-vous vraiment que je quitte le serveur : **{GuildName}**, répondre par `oui` ou `non` ?"
+    },
+    "pfp": {
+        "set": "Le channel des pfps vient d'être assigné à",
+        "channel": "Le channel spécifié est invalide.",
+        "off": "Système de pfp vient d'être désactivée."
     }
 }

@@ -24,8 +24,7 @@ module.exports = {
             .setTitle(await client.lang('mybot.embed.title'))
             .setColor(client.color)
             .setFooter(client.footer);
-            let descrip = (await client.lang('mybot.description')).replace("{buyers}", `${client.functions.emoji.buyers}`).replace("{owners}", `${client.functions.emoji.owners}`)
-            let description = `${descrip}\n\n`;
+            let description = ""
           
         for (let index = 0; index < response.length; index++) {
             const bot = response[index];
@@ -33,7 +32,7 @@ module.exports = {
             const botUser = await client.users.fetch(bot.bot);
 
 
-            description += `**${index + 1} -** [\`${botUser ? botUser.tag : `${await client.lang('mybot.nobot')}`}\`](https://discord.com/api/oauth2/authorize?client_id=${botUser.id}&permissions=8&scope=bot%20applications.commands): <t:${Math.floor(bot.temps / 1000)}:R> ${bot.buyer ? client.functions.emoji.buyers : client.functions.emoji.owners}\n`;
+            description += `**${index + 1})** [\`${botUser ? botUser.tag : `${await client.lang('mybot.nobot')}`}\`](https://discord.com/api/oauth2/authorize?client_id=${botUser.id}&permissions=8&scope=bot%20applications.commands): <t:${Math.floor(bot.temps / 1000)}:R> ${bot.buyer ? client.functions.emoji.buyers : ""}\n`;
         }
 
         embed.setDescription(description);

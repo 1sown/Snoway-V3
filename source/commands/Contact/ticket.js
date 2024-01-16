@@ -4,7 +4,10 @@ const ms = require('../../structures/Utils/ms');
 module.exports = {
     name: 'ticket',
     aliases: ["tickets"],
-    description: 'Permet de créer/configure le sytème de ticket.',
+    description: {
+        fr: 'Permet de créer/configure le sytème de ticket.',
+        en: "Creates/configures the ticket system."
+    },
     /**
      * @param {Snoway} client 
      * @param {Discord.Message} message 

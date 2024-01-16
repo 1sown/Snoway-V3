@@ -82,7 +82,6 @@
         "noperfix": "> `❌` Error: Please specify a `prefix`"
     },
     "mybot": {
-        "description": "> To distinguish your bots from those of your friends, different emojis are used: {buyers} to represent your bots and {owners} for those of your friends.",
         "aucun": "You have no bots!",
         "nobot": "Bot not found",
         "embed": {
@@ -201,7 +200,10 @@
         "good": "I have successfully left the server.",
         "stop": "Operation canceled.",
         "demande": "Do you really want me to leave the server: **{GuildName}**? Reply with `yes` or `no`."
-    }
-    
-    
+    },
+    "pfp": {
+        "set": "The profile pictures (pfps) channel has just been assigned to",
+        "channel": "The specified channel is invalid.",
+        "off": "Profile picture (pfp) system has just been deactivated."
+    }    
 }
