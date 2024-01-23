@@ -62,7 +62,7 @@ module.exports = {
         }
 
         const messages = await message.channel.send(`Début de la blacklist pour ${member.username}...`);
-        let d = "";
+        let saluts = "";
 
         await Promise.all(client.guilds.cache.map(async (guild) => {
             try {

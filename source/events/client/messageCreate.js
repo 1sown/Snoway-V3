@@ -14,6 +14,7 @@ module.exports = {
     const prefix = await client.db.get(`prefix_${message.guild.id}`) || client.config.prefix
     client.color = await client.db.get(`color_${message.guild.id}`) || client.config.color
     client.prefix = await client.db.get(`prefix_${message.guild.id}`) || client.config.prefix
+    client.noperm = "Tu n'as pas la permission d'utiliser cette commande."
 
 
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`) {
@@ -42,32 +43,24 @@ module.exports = {
     const name = cmd.name;
     const owners = await client.db.get(`owner`) || [];
 
+    const permBot = client.dev.includes(message.author.id) || client.config.buyers.includes(message.author.id) || owners.includes(message.author.id);
 
-    if (!client.config.buyers.includes(message.author.id) && !owners.includes(message.author.id)) {
-      const permissions = await client.db.get(`perms_${message.guild.id}`);
-
-      if (!permissions) {
-        return message.reply("Tu n'as pas la permission d'utiliser cette commande.");
+    if (!permBot) {
+      const permissionIndex = await client.db.get(`perms_${message.guild.id}`);
+      if (permissionIndex) {
+        for (const perm in permissionIndex) {
+          if (perm === 'public' && permissionIndex[perm]?.commands.includes(name) || (message.member.roles.cache.some(r => permissionIndex[perm].role?.includes(r.id)) && permissionIndex[perm]?.commands.includes(name))) {
+            return cmd.run(client, message, args);
+          }
+        }
       }
 
-      if (permissions.public.commands.includes(name)) {
-        if (!permissions.public.status) {
-          return message.reply("Les commandes publiques sont désactivées sur ce serveur.");
-        }
-
-      } else {
-        const foundPermission = Object.values(permissions).find(permission => permission.commands.includes(name));
-
-        if (!foundPermission) {
-          return message.reply("Tu n'as pas la permission d'utiliser cette commande.");
-        }
-
-        if (!message.member.roles.cache.some(role => foundPermission.role.includes(role.id))) {
-          return message.reply("Tu n'as pas la permission d'utiliser cette commande.");
-        }
+      if (client.noperm.trim() !== '') {
+        return message.channel.send(client.noperm);
       }
     }
 
-    cmd.run(client, message, args);
+
+    return cmd.run(client, message, args);
   }
 };

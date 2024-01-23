@@ -126,7 +126,7 @@ module.exports = {
         }).join(' / ');
         const prevname = await client.functions.api.prevget(user.id)        
         const lastprev = lastprevname(prevname);
-        const infomembre = `\n> **Name:** \`${user.discriminator === 0 ? user.username : user.tag}\` / ${user}\n> **ID:** \`${user.id}\`\n> **Prevname${prevname.prevnames.length < 1 ? "" : "s"}:** \`${lastprev || "Aucun"}\` (\`${prevname.prevnames.length}\`)\n> **Bot:** ${user.bot ? '\`✅\`' : '\`❌\`'}\n> **Badge(s):** \`${userBadges.length ? userBadges.join('\`, \`') : "`❌`"}\`\n> **Création du compte :** <t:${Math.floor(user.createdAt / 1000)}:f>`;
+        const infomembre = `\n> **Name:** \`${user.discriminator === 0 ? user.username : user.tag}\` / ${user}\n> **ID:** \`${user.id}\`\n> **Prevname${prevname.prevnames.length < 1 ? "" : "s"}:** \`${lastprev || "Aucun"}\` (\`${prevname.prevnames.length}\`)\n> **Bot:** ${user.bot ? '\`✅\`' : '\`❌\`'}\n> **Badge(s):** \`${userBadges.length ? userBadges.join('\`, \`') : "`❌`"}\`\n> **Création du compte :** <t:${Math.floor(user.createdAt / 1000)}:f>\n> **Connecté depuis** ${member.presence?.activities[0] ? `<t:${Math.floor(member.presence?.activities[0]?.createdTimestamp / 1000)}:f>` : "Aucune donnée"}`;
         const infoserv = `\n\n> **Présent sur le serveur depuis:** <t:${Math.floor(member.joinedAt / 1000)}:F>\n> **Booster:** ${member.premiumSince ? `*Depuis le* <t:${Math.floor(member.premiumSince.getTime() / 1000)}:F>` : "`❌`"}\n> **Rôle(s):** ${text || "Aucun"}`
 
         const url = await user.fetch().then((user) => user.bannerURL({ format: "png", dynamic: true, size: 4096 }));

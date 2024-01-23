@@ -45,7 +45,6 @@ module.exports = {
                     'Authorization': 'Bot ' + config_bot.token,
                 },
             });
-    
             return response.data;
         } catch (error) {
             throw error;
