@@ -83,7 +83,7 @@ module.exports = {
         const sentMessage = await message.reply({ embeds: [embed], components: [row] });
 
         const filter = (interaction) => interaction.user.id === message.author.id;
-        const collector = sentMessage.createMessageComponentCollector({ filter, time: 60000 });
+        const collector = sentMessage.createMessageComponentCollector();
 
         collector.on('collect', (interaction) => {
             if (interaction.customId === 'prev' && currentPage > 1) {

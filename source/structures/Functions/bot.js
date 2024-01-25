@@ -24,6 +24,25 @@ module.exports = {
         }
     },
 
+    gen() {
+            const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const number = "0123456789"
+            let keys = [];
+        
+            for (let i = 0; i < 1; i++) {
+                let keySection1 = Array.from({ length: 4 }, () => number[Math.floor(Math.random() * number.length)]).join('');
+                let keySection2 = Array.from({ length: 4 }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+                let keySection3 = Array.from({ length: 4 }, () => number[Math.floor(Math.random() * number.length)]).join('');
+                let keySection4 = Array.from({ length: 4 }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+        
+                let key = `SNOW-${keySection1}-${keySection2}-${keySection3}-${keySection4}`;
+                keys.push(key);
+            }
+        
+            return keys;
+        
+    },
+ 
     maj(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     },

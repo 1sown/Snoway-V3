@@ -24,7 +24,7 @@ async function prevget(userId) {
             'api-key': config_api.snoway.api
         }
 
-    }).catch(() => { e => console.log(e) })
+    }).catch((e) => { console.log(e) })
     return response.data
 }
 
