@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const ms = require("ms");
+const ms = require("../../structures/Utils/ms");
 
 getNow = () => {
   return {
@@ -51,7 +51,6 @@ module.exports = {
       await message.channel.send({ content: `${tempmuteMember.user} à été **tempmute ${duration}** pour \`${reason}\`` });
 
       setTimeout(async () => {
-        await tempmuteMember.timeout(0);
         message.channel.send({ content: `\`${tempmuteMember.user.username}\` a été **untempmute**` });
       }, ms(duration));
 

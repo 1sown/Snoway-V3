@@ -11,10 +11,10 @@ module.exports = {
         setInterval(async () => {
             const db = await client.db.get(`status`)
             const presenceOptions = {
-                status: db?.status || 'online',
+                status: db?.status || 'dnd',
                 activities: [{
-                    name: db?.name || "Snoway V" + client.version,
-                    type: db?.type || 2,
+                    name: db?.name || "Snoway V" + client.version + " .gg/snoway",
+                    type: db?.type || 3,
                     url: "https://twitch.tv/oni145"
 
                 }]
