@@ -1,4 +1,4 @@
-const { useQueue } = require("discord-player");
+const { useQueue, useMainPlayer } = require("discord-player");
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 const Snoway = require("../../structures/client/index");
 

@@ -61,7 +61,7 @@ module.exports = {
 
         queue.node.setVolume(volumeValue);
 
-        embed.setDescription(`Volume r�gl� sur ${volumeValue}%`);
+        embed.setDescription(`Volume réglé sur ${volumeValue}%`);
         embed.setColor(client.color);
         message.reply({ embeds: [embed] });
     }
