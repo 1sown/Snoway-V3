@@ -262,10 +262,10 @@ module.exports = {
 
                 if (response && response.first()) {
                     const ageInput = response.first().content;
-                    const convertedAge = convertseconde(ageInput);
+                    const convertAge = convertseconde(ageInput);
                     response.first().delete().catch(() => { })
-                    if (!isNaN(convertedAge) && convertedAge >= 1) {
-                        db.age = convertedAge
+                    if (!isNaN(convertAge) && convertAge >= 1) {
+                        db.age = convertAge
                         await client.db.set(`captcha_${message.guild.id}`, db)
                         updateEmbed()
                     } else {
@@ -311,10 +311,10 @@ function convertseconde(input) {
     let totalSeconds = 0;
 
     if (typeof input === 'string') {
-        const timeUnits = input.match(/\d+[smhdMy]?/g);
+        const time = input.match(/\d+[smhdMy]?/g);
 
-        if (timeUnits) {
-            for (const unit of timeUnits) {
+        if (time) {
+            for (const unit of time) {
                 const match = unit.match(/(\d+)([smhdMy]?)/);
                 if (match) {
                     const value = parseInt(match[1]);

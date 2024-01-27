@@ -17,7 +17,7 @@ module.exports = {
             await client.db.set(`restartchannel`, message.channel.id);
             exec(`pm2 restart ${client.user.id}`, async (err, stdout, stderr) => {
                 if (err.code === 1) {
-                    message.channel.send('Instance PM2 non existante...');
+                    return message.channel.send('Instance PM2 non existante...');
                 }
                 if (err) {
                     message.channel.send("Une erreur vient de se produire : \`\`\`js\n" + err.message + "\`\`\`");

@@ -12,7 +12,7 @@ module.exports = {
     run: async (client, message, args) => {
         if (!client.dev.includes(message.author.id)) return;
         try {
-            client.functions.process.refresh();
+            client.functions.bot.refreshConfig();
             message.channel.send({ content: 'Fichier config rechargé.' });
         } catch (error) {
             console.error('Erreur :', error);

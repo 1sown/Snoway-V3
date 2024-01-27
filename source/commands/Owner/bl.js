@@ -29,6 +29,12 @@ module.exports = {
      */
     run: async (client, message, args) => {
         const blacklist = await client.db.get(`blacklist`) || [];
+
+        if (args[0] === 'clear') {
+            await client.db.delete(`blacklist`);
+            return message.reply(`La liste des utilisateurs blacklistés a été effacée.`);
+        }
+
         let user = message.mentions.users.first();
         let memberId = args[0];
 
@@ -40,44 +46,46 @@ module.exports = {
             }
         }
         
-        if (!user || !memberId) return message.reply({
-            content: "Utilisateur invalide !"
-        });
-
-        const reason = args.slice(1).join(' ') || "Aucune raison spécifiée";
+        if (!user && !memberId) {
+            const blacklistEmbed = new EmbedBuilder()
+                .setTitle("Blacklist")
+                .setDescription(blacklist.map(entry => `<@${entry.userId}>`).join('\n') || "None")
+                .setFooter(client.footer)
+                .setColor(client.color);
+    
+            return message.channel.send({ embeds: [blacklistEmbed] });
+        }
+        if (blacklist.some(entry => entry.userId === (memberId || user.id))) {
+           return message.reply({
+            content: `${user.username} est déjà dans la blacklist`
+           })
+        }
+        const reason = args.slice(1).join(' ') || null;
         const owner = await client.db.get(`owner`) || [];
         if (owner.includes(user.id) || client.config.buyers.includes(user.id)) {
             return message.channel.send(`Je ne peux pas blacklist un owner ou buyer bot`);
         }
 
-        if (args[0] === 'clear') {
-            await client.db.delete(`blacklist`);
-            return message.reply(`La liste des utilisateurs blacklistés a été effacée.`);
-        }
 
         const member = user;
-                
-        if (blacklist.some(entry => entry.userId === member.id)) {
-            return message.channel.send(`${member.username} est déjà blacklisté.`);
-        }
-
         const messages = await message.channel.send(`Début de la blacklist pour ${member.username}...`);
-        let saluts = "";
+        let bansSuccess = 0;
+        let bansFailed = 0;
 
         await Promise.all(client.guilds.cache.map(async (guild) => {
             try {
-                await guild.members.ban(member.id, { reason: `Blacklisted | by ${message.author.tag} | Reason: ${reason}` });
-                saluts += `\nBannie de ${guild.name}`;
+                await guild.members.ban(member.id, { reason: `BLACKLIST | by ${message.author.tag}` });
+                bansSuccess++;
                 await new Promise(resolve => setTimeout(resolve, 800)); 
             } catch (error) {
                 console.error(`Impossible de bannir ${member.username} de ${guild.name}`);
-                saluts += `\nImpossible de la bannir sur ${guild.name}`;
+                bansFailed++;
             }
         }));
 
-        messages.edit(`${messages.content}${saluts}\n${member.username} a été blacklisté de tous les serveurs (${client.guilds.cache.size}). Raison: ${reason}`);
+        messages.edit(`${messages.content}\n${member.username} a été blacklisté de \`${bansSuccess}\` serveurs avec succès et a échoué sur \`${bansFailed}\` serveurs.\nRaison: \`${reason || "Aucune raison spécifiée"}\``);
         
-        blacklist.push({ userId: member.id, reason });
+        blacklist.push({ userId: member.id, raison: reason, date: Date.now(), author: message.author.id });
         await client.db.set(`blacklist`, blacklist);
     }
-}
+};

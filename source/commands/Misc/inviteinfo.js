@@ -23,7 +23,6 @@ module.exports = {
             const invite = await client.fetchInvite(`https://discord.gg/` + url);
 
             const server = invite.guild;
-
             const embed = new Discord.EmbedBuilder()
                 .setTitle(server.name)
                 .setColor(0x6200b8)

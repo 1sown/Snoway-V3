@@ -70,6 +70,12 @@ module.exports = {
         }
     },
 
+    refreshConfig() {
+        delete this.config;
+        delete require.cache[require.resolve('../../../config/config')];
+        this.config = require('../../../config/config');
+    },
+    
     async invite(invite_url) {
         const response = await axios.get(`https://discord.com/api/v10/invites/${invite_url}`, {
             headers: {
