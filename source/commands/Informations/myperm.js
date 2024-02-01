@@ -3,7 +3,10 @@ const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
     name: 'myperm',
-    description: 'Check your own permissions for specified actions.',
+    description: {
+        en: "Check your own permissions for specified actions",
+        fr: "Vérifiez vos propres autorisations sur le serveur"
+    },
     /**
      * @param {Snoway} client 
      * @param {Discord.Message} message 

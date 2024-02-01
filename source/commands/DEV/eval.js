@@ -1,5 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
-const util = require('util');
+const { EmbedBuilder, Message } = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -8,8 +7,8 @@ module.exports = {
     /**
      * 
      * @param {Snoway} client 
-     * @param {*} message 
-     * @param {*} args 
+     * @param {Message} message 
+     * @param {string[]} args 
      * @returns 
      */
     async run(client, message, args) {
@@ -18,10 +17,10 @@ module.exports = {
         const code = args.join(' ');
         if(!code) return message.reply('Merci de donner un code a eval !')
         try {
-            let evaled = await eval(code);
+            let evalcode = await eval(code);
 
-            if (typeof evaled !== 'string') {
-                evaled = require('util').inspect(evaled);
+            if (typeof evalcode !== 'string') {
+                evalcode = require('util').inspect(evalcode);
             }
             
             message.channel.send({
@@ -29,7 +28,7 @@ module.exports = {
                     new EmbedBuilder()
                         .setTitle('Évaluation réussie')
                         .addFields({name: 'Entrée 📥', value: `\`\`\`javascript\n${code}\n\`\`\``})
-                        .addFields({name:'Sortie 📤', value: `\`\`\`javascript\n${clean(evaled)}\n\`\`\``})
+                        .addFields({name:'Sortie 📤', value: `\`\`\`javascript\n${clean(evalcode)}\n\`\`\``})
                         .setColor(client.color)
                 ]
             });

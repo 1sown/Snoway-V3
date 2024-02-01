@@ -56,7 +56,7 @@ module.exports = {
             return message.channel.send(await client.lang('activity.clear'))
         }
 
-        if (activityType === 'playto' || activityType === 'play' || activity === "playing") {
+        if ((activityType === 'playto' || activityType === 'play' || activity === "playing")) {
             db.name = name
             db.type = 0
         } else if (activityType === 'watch' || activityType === "watching") {
@@ -72,7 +72,7 @@ module.exports = {
             db.name = name
             db.type = 5
         } else {
-            return message.channel.send({ content: `${await client.lang('activity.invalide')} \`${client.prefix}activity playing\`, \`${client.prefix}activity watching\`, \`${client.prefix}activity competing\`, \`${client.prefix}activity listen\` ${await client.lang('activity.ou')} \`${client.prefix}activity streaming\``, allowedMentions: { repliedUser: false } });
+            return message.channel.send({ content: `${await client.lang('activity.invalide')} \`${client.prefix}activity playto\`, \`${client.prefix}activity watching\`, \`${client.prefix}activity competing\`, \`${client.prefix}activity listen\` ${await client.lang('activity.ou')} \`${client.prefix}activity streaming\``, allowedMentions: { repliedUser: false } });
         }
 
 

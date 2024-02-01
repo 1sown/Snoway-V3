@@ -18,7 +18,7 @@ module.exports = {
 
 
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`) {
-      return message.channel.send(`Mon prefix sur ce serveur est: \`${prefix}\``).catch(() => { });
+      return message.channel.send(`${await client.lang('prefixbot')} \`${prefix}\``).catch(() => { });
     }
 
     if (!message.content.startsWith(prefix) || message.content === prefix || message.content.startsWith(prefix + ' ')) {

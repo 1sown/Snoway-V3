@@ -21,7 +21,7 @@ module.exports = {
             const channels = message.guild.channels.cache;
             channels.forEach(async (channel) => {
                 await channel.permissionOverwrites.edit(message.guild.roles.everyone, {
-                    ViewChannel: false,
+                    ViewChannel: true,
                 }).then(() => {
                     channelLock++;
                 }).catch((error) => {

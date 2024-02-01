@@ -60,6 +60,7 @@ module.exports = {
                     'Misc',
                     'Contact',
                     'Musique',
+                    'Antiraid',
                     'Permissions',
                     'Owner',
                     'Buyers'
@@ -73,9 +74,11 @@ module.exports = {
                     'Misc': 5,
                     'Contact': 6,
                     'Musique': 7,
-                    'Permissions': 8,
-                    'Owner': 9,
-                    'Buyers': 10,
+                    'Antiraid': 8,
+                    'Permissions': 9,
+                    'Owner': 10,
+                    'Buyers': 11,
+                    
                 };
 
                 cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
