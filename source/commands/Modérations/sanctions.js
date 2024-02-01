@@ -2,7 +2,10 @@ const { MessageActionRow, MessageButton, InteractionCollector, ActionRowBuilder,
 
 module.exports = {
     name: 'warnlist',
-    description: 'Lists warnings for a server member with a paging system',
+    alisas: ["sanction", "sanctions"],
+    description: {
+        fr: 'Liste des avertissements pour un membre du serveur avec un système de radiomessagerie',
+        en: "Lists warnings for a server member with a paging system"},
     run: async (client, message, args) => {
         const color = client.color 
         try {

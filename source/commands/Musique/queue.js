@@ -16,14 +16,13 @@ module.exports = {
      */
     run: async (client, message, args) => {
         const queue = useQueue(message.guild.id);
-        if (!queue || !queue.musiquencours) {
+        if (!queue || queue.tracks.length === 0) {
             const embed = new EmbedBuilder()
                 .setColor(client.color)
                 .setFooter(client.footer)
                 .setDescription("Aucune musique en cours !");
             return message.reply({ embeds: [embed] });
         }
-
         const channel = message.member.voice.channel;
 
         if (!channel) {
@@ -53,7 +52,7 @@ module.exports = {
         const itemPerPage = 5;
         const totalPages = Math.ceil((queue.tracks.data.length || 1) / itemPerPage);
         let currentPage = 1;
-        const musiquencours = queue.musiquencours;
+        const musiquencours = queue.currentTrack;
 
         const generateEmbed = (page) => {
             const startIndex = (page - 1) * itemPerPage;

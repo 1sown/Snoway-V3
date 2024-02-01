@@ -20,7 +20,7 @@ module.exports = {
     run: async (client, message, args) => {
         const url = args[0]
         try {
-            const invite = await client.fetchInvite(`https://discord.gg/` + url);
+            const invite = await client.fetchInvite(url);
             if(!invite) return message.reply('Erreur, serveur invalide');
             const server = invite.guild;
             const embed = new Discord.EmbedBuilder()

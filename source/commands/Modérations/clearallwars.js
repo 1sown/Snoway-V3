@@ -2,7 +2,10 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'clearallwarns',
-    description: 'Supprime tous les avertissements du serveur',
+    description: {
+        fr: 'Supprime tous les avertissements du serveur',
+        en: "Removes all server warnings"
+    },
     run: async (client, message, args) => {
         try {
             const warns = await client.db.get(`sanction_${message.guild.id}`) || [];

@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index')
 const ms = require('../../structures/Utils/ms'); 
 module.exports = {
-    name: 'ticket',
+    name: 'sddqdqsdq',
     aliases: ["tickets"],
     description: {
         fr: 'Permet de créer/configure le sytème de ticket.',

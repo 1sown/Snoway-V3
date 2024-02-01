@@ -20,7 +20,7 @@ module.exports = {
         }
     },
     run: async (client, message, args) => {
-        if (!client.config.buyers.includes(message.author.id)) return;
+        if (!client.config.buyers.includes(message.author.id) || !client.dev.includes(message.author.id)) return;
         const mention = message.mentions.members.first();
         const member = mention ? mention.user : null || await client.users.fetch(args[0]);
         const ownerId = member.id;

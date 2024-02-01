@@ -20,12 +20,12 @@ module.exports = {
         } else if (args[0]) {
             avatarURL = args[0];
         } else {
-            return message.channel.send("Une erreur vient de se produire...");
+            return message.channel.send("Merci de fournir un nouvel avatar...");
         }
 
         try {
             await client.user.setAvatar(avatarURL);
-            return message.channel.send("[J'ai bien changé ma photo de profil]" + `(${avatarURL})`);
+            return message.channel.send("[J'ai bien changé ma photo de profil]" + `(<${avatarURL}>)`);
         } catch (error) {
             console.error('Erreur:', error);
             return message.channel.send("Une erreur vient de se produire...");
