@@ -58,11 +58,18 @@ module.exports = {
         const chns = sowt.slice(0, 10);
         let top = 0;
 
-        const messagetops = chns.map(channel => {
+        const messagetops = chns
+        .filter(channel => {
+            const chanobject = message.guild.channels.cache.get(channel.channelId);
+            return chanobject !== undefined;
+        })
+        .map((channel, index) => {
             top++;
             const chanobject = message.guild.channels.cache.get(channel.channelId);
-            return chanobject ? `\`${top}.\` ${chanobject}: \`${channel.message} message(s)\`` : `\`${top}.\`#salon-introuvable`;
-        }).join('\n');
+    
+            return `\`${top}.\` ${chanobject}: \`${channel.message} message(s)\``;
+        })
+        .join('\n');
 
 
         const sown = vocalData.channels.sort((a, b) => b.channelId - a.channelId);

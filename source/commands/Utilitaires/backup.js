@@ -46,7 +46,7 @@ module.exports = {
           return message.reply({ content: await client.lang('backup.create.deja') });
         }
         const start = Date.now();
-
+        const edit = await message.reply({ content: await client.lang('backup.create.attente') });
         const backupData = await backup.create(message.guild, {
           maxMessagesPerChannel: 0,
           doNotBackup: ["messages"]
@@ -63,10 +63,10 @@ module.exports = {
         });
         const end = Date.now();
         const time = end - start;
-        return message.reply({ content: (await client.lang('backup.create.succes')).replace("{GuildName}", message.guild.name).replace('{Time}', time) });
+        return edit.edit({ content: (await client.lang('backup.create.succes')).replace("{GuildName}", message.guild.name).replace('{Time}', time) });
       } catch (error) {
         console.error(error);
-        return message.reply(await client.lang('backup.create.erreur'));
+        return edit.edit(await client.lang('backup.create.erreur'));
       }
     }
 

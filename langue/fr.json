@@ -1,5 +1,6 @@
 {
     "notard": "Aucune traduction pour ce texte. Merci de contacter les développeurs !",
+    "prefixbot": "Mon prefix sur ce serveur est:",
     "erreur": "Une erreur vient de se produire.",
     "interaction": "Vous n'êtes pas autorisé à utiliser cette interaction",
     "ping": {
@@ -107,6 +108,7 @@
     },
     "backup": {
         "create": {
+            "attente": "Création de la backup en cours...",
             "noname": "Merci de donner un nom pour la backup",
             "deja": "Une backup de ce nom existe déjà",
             "erreur": ":x: Une erreur s'est produite.",

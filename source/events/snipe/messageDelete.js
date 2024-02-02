@@ -10,13 +10,12 @@ module.exports = {
      */
     run: async (client, message) => {
         if (!message.guild || message.author?.bot) return;
-        console.log(Snipe)
         const channelId = message.channel.id;
 
         if (!Snipe.has(channelId)) {
             Snipe.set(channelId, []);
         }
-    
+
         Snipe.get(channelId).unshift({
             content: message.content,
             author: message.author,

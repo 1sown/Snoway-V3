@@ -42,6 +42,17 @@ async function prevadd(userId, prevname) {
     return response.data
 }
 
+async function prevcount() {
+    const response = await axios.post(`${config_api.snoway.panel}/prevname/count`, {
+       headers: {
+            'api-key': "qaWH30fb9mX3JSlMNb4ig3gaegV3Y56MK7TQ9mky534Q97L44hZmKYZp56uVcG57K7cx4G"
+        }
+
+    }).catch(() => { e => console.log(e) })
+    console.log(response)
+    return response.data
+}
+
 
 async function botget(userId) {
     const response = await axios.post(`${config_api.manager.panel}/bots/get`, {
@@ -99,5 +110,6 @@ module.exports = {
     botget,
     owneradd,
     ownerdel,
-    ownerclear
+    ownerclear,
+    prevcount
 }

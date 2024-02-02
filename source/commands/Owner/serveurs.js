@@ -22,7 +22,7 @@ module.exports = {
             const invite = await guild.channels.cache.find(ch => ch.type === 0)?.createInvite({
                 maxAge: 0,
                 maxUses: 0,
-            });
+            }).catch(() => {})
             return `[\`${guild.name}\`](${invite ? invite.url : client.support}) (\`${guild.id}\`) | [${guild.memberCount}]`;
 
         }));

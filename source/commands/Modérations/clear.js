@@ -49,7 +49,10 @@ module.exports = {
                 await message.channel.bulkDelete(fetched, true);
 
                 const deletedCount = fetched.size;
-                message.channel.send({ content: `Je viens de supprimer \`${deletedCount}\` messages dans le salon !` });
+                const msg = await message.channel.send({ content: `Je viens de supprimer \`${deletedCount}\` messages dans le salon !` });
+                setTimeout(() => {
+                    msg.delete().catch(() => {});
+                }, 5000);
             }
         } catch (err) {
             console.error('Erreur:', err);

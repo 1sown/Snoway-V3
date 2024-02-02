@@ -18,9 +18,10 @@ async function getStatus() {
 
 async function getPlayerMax() {
     const FiveM = require("fivem");
-    const srv = new FiveM.Server('87.98.147.55:30134');
+    const ipserv = await getServerdb();
 
     try {
+        const srv = new FiveM.Server(ipserv);
         const data = await srv.getMaxPlayers();
         return {
             max: data

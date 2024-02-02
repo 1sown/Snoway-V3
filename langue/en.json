@@ -1,6 +1,7 @@
 {
     "erreur": "An error has just occurred.",
     "interaction": "You are not authorized to use this interaction",
+    "prefixbot": "My prefix on this server is:",
     "ping": {
         "ping": "My ping is:"
     },
@@ -106,6 +107,7 @@
     },
     "backup": {
         "create": {
+            "attente": "Creation of the current backup...",
             "noname": "Please provide a name for the backup",
             "deja": "A backup with this name already exists",
             "erreur": ":x: An error occurred.",
