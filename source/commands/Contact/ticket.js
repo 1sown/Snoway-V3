@@ -162,6 +162,7 @@ module.exports = {
                 if (!dbone.salon) {
                     return i.reply({ content: "Le système de tickets (le salon) n'est pas configuré.", flags: 64 });
                 }
+                
                 const embed = new Discord.EmbedBuilder()
                     .setTitle('Tickets')
                     .setDescription('Utiliser ce menu pour créer un ticket et contacter le staff')

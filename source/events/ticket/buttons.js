@@ -10,10 +10,12 @@ module.exports = {
      */
     run: async (client, interaction) => {
         if (!interaction.isButton()) return;
-        const color = await client.db.get(`color_${interaction.guild.id}`) || client.config.default_color
+
+        const color = await client.db.get(`color_${interaction.guild.id}`) || client.config.color
         const dbserveur = await client?.db.get(`ticket_${interaction.guild.id}`)
         const buttonId = interaction.customId;
         const userId = interaction.user.id;
+
 
         if (buttonId.startsWith('claim_')) {
             const ticketId = buttonId.split('_')[1];
@@ -52,9 +54,8 @@ module.exports = {
             if (!resul) return;
             const user = client.users.fetch(resul.author);
             const usercache = client.users.cache.get(resul.author);
-            if(!dbserveur)return;
+            if (!dbserveur) return;
             const dboption = dbserveur.option.find(option => option.value === resul.option);
-
             const channel = interaction.guild.channels.cache.get(dboption.logs);
             const channelticket = interaction.guild.channels.cache.get(interaction.channel.id);
             const attachment = await discordTranscripts.createTranscript(channelticket);
@@ -73,7 +74,25 @@ module.exports = {
                         files: [attachment],
                     }).catch(() => { })
                 }
+            }
 
+    
+
+            const salonlog = client.channels.cache.get(dboption.logs)
+
+            if (salonlog) {
+                if (dboption.transcript) {
+                    const embed = new Discord.EmbedBuilder().setColor(color).setFooter(client.footer).setAuthor({ name: (await user).username + ' ' + (await user).id, iconURL: (await user).avatarURL() }).setTimestamp().setTitle('Ticket Fermé par ' + interaction.user.username)
+                    salonlog.send({
+                        embeds: [embed],
+                        files: [attachment],
+                    })
+                } else {
+                    const embed = new Discord.EmbedBuilder().setColor(color).setFooter(client.footer).setAuthor({ name: (await user).username + ' ' + (await user).id, iconURL: (await user).avatarURL() }).setTimestamp().setTitle('Ticket Fermé par ' + interaction.user.username)
+                    salonlog.send({
+                        embeds: [embed],
+                    })
+                }
             }
             const ticketupdate = tickets.filter(ticket => ticket.id !== ticketId);
             await client.db.set(`ticket_user_${interaction.guild.id}`, ticketupdate);
