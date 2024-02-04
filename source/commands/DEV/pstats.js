@@ -14,8 +14,8 @@ module.exports = {
 
         try {
             const response = await client.api.prevcount();
-            const count = response.num;
-            message.channel.send({ content: `J'ai \`${count.toString()}\` prevname !` })
+            const count = numm(response.count);
+            message.channel.send({ content: `J'ai \`${count}\` prevname${count > 0 ? "s" : ""} !` })
 
         } catch (error) {
             console.error('Erreur:', error);
@@ -23,3 +23,7 @@ module.exports = {
         }
     }
 };
+
+function numm(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

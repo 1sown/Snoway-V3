@@ -1,4 +1,5 @@
-const {EmbedBuilder} = require('discord.js')
+const {EmbedBuilder, Message} = require('discord.js');
+const Snoway = require('../../structures/client');
 module.exports = {
   name: 'fivem',
   description: {
@@ -43,6 +44,7 @@ async function embed(client) {
     .setFooter(client.footer);
 
   try {
+    console.log(await client.functions.fivem.getPlayerMax())
     const servData = (await client.functions.fivem.getAllPlayer()).serv;
     const serv = servData !== undefined ? servData : [];
      embed.setTitle(`Joueur connecté ${((await client.functions.fivem.getAllPlayer()).serv).length}/${(await client.functions.fivem.getPlayerMax()).max}`);
@@ -53,6 +55,7 @@ async function embed(client) {
 
     embed.setDescription(text);
   } catch (error) {
+    console.log(error)
     embed.setDescription("Impossible à récupérer: adresse IP invalide ou serveur hors ligne.");
   }
 

@@ -2,12 +2,11 @@ const { MessageActionRow, MessageButton, InteractionCollector, ActionRowBuilder,
 
 module.exports = {
     name: 'warnlist',
-    alisas: ["sanction", "sanctions"],
+    aliases: ["sanction", "sanctions"],
     description: {
         fr: 'Liste des avertissements pour un membre du serveur avec un système de radiomessagerie',
         en: "Lists warnings for a server member with a paging system"},
     run: async (client, message, args) => {
-        const color = client.color 
         try {
             let user = message.mentions.users.first();
             let memberId = args[0];
@@ -20,7 +19,12 @@ module.exports = {
                 return message.channel.send('> ❌ Erreur : Usage: `warnlist <mention/Id>`');
             }
 
-            const warns = await client.db.get(`sanction_${message.guild.id}`) || [];
+            const db = await client.db.get(`sanction_${message.guild.id}`) || [];
+            const warns = db.filter(entry => entry.userId === user.id);
+
+            if (warns.length === 0) {
+                return message.channel.send(`Aucun avertissement trouvé pour <@${user.id}>`);
+            }
 
             const itemsPerPage = 5;
             let page = parseInt(args[1]) || 1;
@@ -36,11 +40,10 @@ module.exports = {
                 const startIndex = (page - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage;
                 const pageItems = warns.slice(startIndex, endIndex);
-                console.log(warns)
                 const date = new Date().toLocaleTimeString('fr-FR', { hour12: false });
                 const tiime = new Date().toLocaleDateString().replace(/\//g, '-');
                 const embed = new EmbedBuilder()
-                    .setColor(color)
+                    .setColor(client.color)
                     .setTitle(`Avertissements de ${user.tag}`)
                     .setFooter({
                         text: client.footer.text + ` • Total de sanction: ${warns.length}`

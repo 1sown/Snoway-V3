@@ -4,6 +4,7 @@ const { sleep } = require('../../structures/Functions/sleep.js')
 const ms = require('../../structures/Utils/ms.js')
 module.exports = {
     name: 'ticket',
+    aliases: ["tickets"],
     description: {
         fr: 'Permet de créer/configure le sytème de ticket.',
         en: "Creates/configures the ticket system."
@@ -16,10 +17,7 @@ module.exports = {
      * @returns 
      */
     run: async (client, message, args) => {
-        const msg = await message.channel.send({ content: "Je charge les options !" })
-
-
-
+        const msg = await message.channel.send({ content: await client.lang('ticket.load') })
         async function embedOptions(module) {
             const db = await client?.db.get(`ticket_${message.guild.id}`) || {}
             const selectedOption = db.option.find(option => option.value === module);
@@ -27,21 +25,21 @@ module.exports = {
             const channlog = client.channels.cache.get(selectedOption.logs)
             const rolesMention = await Promise.all(selectedOption.mention.map(roleId => message.guild.roles.cache.get(roleId)));
             const description = selectedOption.description
-            const messageTicket = selectedOption.message || "Merci d'avoir contacté le support\nDécrivez votre problème puis attendez de recevoir une réponse"
+            const messageTicket = selectedOption.message || await client.lang('ticket.defautMessage')
             const embed = new EmbedBuilder()
-                .setTitle('Option Settings')
+                .setTitle(await client.lang('ticket.command.embedOption.title'))
                 .setColor(client.color)
                 .setFooter(client.footer)
                 .addFields(
-                    { name: "**Catégorie**", value: `\`\`\`js\n${categorie?.name || "Aucun"}\`\`\``, inline: true },
-                    { name: "**Emoji**", value: `\`\`\`js\n${selectedOption.emoji || 'Aucun'}\`\`\``, inline: true },
-                    { name: "**Nom de l'option**", value: `\`\`\`js\n${selectedOption.text}\`\`\``, inline: true },
-                    { name: "**Salon des logs**", value: `\`\`\`js\n${channlog?.name || "Aucun"}\`\`\``, inline: true },
-                    { name: "**Transcript**", value: `\`\`\`js\n${selectedOption.transcript ? "✅" : "❌"}\`\`\``, inline: true },
-                    { name: "**Rôles mentionnés**", value: `\`\`\`js\n${rolesMention.map(role => role?.name).join(', ') || "Aucun"}\`\`\``, inline: true },
-                    { name: "**Description (Sélecteur seulement)**", value: `\`\`\`js\n${description || "Aucune"}\`\`\``, inline: true })
+                    { name: await client.lang('ticket.command.embedOption.field.categorie'), value: `\`\`\`js\n${categorie?.name || await client.lang('ticket.command.embedOption.aucun')}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedOption.field.emoji'), value: `\`\`\`js\n${selectedOption.emoji || await client.lang('ticket.command.embedOption.aucun')}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedOption.field.nom'), value: `\`\`\`js\n${selectedOption.text}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedOption.field.logs'), value: `\`\`\`js\n${channlog?.name || await client.lang('ticket.command.embedOption.aucun')}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedOption.field.transcript'), value: `\`\`\`js\n${selectedOption.transcript ? "✅" : "❌"}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedOption.field.role'), value: `\`\`\`js\n${rolesMention.map(role => role?.name).join(', ') || await client.lang('ticket.command.embedOption.aucun')}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedOption.field.description'), value: `\`\`\`js\n${description || await client.lang('ticket.command.embedOption.aucun')}\`\`\``, inline: true })
                 .addFields(
-                    { name: "**Message**", value: `\`\`\`js\n${messageTicket}\`\`\`` },
+                    { name: await client.lang('ticket.command.embedOption.field.message'), value: `\`\`\`js\n${messageTicket}\`\`\`` },
                 )
 
 
@@ -52,35 +50,35 @@ module.exports = {
                         .setPlaceholder('Snoway')
                         .addOptions([
                             {
-                                label: 'Catégorie',
+                                label: await client.lang('ticket.command.embedOption.select.categorie'),
                                 emoji: '📮',
                                 value: 'categorie_option_' + selectedOption.value
                             }, {
-                                label: 'Emoji',
+                                label: await client.lang('ticket.command.embedOption.select.emoji'),
                                 emoji: '🌐',
                                 value: 'emoji_option_' + selectedOption.value
                             }, {
-                                label: 'Nom de button/selecteur',
+                                label: await client.lang('ticket.command.embedOption.select.label'),
                                 emoji: '✏',
                                 value: 'text_option_' + selectedOption.value
                             }, {
-                                label: 'Salon des logs',
+                                label: await client.lang('ticket.command.embedOption.select.logs'),
                                 emoji: "🏷",
                                 value: 'salon_option_' + selectedOption.value
                             }, {
-                                label: 'Transcript',
+                                label: await client.lang('ticket.command.embedOption.select.transcript'),
                                 emoji: "📜",
                                 value: 'transcript_option_' + selectedOption.value
                             }, {
-                                label: 'Rôle mentionner',
+                                label: await client.lang('ticket.command.embedOption.select.role'),
                                 emoji: '🔔',
                                 value: 'role_option_' + selectedOption.value
                             }, {
-                                label: 'Description (Sélecteur seulement)',
+                                label: await client.lang('ticket.command.embedOption.select.description'),
                                 emoji: "🗨",
                                 value: 'description_option_' + selectedOption.value
                             }, {
-                                label: 'Message d\'ouverture de ticket',
+                                label: await client.lang('ticket.command.embedOption.select.message'),
                                 emoji: '📋',
                                 value: 'ouvert_option_' + selectedOption.value
                             },
@@ -96,7 +94,7 @@ module.exports = {
                     new ButtonBuilder()
                         .setCustomId('options_delete_' + selectedOption.value)
                         .setStyle(4)
-                        .setLabel('❌ Supprimer l\'option')
+                        .setLabel(await client.lang('ticket.command.embedOption.button'))
                 )
 
             return msg.edit({
@@ -140,19 +138,19 @@ module.exports = {
             const rolesInterdit = await Promise.all(db.roleinterdit.map(roleId => message.guild.roles.cache.get(roleId)));
 
             const embed = new EmbedBuilder()
-                .setTitle('Ticket Settings')
+                .setTitle(await client.lang('ticket.command.embedMenu.title'))
                 .setColor(client.color)
                 .setFooter(client.footer)
                 .addFields(
-                    { name: "**Salon**", value: `\`\`\`js\n${salon?.name || "Aucun"} ${db.messageid && salon?.name ? `(Message: ${db.messageid})` : ""}\`\`\``, inline: true },
-                    { name: "**Type du ticket**", value: `\`\`\`js\n${modules}\`\`\``, inline: true },
-                    { name: "**Max ticket**", value: `\`\`\`js\n${db.maxticket}\`\`\``, inline: true },
-                    { name: "**Bouton claim**", value: `\`\`\`js\n${db.claimbutton ? "✅" : "❌"}\`\`\``, inline: true },
-                    { name: "**Bouton close**", value: `\`\`\`js\n${db.buttonclose ? "✅" : "❌"}\`\`\``, inline: true },
-                    { name: "**Transcript MP**", value: `\`\`\`js\n${db.transcript ? "✅" : "❌"}\`\`\``, inline: true },
-                    { name: "**Roles Requis**", value: `\`\`\`js\n${rolesRequis.map(role => role?.name).join(', ') || "Aucun"}\`\`\``, inline: true },
-                    { name: "**Roles Interdit**", value: `\`\`\`js\n${rolesInterdit.map(role => role?.name).join(', ') || "Aucun"}\`\`\``, inline: true },
-                    { name: "**Fermer automatiquement**", value: `\`\`\`js\n${db.leaveclose ? "✅" : "❌"} (Fermeture au leave du membre)\`\`\``, inline: true }
+                    { name:  await client.lang('ticket.command.embedMenu.fields.salon'), value: `\`\`\`js\n${salon?.name || "Aucun"} ${db.messageid && salon?.name ? `(Message: ${db.messageid})` : ""}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedMenu.fields.type'), value: `\`\`\`js\n${modules}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedMenu.fields.max'), value: `\`\`\`js\n${db.maxticket}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedMenu.fields.claim'), value: `\`\`\`js\n${db.claimbutton ? "✅" : "❌"}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedMenu.fields.close'), value: `\`\`\`js\n${db.buttonclose ? "✅" : "❌"}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedMenu.fields.transcript'), value: `\`\`\`js\n${db.transcript ? "✅" : "❌"}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedMenu.fields.role'), value: `\`\`\`js\n${rolesRequis.map(role => role?.name).join(', ') || "Aucun"}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedMenu.fields.roleinterdit'), value: `\`\`\`js\n${rolesInterdit.map(role => role?.name).join(', ') || "Aucun"}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedMenu.fields.closeauto'), value: `\`\`\`js\n${db.leaveclose ? "✅" : "❌"} (Fermeture au leave du membre)\`\`\``, inline: true }
                 )
                     
                 const optionselect = db.option.map(option => {
@@ -168,13 +166,13 @@ module.exports = {
 
             const SelectOptionEdit = new StringSelectMenuBuilder()
                 .setCustomId('select_edit_option')
-                .setPlaceholder('Gérer les options')
+                .setPlaceholder(await client.lang('ticket.command.embedMenu.selectoption.menu'))
                 .addOptions({
-                    label: 'Crée une option',
+                    label: await client.lang('ticket.command.embedMenu.selectoption.create'),
                     emoji: client.functions.emoji.new,
                     value: 'new'
                 }, {
-                    label: 'Supprime une option',
+                    label: await client.lang('ticket.command.embedMenu.selectoption.delete'),
                     emoji: client.functions.emoji.del,
                     value: 'delete'
                 });
@@ -182,46 +180,46 @@ module.exports = {
 
             const SelectConfig = new StringSelectMenuBuilder()
                 .setCustomId('selec_config')
-                .setPlaceholder('Gérer les tickets')
+                .setPlaceholder(await client.lang('ticket.command.embedMenu.select.menu'))
                 .addOptions([
                     {
-                        label: 'Modifier le salon',
+                        label: await client.lang('ticket.command.embedMenu.select.salon'),
                         emoji: '🏷',
                         value: 'salon'
                     }, {
-                        label: 'Message Id',
+                        label: await client.lang('ticket.command.embedMenu.select.message'),
                         emoji: '🆔',
                         value: 'messageid'
                     }, {
-                        label: 'Type button/selecteur',
+                        label: await client.lang('ticket.command.embedMenu.select.type'),
                         emoji: '⏺',
                         value: 'type'
                     }, {
-                        label: 'Max tickets',
+                        label: await client.lang('ticket.command.embedMenu.select.max'),
                         emoji: "♻",
                         value: 'maxticket'
                     }, {
-                        label: 'Button Claim',
+                        label: await client.lang('ticket.command.embedMenu.select.buttonclaim'),
                         emoji: "🛡",
                         value: 'claim'
                     }, {
-                        label: 'Button Close',
+                        label: await client.lang('ticket.command.embedMenu.select.close'),
                         emoji: '🔒',
                         value: 'close'
                     }, {
-                        label: 'Transcript MP',
+                        label: await client.lang('ticket.command.embedMenu.select.transcript'),
                         emoji: "📚",
                         value: 'transcript'
                     }, {
-                        label: 'Rôles Requis',
+                        label: await client.lang('ticket.command.embedMenu.select.requis'),
                         emoji: '⚙',
                         value: 'rolerequis'
                     }, {
-                        label: 'Rôles Interdit',
+                        label:  await client.lang('ticket.command.embedMenu.select.interdit'),
                         emoji: '⛔',
                         value: 'roleinterdit'
                     }, {
-                        label: 'Fermeture au leave',
+                        label: await client.lang('ticket.command.embedMenu.select.leave'),
                         emoji: '🔒',
                         value: 'fermetureleave'
                     }
@@ -236,7 +234,7 @@ module.exports = {
 
             const selectoption = new StringSelectMenuBuilder()
                 .setCustomId('select_option')
-                .setPlaceholder('Vos options')
+                .setPlaceholder(await client.lang('ticket.command.embedOption.vosoption'))
                 .setDisabled(optionsValue.length <= 0)
                 .addOptions(...optionselect);
 
@@ -296,7 +294,7 @@ module.exports = {
             if (i.customId === "valide") {
                 if (!db || !db.option || db.option.length === 0) {
                     return i.reply({
-                        content: "Les options des tickets ne sont pas configurées",
+                        content: await client.lang('ticket.command.valide.option'),
                         flags: 64
                     });
                 }
@@ -304,7 +302,7 @@ module.exports = {
                 const salon = client.channels.cache.get(db.salon);
                 if (!salon) {
                     return i.reply({
-                        content: "Le salon des tickets n'est pas configuré",
+                        content: await client.lang('ticket.command.valide.nochannel'),
                         flags: 64
                     });
                 }   
@@ -312,14 +310,14 @@ module.exports = {
                 const fetch = await salon.messages.fetch(db.messageid).catch(() => null);
                 if (fetch && fetch.author.id !== client.user.id) {
                     return i.reply({
-                        content: "Le message pour les tickets ne vient pas de moi, je ne peux donc pas modifier le message",
+                        content: await client.lang('ticket.command.valide.nomessage'),
                         flags: 64
                     });
                 }
-           
+                
                 const embed = new EmbedBuilder()
-                .setTitle('Tickets')
-                .setDescription('Utiliser ce menu pour créer un ticket et contacter le staff')
+                .setTitle(await client.lang('ticket.command.valide.embeds.title'))
+                .setDescription(await client.lang('ticket.command.valide.embeds.description'))
                 .setColor(client.color)
                 .setFooter(client.footer)
 
@@ -412,7 +410,7 @@ module.exports = {
             if (i.customId === "delete_all_data") {
                 const embed = new EmbedBuilder()
                     .setColor(client.color)
-                    .setDescription("***Voulez-vous vraiment supprimer toutes les données du système de ticket***")
+                    .setDescription(await client.lang('ticket.command.deletedata'))
                     .setFooter(client.footer);
 
                 const row = new ActionRowBuilder()
@@ -509,7 +507,7 @@ module.exports = {
             if (i.values[0] === 'rolerequis') {
                 const embed = new EmbedBuilder()
                     .setColor(client.color)
-                    .setDescription("***Quel rôle souhaitez-vous assigner pour les rôels requis ?***")
+                    .setDescription(await client.lang('ticket.command.rolerequis'))
                     .setFooter(client.footer);
 
                 const row = new ActionRowBuilder()
@@ -548,7 +546,7 @@ module.exports = {
                         }
                     } else {
                         const channel = client.channels.cache.get(response.first().channelId);
-                        await channel.send({ content: "***Le rôle mentionné est invalide. Veuillez mentionner un rôle valide.***" });
+                        await channel.send({ content: await client.lang('ticket.command.invaliderole') });
                     }
 
                     response.first().delete().catch(() => { });
@@ -560,7 +558,7 @@ module.exports = {
             if (i.values[0] === 'roleinterdit') {
                 const embed = new EmbedBuilder()
                     .setColor(client.color)
-                    .setDescription("***Quel rôle souhaitez-vous assigner pour les rôels interdit ?***")
+                    .setDescription(await client.lang('ticket.command.roleinterdit'))
                     .setFooter(client.footer);
 
                 const row = new ActionRowBuilder()
@@ -599,7 +597,7 @@ module.exports = {
                         }
                     } else {
                         const channel = client.channels.cache.get(response.first().channelId);
-                        await channel.send({ content: "***Le rôle mentionné est invalide. Veuillez mentionner un rôle valide.***" });
+                        await channel.send({ content: await client.lang('ticket.command.invaliderole') });
                     }
 
                     response.first().delete().catch(() => { });
@@ -611,7 +609,7 @@ module.exports = {
             if (i.values[0] === 'maxticket') {
                 const embed = new EmbedBuilder()
                     .setColor(client.color)
-                    .setDescription("***Veuillez indiquer le nouveau nombre maximum de tickets par personne.***\n*Exemple:* `1` ou `4`")
+                    .setDescription(await client.lang('ticket.command.maxticket'))
                     .setFooter(client.footer);
 
                 const row = new ActionRowBuilder()
@@ -640,7 +638,7 @@ module.exports = {
                         await collected.first().delete();
                         return embedMenu();
                     } else {
-                        const msg = await message.channel.send("Veuillez entrer un nombre entier positif.");
+                        const msg = await message.channel.send(await client.lang('ticket.command.nombreinvalide'));
                         await collected.first().delete();
                         embedMenu();
                         setTimeout(() => {
@@ -652,14 +650,14 @@ module.exports = {
                     console.error(error);
                     sentMessage.delete();
                     await embedMenu();
-                    message.channel.send("Le temps de réponse a expiré ou une erreur s'est produite : " + error.message);
+                    message.channel.send(await client.lang('ticket.command.temps') + error.message);
                 }
             }
 
             if (i.values[0] === "salon") {
                 const embed = new EmbedBuilder()
                     .setColor(client.color)
-                    .setDescription("***Quel salon souhaitez-vous utiliser pour le ticket ?***")
+                    .setDescription(await client.lang('ticket.command.salon'))
                     .setFooter(client.footer);
 
                 const row = new ActionRowBuilder()
@@ -689,7 +687,7 @@ module.exports = {
                         embedMenu();
                     } else {
                         const channel = client.channels.cache.get(response.first().channelId);
-                        const salon = await channel.send({ content: '***Le salon mentionné est invalide. Veuillez mentionner un salon valide.***' });
+                        const salon = await channel.send({ content: await client.lang('ticket.command.saloninvalide') });
                         embedMenu()
                         setTimeout(() => {
                             salon.delete().catch(() => { })
@@ -703,14 +701,14 @@ module.exports = {
             } else if (i.values[0] === "messageid") {
                 const channel = client.channels.cache.get(db.salon)
                 if (!channel) {
-                    const msg = await i.reply({ content: "***Le salon des tickets est invalide. Veuillez le configurer pour pouvoir continuer.***", flags: 64 });
+                    const msg = await i.reply({ content: await client.lang('ticket.command.messagechannel'), flags: 64 });
                     setTimeout(() => {
                         msg.delete().catch(() => { });
                     }, 5000);
                 }
                 const embed = new EmbedBuilder()
                     .setColor(client.color)
-                    .setDescription('Veuillez fournir le nouveau **message ID** pour le système de ticket.')
+                    .setDescription(await client.lang('ticket.command.messageId'))
                     .setFooter(client.footer);
 
                 const row = new ActionRowBuilder()
@@ -751,7 +749,7 @@ module.exports = {
                         response.first().delete().catch(() => { });
                         embedMenu();
                     } else {
-                        const invalidMessage = await msg.reply({ content: 'Le message ID fourni est invalide ou introuvable. Veuillez fournir un message ID valide.', ephemeral: true });
+                        const invalidMessage = await msg.reply({ content: await client.lang('ticket.command.messageinvalide')});
                         setTimeout(() => {
                             invalidMessage.delete().catch(() => { });
                         }, 5000);
@@ -759,7 +757,7 @@ module.exports = {
                         embedMenu();
                     }
                 } else {
-                    const timeoutMessage = await msg.reply({ content: 'Temps écoulé. Opération annulée.', ephemeral: true });
+                    const timeoutMessage = await msg.reply({ content: await client.lang('ticket.command.finit')})
                     setTimeout(() => {
                         timeoutMessage.delete().catch(() => { });
                     }, 5000);
@@ -768,7 +766,7 @@ module.exports = {
                 }
             } if (i.values[0] === 'new') {
                 if (db.option.length >= 25) {
-                    const ireply = await i.reply({ content: 'Vous ne pouvez configurer que 25 options pour les tickets', flags: 64, embeds: [], components: [] })
+                    const ireply = await i.reply({ content: await client.lang('ticket.command.maxoption'), flags: 64, embeds: [], components: [] })
                     await sleep("4000")
                     ireply.delete()
                     return;
@@ -776,7 +774,7 @@ module.exports = {
                     db.option.push({
                         categorie: null,
                         emoji: null,
-                        text: 'Ouvrir un ticket',
+                        text: await client.lang('ticket.option'),
                         value: code(10),
                         description: null,
                         message: null,
@@ -790,7 +788,7 @@ module.exports = {
                 embedMenu()
             } if (i.values[0] === 'delete') {
                 if (db.option.length === 0) {
-                    const ireply = await i.reply({ content: 'Vous n\'avez pas créé d\'option pour les tickets', flags: 64, embeds: [], components: [] })
+                    const ireply = await i.reply({ content: await client.lang('ticket.command.aucuneoption'), flags: 64, embeds: [], components: [] })
                     await sleep("4000")
                     ireply.delete()
                     return;
@@ -812,7 +810,7 @@ module.exports = {
 
                 const selectoption = new StringSelectMenuBuilder()
                     .setCustomId('select_option_delete')
-                    .setPlaceholder('Options du ticket')
+                    .setPlaceholder(await client.lang('ticket.command.selectoptions'))
                     .addOptions(...optionselect);
 
                 const row = new ActionRowBuilder()
@@ -822,7 +820,7 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setColor(client.color)
                     .setFooter(client.footer)
-                    .setDescription(`Merci de sélectionner une option à supprimer.`)
+                    .setDescription(await client.lang('ticket.command.deleteoptions'))
                 i.update({
                     embeds: [embed],
                     components: [row, Button],
@@ -854,7 +852,7 @@ module.exports = {
                 const valideoption = db.option.find(option => option.value === id);
                 const embed = new EmbedBuilder()
                     .setColor(client.color)
-                    .setDescription("***Quel rôle souhaitez-vous assigner/retire pour les rôels mentionnés ?***")
+                    .setDescription(await client.lang('ticket.command.roleoptions'))
                     .setFooter(client.footer);
 
                 const row = new ActionRowBuilder()
@@ -893,7 +891,7 @@ module.exports = {
                         }
                     } else {
                         const channel = client.channels.cache.get(response.first().channelId);
-                        await channel.send({ content: "***Le rôle mentionné est invalide. Veuillez mentionner un rôle valide.***" });
+                        await channel.send({ content: await client.lang('ticket.command.invaliderole') });
                     }
 
                     response.first().delete().catch(() => { });
@@ -917,7 +915,7 @@ module.exports = {
 
                 const embed = new EmbedBuilder()
                     .setColor(client.color)
-                    .setDescription("***Quel salon souhaitez-vous utiliser pour l'option ?***")
+                    .setDescription(await client.lang('ticket.command.optionticket'))
                     .setFooter(client.footer);
 
                 const row = new ActionRowBuilder()
@@ -947,7 +945,7 @@ module.exports = {
                         embedOptions(id)
                     } else {
                         const channel = client.channels.cache.get(response.first().channelId);
-                        const salon = await channel.send({ content: '***Le salon mentionné est invalide. Veuillez mentionner un salon valide.***' });
+                        const salon = await channel.send({ content: await client.lang('ticket.command.saloninvalide') });
                         embedOptions(id)
                         setTimeout(() => {
                             salon.delete().catch(() => { })
@@ -968,7 +966,7 @@ module.exports = {
 
                     const embed = new EmbedBuilder()
                         .setColor(client.color)
-                        .setDescription("***Quel seras l'emoji ?***")
+                        .setDescription(await client.lang('ticket.command.emojioption'))
                         .setFooter(client.footer);
 
                     const row = new ActionRowBuilder()
@@ -991,7 +989,7 @@ module.exports = {
                         const emojiInput = collected.first().content.trim();
                         const emojiId = emojiget(client, emojiInput);
                         if (!valide(client, emojiId) && !valide(client, emojiInput)) {
-                            message.channel.send('L\'émoji indiqué est invalide.');
+                            message.channel.send(await client.lang('ticket.command.emojiinvalide'));
                         } else {
                             const emoji = emojiId || emojiInput;
                             valideoption.emoji = emoji;
@@ -1002,7 +1000,7 @@ module.exports = {
                     } catch (error) {
                         console.error(error);
                         await embedOptions(id);
-                        message.channel.send("Le temps de réponse a expiré ou une erreur s'est produite.")
+                        message.channel.send(await client.lang('ticket.command.finit') )
 
                     }
                 }
@@ -1041,10 +1039,10 @@ module.exports = {
                         const text = msgcollect
 
                         if (!text) {
-                            message.channel.send('Le nom de l\'option indiquée est invalide.');
+                            message.channel.send(await client.lang('ticket.command.invalidetext'));
                         } else {
                             if (text.length >= 80) {
-                                return message.channel.send('Le nom de l\'option ne peut pas être supérieur ou égale à 80 caractères.');
+                                return message.channel.send(await client.lang('ticket.command.invalidetextcaractre'));
                             }
 
                             valideoption.text = msgcollect;
@@ -1055,7 +1053,7 @@ module.exports = {
                     } catch (error) {
                         await embedOptions(id);
                         console.error(error);
-                        message.channel.send("Le temps de réponse a expiré ou une erreur s'est produite.")
+                        message.channel.send(await client.lang('ticket.command.finit'))
                     }
                 }
             }
@@ -1069,7 +1067,7 @@ module.exports = {
 
                     const embed = new EmbedBuilder()
                         .setColor(client.color)
-                        .setDescription("***Veuillez indiquer la description du select menu.***")
+                        .setDescription(await client.lang('ticket.command.description'))
                         .setFooter(client.footer);
 
                     const row = new ActionRowBuilder()
@@ -1094,10 +1092,10 @@ module.exports = {
                         const text = msgcollect
 
                         if (!text) {
-                            message.channel.send('La description de l\'option indiquée est invalide.');
+                            message.channel.send(await client.lang('ticket.command.nodescription'));
                         } else {
                             if (text.length >= 100) {
-                                return message.channel.send('La description de l\'option ne peut pas être supérieur ou égale à 100 caractères.');
+                                return message.channel.send(await client.lang('ticket.command.invalidedescriptioncaractre'));
                             }
 
                             valideoption.description = msgcollect;
@@ -1108,7 +1106,7 @@ module.exports = {
                     } catch (error) {
                         await embedOptions(id);
                         console.error(error);
-                        message.channel.send("Le temps de réponse a expiré ou une erreur s'est produite.")
+                        message.channel.send(await client.lang('ticket.command.finit'))
                     }
                 }
             }
@@ -1121,7 +1119,7 @@ module.exports = {
 
                     const embed = new EmbedBuilder()
                         .setColor(client.color)
-                        .setDescription("***Veuillez indiquer le texte d'ouverture du ticket.***")
+                        .setDescription(await client.lang('ticket.command.textdouvert'))
                         .setFooter(client.footer);
 
                     const row = new ActionRowBuilder()
@@ -1146,10 +1144,10 @@ module.exports = {
                         const text = msgcollect
 
                         if (!text) {
-                            message.channel.send('Le message de l\'embed de l\'option indiquée est invalide.');
+                            message.channel.send(await client.lang('ticket.command.textdouvertinvalide'));
                         } else {
                             if (text.length >= 200) {
-                                return message.channel.send('Le message de l\'embed ne peut pas être supérieur ou égale à 200 caractères.');
+                                return message.channel.send(await client.lang('ticket.command.caracteres'));
                             }
 
                             valideoption.message = msgcollect;
@@ -1160,7 +1158,7 @@ module.exports = {
                     } catch (error) {
                         await embedOptions(id);
                         console.error(error);
-                        message.channel.send("Le temps de réponse a expiré ou une erreur s'est produite.")
+                        message.channel.send(await client.lang('ticket.command.finit'))
                     }
                 }
             }
@@ -1173,7 +1171,7 @@ module.exports = {
 
                     const embed = new EmbedBuilder()
                         .setColor(client.color)
-                        .setDescription("***Quel seras la catégorie des tickets ?***")
+                        .setDescription(await client.lang('ticket.command.categorie'))
                         .setFooter(client.footer);
 
                     const row = new ActionRowBuilder()
@@ -1197,7 +1195,7 @@ module.exports = {
                         const msgcollect = collected.first().content.trim();
                         const channels = await message.guild.channels.cache.get(msgcollect);
                         if (channels.type !== 4) {
-                            message.channel.send('La catégorie indiquée est invalide.');
+                            message.channel.send(await client.lang('ticket.command.invalidecategorie'));
                             await collected.first().delete();
                         } else {
                             valideoption.categorie = msgcollect;
@@ -1209,7 +1207,7 @@ module.exports = {
                     } catch (error) {
                         console.error(error);
                         await embedOptions(id);
-                        message.channel.send("Le temps de réponse a expiré ou une erreur s'est produite.")
+                        message.channel.send(await client.lang('ticket.command.finit'))
                     }
                 }
             }

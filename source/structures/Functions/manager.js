@@ -2,8 +2,6 @@ const axios = require('axios');
 const config = require("../../../config/config")
 const config_api = require('./config')
 
-
-
 async function prevclear(userId) {
     const response = await axios.post(`${config_api.snoway.panel}/prevname/clear`, {
         userId: userId,
@@ -43,13 +41,11 @@ async function prevadd(userId, prevname) {
 }
 
 async function prevcount() {
-    const response = await axios.post(`${config_api.snoway.panel}/prevname/count`, {
-       headers: {
-            'api-key': "qaWH30fb9mX3JSlMNb4ig3gaegV3Y56MK7TQ9mky534Q97L44hZmKYZp56uVcG57K7cx4G"
+    const response = await axios.post(`${config_api.snoway.panel}/prevname/count`, null, {
+        headers: {
+          'api-key': ["eHNdapE343dET5GY5ktc978ABhg4w3suD5Ny4sEW4F5KLg8u84"]
         }
-
-    }).catch(() => { e => console.log(e) })
-    console.log(response)
+      });
     return response.data
 }
 

@@ -171,12 +171,12 @@
                 "emoji": "Emojis"
             }
         }
-    }, 
+    },
     "remid": {
         "hello": "Salut",
         "rappelle": "je viens vous rappeler de:",
         "set": "Rappel enregistré. Je vous rappellerai dans",
-        "temps":"Veuillez spécifier une durée valide pour le rappel."
+        "temps": "Veuillez spécifier une durée valide pour le rappel."
     },
     "activity": {
         "clear": "L'activiter a bien était clear !",
@@ -208,5 +208,114 @@
         "set": "Le channel des pfps vient d'être assigné à",
         "channel": "Le channel spécifié est invalide.",
         "off": "Système de pfp vient d'être désactivée."
+    },
+  
+    "ticket": {
+        "load": "Chargement des options !",
+        "option": "Ouvrir un ticket",
+        "defautMessage": "Merci de contacter le support. Décrivez votre problème et attendez une réponse.",
+        "event": {},
+        "command": {
+            "deletedata": "***Voulez-vous vraiment supprimer toutes les données du système de ticket***",
+            "rolerequis": "***Quel rôle souhaitez-vous assigner pour les rôels requis ?***",
+            "invaliderole": "***Le rôle mentionné est invalide. Veuillez mentionner un rôle valide.***",
+            "roleinterdit": "***Quel rôle souhaitez-vous assigner pour les rôels interdit ?***",
+            "maxticket": "***Veuillez indiquer le nouveau nombre maximum de tickets par personne.***\n*Exemple:* `1` ou `4`",
+            "nombreinvalide": "Veuillez entrer un nombre entier positif.",
+            "temps":"Le temps de réponse a expiré ou une erreur s'est produite ",
+            "salon": "***Quel salon souhaitez-vous utiliser pour le ticket ?***",
+            "saloninvalide": "***Le salon mentionné est invalide. Veuillez mentionner un salon valide.***",
+            "messagechannel": "***Le salon des tickets est invalide. Veuillez le configurer pour pouvoir continuer.***",
+            "messageId": "Veuillez fournir le nouveau **message ID** pour le système de ticket.",
+            "messageinvalide": "Le message ID fourni est invalide ou introuvable. Veuillez fournir un message ID valide.",
+            "finit": "Temps écoulé. Opération annulée.",
+            "maxoption": "Vous ne pouvez configurer que 25 options pour les tickets",
+            "aucuneoption": "Vous n'avez pas créé d'option pour les tickets",
+            "selectoptions": "Options du ticket",
+            "deleteoptions": "Merci de sélectionner une option à supprimer.",
+            "roleoptions": "***Quel rôle souhaitez-vous assigner/retire pour les rôels mentionnés ?***",
+            "optionticket": "***Quel salon souhaitez-vous utiliser pour l'option ?***",
+            "emojioption": "***Quel seras l'emoji ?***",
+            "emojiinvalide": "L'émoji indiqué est invalide.",
+            "textoptions": "***Veuillez indiquer la text de l'option***",
+            "invalidetext": "Le nom de l'option indiquée est invalide.",
+            "invalidetextcaractre": "Le nom de l'option ne peut pas être supérieur ou égale à 80 caractères.",
+            "description": "***Veuillez indiquer la description du select menu.***",
+            "nodescription": "La description de l'option indiquée est invalide.",
+            "invalidedescriptioncaractre": "La description de l'option ne peut pas être supérieur ou égale à 100 caractères.",
+            "textdouvert": "***Veuillez indiquer le texte d'ouverture du ticket.***",
+            "textdouvertinvalide": "Le message de l'embed de l'option indiquée est invalide.",
+            "caracteres": "Le message de l'embed ne peut pas être supérieur ou égale à 200 caractères.",
+            "categorie": "***Quel seras la catégorie des tickets ?***",
+            "invalidecategorie": "La catégorie indiquée est invalide.",
+            "valide": {
+                "option": "Les options des tickets ne sont pas configurées",
+                "nochannel": "Le salon des tickets n'est pas configuré",
+                "nomessage": "Le message pour les tickets ne vient pas de moi, je ne peux donc pas modifier le message",
+                "actif": "Panel des tickets actif",
+                "embeds": {
+                    "title": "Tickets",
+                    "description": "Utiliser ce menu pour créer un ticket et contacter le staff"
+                }
+            },
+            "embedMenu": {
+                "title": "Paramètres des Tickets",
+                "fields": {
+                    "salon": "**Salon**",
+                    "type": "**Type de Ticket**",
+                    "max": "**Max de Tickets**",
+                    "claim": "**Bouton Réclamation**",
+                    "close": "**Bouton Fermeture**",
+                    "transcript": "**Transcription MP**",
+                    "role": "**Rôles Requis**",
+                    "roleinterdit": "**Rôles Interdits**",
+                    "closeauto": "**Fermer Automatiquement**",
+                    "closeautoticket": "Fermeture au leave du membre"
+                }, "selectoption": {
+                    "create": "Crée une option",
+                    "menu": "Gérer les options",
+                    "delete": "Supprime une option"
+                }, "select": {
+                    "menu": "Gérer les Tickets",
+                    "salon": "Modifier le Salon",
+                    "message": "ID du Message",
+                    "type": "Type de Bouton/Sélecteur",
+                    "max": "Max de Tickets",
+                    "buttonclaim": "Bouton Réclamation",
+                    "close": "Bouton Fermeture",
+                    "transcript": "Transcription MP",
+                    "requis": "Rôles Requis",
+                    "interdit": "Rôles Interdits",
+                    "leave": "Fermeture au Départ"
+                } 
+            },
+            "embedOption": {
+                "title": "Paramètres des Options",
+                "aucun": "Aucun",
+                "button": "❌ Supprimer l'Option",
+                "vosoption": "Vos options",
+                "field": {
+                    "categorie": "**Catégorie**",
+                    "emoji": "**Emoji**",
+                    "nom": "**Nom de l'Option**",
+                    "logs": "**Salon des Logs**",
+                    "transcript": "**Transcription**",
+                    "role": "**Rôles Mentionnés**",
+                    "description": "**Description (Sélecteur seulement)**",
+                    "message": "**Message**"
+                }, "select": {
+                    "categorie": "Catégorie",
+                    "emoji": "Emoji",
+                    "label": "Nom de Bouton/Sélecteur",
+                    "logs": "Salon des Logs",
+                    "transcript": "Transcription",
+                    "role": "Rôle Mentionné",
+                    "description": "Description (Sélecteur seulement)",
+                    "message": "Message d'Ouverture de Ticket"
+                }
+            }
+        }
     }
+    
+   
 }
