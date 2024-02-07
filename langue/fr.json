@@ -214,7 +214,15 @@
         "load": "Chargement des options !",
         "option": "Ouvrir un ticket",
         "defautMessage": "Merci de contacter le support. Décrivez votre problème et attendez une réponse.",
-        "event": {},
+        "event": {
+            "maxticket": "Vous avez déjà atteint le nombre maximal de tickets ouverts !",
+            "norequisrole": "Vous n'avez pas un des rôles requis pour ouvrir un ticket !",
+            "roleinterdit": "Vous avez un des rôles interdit pour ouvrir un ticket !",
+            "open": "Ticket open",
+            "buttonclaim": "Récupère le ticket",
+            "buttonclose": "Fermer le ticket",
+            "openticket": "Ticket ouvert par "
+        },
         "command": {
             "deletedata": "***Voulez-vous vraiment supprimer toutes les données du système de ticket***",
             "rolerequis": "***Quel rôle souhaitez-vous assigner pour les rôels requis ?***",

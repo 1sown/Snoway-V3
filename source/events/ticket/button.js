@@ -21,19 +21,21 @@ module.exports = {
                 const option = db.option.find(option => option.value === id);
                 if (!option) return;
 
+                const resul = tickeruser.find(ticket => ticket.author === interaction.user.id);
+                if (resul && tickeruser.length >= db?.maxticket) {
+                    return await interaction.editReply({ content: await client.lang('ticket.event.maxticket') });
+                }
 
                 const tickeruser = await client.db.get(`ticket_user_${interaction.guild.id}`) || [];
-                const resul = tickeruser.find(ticket => ticket.author === interaction.user.id);
                 
                 if (interaction.member.roles.cache.some(role => db.rolerequis.includes(role.id))) {
-                    return await interaction.editReply({ content: `Vous n'avez pas un des rôles requis pour ouvrir un ticket !` });
+                    return await interaction.editReply({ content: await client.lang('ticket.event.norequisrole') });
                 }
 
                 if (interaction.member.roles.cache.some(role => db.roleinterdit.includes(role.id))) {
-                    return await interaction.editReply({ content: `Vous avez un des rôles interdit pour ouvrir un ticket !` });
+                    return await interaction.editReply({ content: await client.lang('ticket.event.roleinterdit')});
                 }
           
-
                 let permissionOverwrites = [
                     {
                         id: interaction.guild.roles.everyone,
@@ -58,10 +60,10 @@ module.exports = {
                     permissionOverwrites: permissionOverwrites,
                 });
 
-                await interaction.editReply({ content: `Ticket open <#${channel?.id}>` });
+                await interaction.editReply({ content: `${await client.lang('ticket.event.open')} <#${channel?.id}>` });
                 const salonlog = client.channels.cache.get(option.logs)
                 if(salonlog) { 
-                const embeds = new Discord.EmbedBuilder().setColor(color).setFooter(client.footer).setAuthor({ name: interaction.user.username + ' ' + interaction.user.id, iconURL: interaction.user.avatarURL() }).setTimestamp().setTitle('Ticket ouvert par ' + interaction.user.username)
+                const embeds = new Discord.EmbedBuilder().setColor(color).setFooter(client.footer).setAuthor({ name: interaction.user.username + ' ' + interaction.user.id, iconURL: interaction.user.avatarURL() }).setTimestamp().setTitle(await client.lang('ticket.event.openticket') + interaction.user.username)
                 salonlog.send({
                     embeds: [embeds],
                 })
@@ -69,8 +71,8 @@ module.exports = {
                 const embed = new Discord.EmbedBuilder()
                     .setColor(color)
                     .setFooter(client.footer)
-                    .setDescription(option.message)
-                    .setTitle('Ticket ouvert par ' + interaction.user.username)
+                    .setDescription(option.message || await client.lang('ticket.defautMessage'))
+                    .setTitle(await client.lang('ticket.event.openticket') + interaction.user.username)
 
                 const idunique = code(15)
                 const mentionedRoles = option.mention ? option.mention.map(role => `<@&${role}>`).join(', ') : '';
@@ -80,7 +82,7 @@ module.exports = {
                     if (db.buttonclose) {
                         buttonRow.addComponents(
                             new Discord.ButtonBuilder()
-                                .setLabel('Fermer le ticket')
+                                .setLabel(await client.lang('ticket.event.buttonclose'))
                                 .setStyle(4)
                                 .setEmoji('🔒')
                                 .setCustomId("close_" + idunique)
@@ -90,7 +92,7 @@ module.exports = {
                     if (db.claimbutton) {
                         buttonRow.addComponents(
                             new Discord.ButtonBuilder()
-                                .setLabel('Récupère le ticket')
+                                .setLabel(await client.lang('ticket.event.buttonclaim'))
                                 .setStyle(2)
                                 .setEmoji('🔐')
                                 .setCustomId("claim_" + idunique)
@@ -121,7 +123,7 @@ module.exports = {
             }
         } catch (error) {
             console.error(error);
-            interaction.editReply({ content: 'Une erreur est survenue.', flags: 64 });
+            interaction.editReply({ content: await client.lang('erreur'), flags: 64 });
         }
     }
 };

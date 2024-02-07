@@ -13,7 +13,7 @@ module.exports = {
      * @param {Array} args
      */
     run: async (client, message, args) => {
-        if (!client.config.buyers.includes(message.author.id) || !client.dev.includes(message.author.id)) return;
+        if (!client.config.buyers.includes(message.author.id)) return;
         
         return message.reply('Non Disponible.') 
         const msg = await message.channel.send({

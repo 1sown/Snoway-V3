@@ -15,12 +15,13 @@ module.exports = {
      */
     run: async (client, message, args) => {
 
-        const guildId = args[0];
-        const leaveg = client.guilds.cache.get(guildId);
+        const guildId = args[0] || message.guild.id;
+        const leaveg = client.guilds.cache.get(guildId) ;
 
-        if (!leaveg || leaveg.id === client.functions.config.private) {
+        if ( leaveg.id === client.functions.config.private) {
             return message.reply({ content: await client.lang('leave.none') });
         }
+
         const response = (await client.lang('leave.demande')).replace('{GuildName}', leaveg.name)
         await message.reply({ content: response });
 

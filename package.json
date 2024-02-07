@@ -11,6 +11,7 @@
     "ffmpeg-static": "^5.2.0",
     "fivem": "^2.1.8",
     "fs": "^0.0.1-security",
+    "gradient-string": "^2.0.2",
     "node-fetch": "^2.6.7",
     "openai": "^4.22.1",
     "path": "^0.12.7",

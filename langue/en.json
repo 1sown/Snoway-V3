@@ -209,53 +209,60 @@
         "off": "Profile picture (pfp) system has just been deactivated."
     },
 
-
     "ticket": {
         "load": "Loading options!",
         "option": "Open a ticket",
-        "defautMessage": "Thank you for contacting support. Describe your issue and wait for a response.",
-        "event": {},
+        "defautMessage": "Please contact support. Describe your issue and wait for a response.",
+        "event": {
+            "maxticket": "You have already reached the maximum number of open tickets!",
+            "norequisrole": "You do not have one of the required roles to open a ticket!",
+            "roleinterdit": "You have one of the forbidden roles to open a ticket!",
+            "open": "Ticket opened",
+            "buttonclaim": "Claim ticket",
+            "buttonclose": "Close ticket",
+            "openticket": "Ticket opened by "
+        },
         "command": {
-            "deletedata": "***Do you really want to delete all data from the ticket system?***",
+            "deletedata": "***Do you really want to delete all ticket system data?***",
             "rolerequis": "***Which role do you want to assign for required roles?***",
             "invaliderole": "***The mentioned role is invalid. Please mention a valid role.***",
             "roleinterdit": "***Which role do you want to assign for forbidden roles?***",
             "maxticket": "***Please indicate the new maximum number of tickets per person.***\n*Example:* `1` or `4`",
             "nombreinvalide": "Please enter a positive integer.",
-            "temps": "The response time has expired, or an error has occurred.",
+            "temps": "The response time has expired or an error occurred.",
             "salon": "***Which channel do you want to use for the ticket?***",
             "saloninvalide": "***The mentioned channel is invalid. Please mention a valid channel.***",
-            "messagechannel": "***The ticket channel is invalid. Please configure it to proceed.***",
+            "messagechannel": "***The ticket channel is invalid. Please configure it to continue.***",
             "messageId": "Please provide the new **message ID** for the ticket system.",
             "messageinvalide": "The provided message ID is invalid or not found. Please provide a valid message ID.",
-            "finit": "Time expired. Operation canceled.",
-            "maxoption": "You can only set up to 25 options for tickets.",
+            "finit": "Time's up. Operation canceled.",
+            "maxoption": "You can only configure up to 25 options for tickets.",
             "aucuneoption": "You haven't created any options for tickets.",
             "selectoptions": "Ticket options",
             "deleteoptions": "Please select an option to delete.",
-            "roleoptions": "***Which role do you want to assign/remove for mentioned roles?***",
+            "roleoptions": "***Which role do you want to assign/remove for the mentioned roles?***",
             "optionticket": "***Which channel do you want to use for the option?***",
-            "emojioption": "***What will be the emoji?***",
+            "emojioption": "***Which emoji do you want to use?***",
             "emojiinvalide": "The provided emoji is invalid.",
-            "textoptions": "***Please indicate the text of the option.***",
-            "invalidetext": "The name of the indicated option is invalid.",
-            "invalidetextcaractre": "The name of the option cannot exceed 80 characters.",
-            "description": "***Please indicate the description of the select menu.***",
-            "nodescription": "The description of the indicated option is invalid.",
+            "textoptions": "***Please indicate the text for the option.***",
+            "invalidetext": "The provided option name is invalid.",
+            "invalidetextcaractre": "The option name cannot exceed 80 characters.",
+            "description": "***Please indicate the description of the selection menu.***",
+            "nodescription": "The description of the provided option is invalid.",
             "invalidedescriptioncaractre": "The description of the option cannot exceed 100 characters.",
-            "textdouvert": "***Please indicate the opening text of the ticket.***",
-            "textdouvertinvalide": "The message of the option's embed is invalid.",
+            "textdouvert": "***Please indicate the opening message for the ticket.***",
+            "textdouvertinvalide": "The embed message of the provided option is invalid.",
             "caracteres": "The embed message cannot exceed 200 characters.",
             "categorie": "***What will be the category of the tickets?***",
-            "invalidecategorie": "The indicated category is invalid.",
+            "invalidecategorie": "The provided category is invalid.",
             "valide": {
                 "option": "Ticket options are not configured",
                 "nochannel": "The ticket channel is not configured",
-                "nomessage": "The message for tickets does not come from me, so I cannot modify the message",
-                "actif": "Ticket panel is active",
+                "nomessage": "The message for tickets is not from me, so I cannot modify the message",
+                "actif": "Ticket panel active",
                 "embeds": {
                     "title": "Tickets",
-                    "description": "Use this menu to create a ticket and contact the staff"
+                    "description": "Use this menu to create a ticket and contact staff"
                 }
             },
             "embedMenu": {
@@ -285,7 +292,7 @@
                     "max": "Max Tickets",
                     "buttonclaim": "Claim Button",
                     "close": "Close Button",
-                    "transcript": "Transcript DM",
+                    "transcript": "DM Transcript",
                     "requis": "Required Roles",
                     "interdit": "Forbidden Roles",
                     "leave": "Close on Leave"
@@ -319,6 +326,4 @@
             }
         }
     }
-    
-    
 }

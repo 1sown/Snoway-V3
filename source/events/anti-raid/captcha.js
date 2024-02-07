@@ -8,7 +8,7 @@ module.exports = {
      * @param {Discord.GuildMember} member
      */
     run: async (client, member) => {
-        if(member.bot) return;
+        if (member.bot) return;
         const db = await client.db.get(`captcha_${member.guild.id}`)
         if (!db) return;
         const accountCreationDate = member.user.createdAt;
@@ -56,7 +56,7 @@ module.exports = {
             );
 
         const channel = client.channels.cache.get(db.channel);
-
+        if (!channel) return;
         const message = await channel.send({
             content: `${member.user}, suivez les instructions ci-dessous.`,
             embeds: [modifEmbed(client, table, null, color)],

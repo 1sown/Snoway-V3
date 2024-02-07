@@ -15,7 +15,7 @@ module.exports = {
         try {
             const response = await client.api.prevcount();
             const count = numm(response.count);
-            message.channel.send({ content: `J'ai \`${count}\` prevname${count > 0 ? "s" : ""} !` })
+            message.channel.send({ content: `\`${count}\` prevnames dans la snoway API !` })
 
         } catch (error) {
             console.error('Erreur:', error);

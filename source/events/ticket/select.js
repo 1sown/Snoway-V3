@@ -48,19 +48,19 @@ module.exports = {
                     await ticketmessage.edit({ components: [row] });
                 }
 
-                const tickeruser = await client.db.get(`ticket_user_${interaction.guild.id}`) || [];
                 const resul = tickeruser.find(ticket => ticket.author === interaction.user.id);
-
                 if (resul && tickeruser.length >= db?.maxticket) {
-                    return await interaction.editReply({ content: `Vous avez déjà atteint le nombre maximal de tickets ouverts !` });
+                    return await interaction.editReply({ content: await client.lang('ticket.event.maxticket') });
                 }
-     
+
+                const tickeruser = await client.db.get(`ticket_user_${interaction.guild.id}`) || [];
+                
                 if (interaction.member.roles.cache.some(role => db.rolerequis.includes(role.id))) {
-                    return await interaction.editReply({ content: `Vous n'avez pas un des rôles requis pour ouvrir un ticket !` });
+                    return await interaction.editReply({ content: await client.lang('ticket.event.norequisrole') });
                 }
 
                 if (interaction.member.roles.cache.some(role => db.roleinterdit.includes(role.id))) {
-                    return await interaction.editReply({ content: `Vous avez un des rôles interdit pour ouvrir un ticket !` });
+                    return await interaction.editReply({ content: await client.lang('ticket.event.roleinterdit')});
                 }
 
                 let permissionOverwrites = [
@@ -87,10 +87,10 @@ module.exports = {
                     permissionOverwrites: permissionOverwrites,
                 });
                 console.log(option)
-                await interaction.editReply({ content: `Ticket open <#${channel?.id}>` });
+                await interaction.editReply({ content: `${await client.lang('ticket.event.open')} <#${channel?.id}>` });
                 const salonlog = client.channels.cache.get(option.logs)
                 if(salonlog) { 
-                const embeds = new Discord.EmbedBuilder().setColor(color).setFooter(client.footer).setAuthor({ name: interaction.user.username + ' ' + interaction.user.id, iconURL: interaction.user.avatarURL() }).setTimestamp().setTitle('Ticket ouvert par ' + interaction.user.username)
+                const embeds = new Discord.EmbedBuilder().setColor(color).setFooter(client.footer).setAuthor({ name: interaction.user.username + ' ' + interaction.user.id, iconURL: interaction.user.avatarURL() }).setTimestamp().setTitle(await client.lang('ticket.event.openticket') + interaction.user.username)
                 salonlog.send({
                     embeds: [embeds],
                 })
@@ -98,8 +98,8 @@ module.exports = {
                 const embed = new Discord.EmbedBuilder()
                     .setColor(color)
                     .setFooter(client.footer)
-                    .setDescription(option.message || "Merci d'avoir contacté le support\nDécrivez votre problème puis attendez de recevoir une réponse")
-                    .setTitle('Ticket ouvert par ' + interaction.user.username)
+                    .setDescription(option.message || await client.lang('ticket.defautMessage'))
+                    .setTitle(await client.lang('ticket.event.openticket') + interaction.user.username)
                     
                 const idunique = code(15)
                 const mentionedRoles = option.mention ? option.mention.map(role => `<@&${role}>`).join(', ') : '';
