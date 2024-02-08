@@ -92,8 +92,7 @@ module.exports = {
                     case 'color':
                         const reply = await msg.reply('Merci de me donner la nouvelle couleur des embeds');
 
-                        const filter = m => m.author.id === message.author.id;
-                        const responseCollector = message.channel.createMessageCollector({ filter, max: 1, time: 15000 });
+                        const responseCollector = message.channel.createMessageCollector();
 
                         responseCollector.on('collect', async m => {
                             const color = m.content.trim();
