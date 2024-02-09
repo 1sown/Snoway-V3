@@ -110,8 +110,6 @@ module.exports = class Snoway extends Client {
 
         data.push({
           name: slashCommand.name,
-          description: slashCommand.description,
-          type: slashCommand.type,
           type: slashCommand.type === 3 ? "3" : "2",
         });
 

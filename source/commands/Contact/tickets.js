@@ -308,7 +308,6 @@ module.exports = {
                     });
                 }
                 const fetch = await salon.messages.fetch(db.messageid).catch(() => null);
-                console.log(fetch);
                 if (fetch) {
                     if (fetch.author && fetch.author.id !== client.user.id) {
                         return i.editReply({
@@ -390,6 +389,7 @@ module.exports = {
                 }
             
                 await i.editReply({ content: "Panel des tickets actif" });
+                return;
             }
             
 

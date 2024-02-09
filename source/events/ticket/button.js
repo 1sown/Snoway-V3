@@ -20,13 +20,13 @@ module.exports = {
 
                 const option = db.option.find(option => option.value === id);
                 if (!option) return;
+                const tickeruser = await client.db.get(`ticket_user_${interaction.guild.id}`) || [];
 
                 const resul = tickeruser.find(ticket => ticket.author === interaction.user.id);
                 if (resul && tickeruser.length >= db?.maxticket) {
                     return await interaction.editReply({ content: await client.lang('ticket.event.maxticket') });
                 }
 
-                const tickeruser = await client.db.get(`ticket_user_${interaction.guild.id}`) || [];
                 
                 if (interaction.member.roles.cache.some(role => db.rolerequis.includes(role.id))) {
                     return await interaction.editReply({ content: await client.lang('ticket.event.norequisrole') });
