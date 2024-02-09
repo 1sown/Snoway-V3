@@ -3,7 +3,7 @@ const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
     name: "Développeurs Snoway",
-    type: 2,
+    type: "2",
     /**
      * @param {Snoway} client
      * @param {Discord.Integration} interaction

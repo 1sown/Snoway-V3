@@ -11,7 +11,7 @@ module.exports = {
    */
   run: async (client, interaction) => {
 if (interaction.type === Discord.InteractionType.ApplicationCommand) {
-    const SlashCommands = client.context.get(interaction.commandName);
+    const SlashCommands = client.slashCommands.get(interaction.commandName);
     if (!SlashCommands) return;
     try {
         await SlashCommands.run(client, interaction);
