@@ -6,11 +6,7 @@ const { REST } = require('@discordjs/rest');
 const { readdirSync } = require('fs');
 const db = new QuickDB();
 const { Player } = require('discord-player');
-const {
-  DefaultWebSocketManagerOptions: {
-    identifyProperties
-  }
-} = require("@discordjs/ws");
+const {DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
 identifyProperties.browser = "Discord Android"
 
 
