@@ -90,8 +90,7 @@ module.exports = {
                 let response;
                 switch (option) {
                     case 'color':
-                        const reply = await msg.reply('Merci de me donner la nouvelle couleur des embeds');
-
+                        const reply = await msg.reply('Merci de me donner la nouvelle couleur de l\'embeds');
                         const responseCollector = message.channel.createMessageCollector();
 
                         responseCollector.on('collect', async m => {
@@ -109,9 +108,31 @@ module.exports = {
                         });
                         break;
 
-                    case 'field':
-                        response = 'Entrez le titre et la valeur du champ séparés par un caractère pipe (|) :';
-                        break;
+                        case 'titre':
+                            const replyTitle = await msg.reply('Merci de me donner le nouveau titre de l\'embed');
+                            const responseTitle = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+                        
+                            responseTitle.on('collect', async m => {
+                                const title = m.content.trim();
+                                if (title.length > 256) {
+                                    await message.reply('Vous ne pouvez pas mettre plus de 256 caractères.');
+                                    await m.delete().catch(() => {});
+                                    await replyTitle.delete().catch(() => {});
+                                    responseTitle.stop();
+                                    return;
+                                }
+                                if (title) {
+                                    embed.setTitle(title);
+                                    await msg.edit({ embeds: [embed] });
+                                } else {
+                                    await message.channel.send('Erreur: Titre non valide.');
+                                }
+                        
+                                await m.delete().catch(() => {});
+                                await replyTitle.delete().catch(() => {});
+                                responseTitle.stop();
+                            });
+                            break;                        
                     case 'description':
                         response = 'Entrez la nouvelle description de l\'embed :';
                         break;

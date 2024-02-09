@@ -6,12 +6,14 @@ const { REST } = require('@discordjs/rest');
 const { readdirSync } = require('fs');
 const db = new QuickDB();
 const { Player } = require('discord-player');
-const { 
-  DefaultWebSocketManagerOptions: { 
-      identifyProperties 
-  } 
+const {
+  DefaultWebSocketManagerOptions: {
+    identifyProperties
+  }
 } = require("@discordjs/ws");
 identifyProperties.browser = "Discord Android"
+
+
 module.exports = class Snoway extends Client {
   constructor(
     options = {
@@ -57,7 +59,7 @@ module.exports = class Snoway extends Client {
         const langFilePath = `../../../langue/${langCode}.json`;
         const keys = key.split(".");
         let text;
-    
+
         let errorMessage;
         switch (langCode) {
           case "en":
@@ -70,14 +72,14 @@ module.exports = class Snoway extends Client {
         try {
           text = require(langFilePath);
         } catch (error) {
-          
+
           console.error(
             `Impossible de charger le fichier de langue pour la langue "${langCode}" : ${error.message}`
           );
-    
+
           return resolve(errorMessage);
         }
-    
+
         for (const key of keys) {
           text = text[key];
           if (!text) {
@@ -87,11 +89,11 @@ module.exports = class Snoway extends Client {
             return resolve(errorMessage);
           }
         }
-    
+
         return resolve(text);
       });
     }
-  }    
+  }
   connect() {
     return super.login(this.config.token).catch(async (err) => {
       console.log(err)
@@ -104,21 +106,23 @@ module.exports = class Snoway extends Client {
     const data = [];
     readdirSync("./source/applications/").forEach(async (dir) => {
       let slashCommandFile = readdirSync(`./source/applications/${dir}/`).filter((files) => files.endsWith(".js"));
-  
+
       for (const file of slashCommandFile) {
         let slashCommand = require(`../../applications/${dir}/${file}`);
-  
+
         this.context.set(slashCommand.name, slashCommand);
-        console.log(slashCommand.type)
+
         data.push({
           name: slashCommand.name,
+          description: slashCommand.description,
+          type: slashCommand.type,
           type: slashCommand.type === 3 ? "3" : "2",
         });
-  
+
       }
-  
+
     });
-  
+
     const rest = new REST({ version: '10' }).setToken(this.config.token);
     try {
       await rest.put(Routes.applicationCommands(this.config.botId), { body: data });
@@ -126,6 +130,8 @@ module.exports = class Snoway extends Client {
       console.error(error);
     }
   }
+
+
   CommandLoad() {
     const subFolders = fs.readdirSync("./source/commands");
     let finale = new Collection();
