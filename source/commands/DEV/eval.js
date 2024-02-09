@@ -33,7 +33,7 @@ module.exports = {
                 ]
             });
         } catch (err) {
-            message.channel.send("Erreur")
+            message.channel.send("Erreur ```js\n"+ err + "```")
         }
     },
 };
