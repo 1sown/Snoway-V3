@@ -47,13 +47,14 @@ module.exports = {
                         );
                     await ticketmessage.edit({ components: [row] });
                 }
+                
+                const tickeruser = await client.db.get(`ticket_user_${interaction.guild.id}`) || [];
 
                 const resul = tickeruser.find(ticket => ticket.author === interaction.user.id);
                 if (resul && tickeruser.length >= db?.maxticket) {
                     return await interaction.editReply({ content: await client.lang('ticket.event.maxticket') });
                 }
 
-                const tickeruser = await client.db.get(`ticket_user_${interaction.guild.id}`) || [];
                 
                 if (interaction.member.roles.cache.some(role => db.rolerequis.includes(role.id))) {
                     return await interaction.editReply({ content: await client.lang('ticket.event.norequisrole') });
@@ -86,7 +87,6 @@ module.exports = {
                     type: 0,
                     permissionOverwrites: permissionOverwrites,
                 });
-                console.log(option)
                 await interaction.editReply({ content: `${await client.lang('ticket.event.open')} <#${channel?.id}>` });
                 const salonlog = client.channels.cache.get(option.logs)
                 if(salonlog) { 

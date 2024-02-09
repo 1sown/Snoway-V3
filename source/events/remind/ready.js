@@ -35,7 +35,6 @@ async function checkReminders(client) {
                 const updatedReminders = db.filter(r => r.id !== reminder.id);
                 await client.db.set(`reminders`, updatedReminders);
 
-                console.log(`Rappel effectué pour l'utilisateur ${user.username}`);
             }
         }
     } else {

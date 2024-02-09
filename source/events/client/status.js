@@ -8,13 +8,13 @@ module.exports = {
      * @param {Snoway} client
      */
     run: async (client) => {
-        setInterval(async () => {
+       setInterval(async () => {
             const db = await client.db.get(`status`)
             const presenceOptions = {
-                status: db?.status || 'dnd',
+                status: db?.status || 0,
                 activities: [{
                     name: db?.name || "Snoway V" + client.version + " .gg/snoway",
-                    type: db?.type || 3,
+                    type: db?.type || 4,
                     url: "https://twitch.tv/oni145"
 
                 }]

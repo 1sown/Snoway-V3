@@ -4,6 +4,12 @@ const version = require('../../../version')
 const { QuickDB } = require("quick.db")
 const db = new QuickDB();
 const { Player } = require('discord-player');
+const { 
+  DefaultWebSocketManagerOptions: { 
+      identifyProperties 
+  } 
+} = require("@discordjs/ws");
+identifyProperties.browser = "Discord Android"
 module.exports = class Snoway extends Client {
   constructor(
     options = {
@@ -51,10 +57,10 @@ module.exports = class Snoway extends Client {
         let errorMessage;
         switch (langCode) {
           case "en":
-            errorMessage = "No translation for this text. Please contact the developers!";
+            errorMessage = "No translation for this text";
             break;
           default:
-            errorMessage = "Aucune traduction pour ce texte. Merci de contacter les développeurs !";
+            errorMessage = "Aucune traduction pour ce texte";
         }
 
         try {

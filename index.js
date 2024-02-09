@@ -14,7 +14,3 @@ process.on("unhandledRejection", (reason, p) => {
     console.log(" [AntiCrash] :: Uncaught Exception/Catch (MONITOR)");
     console.log(err, origin);
   });
-  process.on("multipleResolves", (type, promise, reason) => {
-    console.log(" [AntiCrash] :: Multiple Resolves");
-    console.log(type, promise, reason);
-  });

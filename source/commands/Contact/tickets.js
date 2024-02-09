@@ -142,7 +142,7 @@ module.exports = {
                 .setColor(client.color)
                 .setFooter(client.footer)
                 .addFields(
-                    { name:  await client.lang('ticket.command.embedMenu.fields.salon'), value: `\`\`\`js\n${salon?.name || "Aucun"} ${db.messageid && salon?.name ? `(Message: ${db.messageid})` : ""}\`\`\``, inline: true },
+                    { name: await client.lang('ticket.command.embedMenu.fields.salon'), value: `\`\`\`js\n${salon?.name || "Aucun"} ${db.messageid && salon?.name ? `(Message: ${db.messageid})` : ""}\`\`\``, inline: true },
                     { name: await client.lang('ticket.command.embedMenu.fields.type'), value: `\`\`\`js\n${modules}\`\`\``, inline: true },
                     { name: await client.lang('ticket.command.embedMenu.fields.max'), value: `\`\`\`js\n${db.maxticket}\`\`\``, inline: true },
                     { name: await client.lang('ticket.command.embedMenu.fields.claim'), value: `\`\`\`js\n${db.claimbutton ? "✅" : "❌"}\`\`\``, inline: true },
@@ -152,17 +152,17 @@ module.exports = {
                     { name: await client.lang('ticket.command.embedMenu.fields.roleinterdit'), value: `\`\`\`js\n${rolesInterdit.map(role => role?.name).join(', ') || "Aucun"}\`\`\``, inline: true },
                     { name: await client.lang('ticket.command.embedMenu.fields.closeauto'), value: `\`\`\`js\n${db.leaveclose ? "✅" : "❌"} (Fermeture au leave du membre)\`\`\``, inline: true }
                 )
-                    
-                const optionselect = db.option.map(option => {
-                    const emojibot = client.emojis.cache.get(option.emoji);
-                
-                    return {
-                        label: option.text,
-                        description: option.description || undefined,
-                        emoji: emojibot ? option.emoji : undefined,
-                        value: "option_" + option.value
-                    };
-                });
+
+            const optionselect = db.option.map(option => {
+                const emojibot = client.emojis.cache.get(option.emoji);
+
+                return {
+                    label: option.text,
+                    description: option.description || undefined,
+                    emoji: emojibot ? option.emoji : undefined,
+                    value: "option_" + option.value
+                };
+            });
 
             const SelectOptionEdit = new StringSelectMenuBuilder()
                 .setCustomId('select_edit_option')
@@ -215,7 +215,7 @@ module.exports = {
                         emoji: '⚙',
                         value: 'rolerequis'
                     }, {
-                        label:  await client.lang('ticket.command.embedMenu.select.interdit'),
+                        label: await client.lang('ticket.command.embedMenu.select.interdit'),
                         emoji: '⛔',
                         value: 'roleinterdit'
                     }, {
@@ -292,47 +292,49 @@ module.exports = {
 
 
             if (i.customId === "valide") {
+                await i.deferReply({ ephemeral: true });
                 if (!db || !db.option || db.option.length === 0) {
-                    return i.reply({
+                    return i.editReply({
                         content: await client.lang('ticket.command.valide.option'),
                         flags: 64
                     });
                 }
-
+            
                 const salon = client.channels.cache.get(db.salon);
                 if (!salon) {
-                    return i.reply({
+                    return i.editReply({
                         content: await client.lang('ticket.command.valide.nochannel'),
                         flags: 64
                     });
-                }   
-                await i.deferReply({ephemeral: true})
-                const fetch = await salon.messages.fetch(db.messageid).catch(() => null);
-                if (fetch && fetch.author.id !== client.user.id) {
-                    return i.reply({
-                        content: await client.lang('ticket.command.valide.nomessage'),
-                        flags: 64
-                    });
                 }
-                
-                const embed = new EmbedBuilder()
-                .setTitle(await client.lang('ticket.command.valide.embeds.title'))
-                .setDescription(await client.lang('ticket.command.valide.embeds.description'))
-                .setColor(client.color)
-                .setFooter(client.footer)
-
-                if (db.type === "select") {
+                const fetch = await salon.messages.fetch(db.messageid).catch(() => null);
+                console.log(fetch);
+                if (fetch) {
+                    if (fetch.author && fetch.author.id !== client.user.id) {
+                        return i.editReply({
+                            content: await client.lang('ticket.command.valide.nomessage'),
+                            flags: 64
+                        });
+                    }
+                }
             
+                const embed = new EmbedBuilder()
+                    .setTitle(await client.lang('ticket.command.valide.embeds.title'))
+                    .setDescription(await client.lang('ticket.command.valide.embeds.description'))
+                    .setColor(client.color)
+                    .setFooter(client.footer);
+            
+                if (db.type === "select") {
                     const options = db.option.map(option => {
                         const emojibot = client.emojis.cache.get(option.emoji);
                         return {
                             label: option.text,
-                            emoji: emojibot ?  option.emoji : undefined,
+                            emoji: emojibot ? option.emoji : undefined,
                             description: option.description || undefined,
                             value: `ticket_${option.value}`
                         };
                     });
-
+            
                     const row = new ActionRowBuilder()
                         .addComponents(
                             new StringSelectMenuBuilder()
@@ -340,34 +342,33 @@ module.exports = {
                                 .setPlaceholder('Snoway')
                                 .addOptions(options)
                         );
-
+            
                     if (fetch) {
-                        fetch.edit({ components: [row] });
+                        await fetch.edit({ components: [row] });
                     } else {
-                       const msg = await salon.send({
+                        const msg = await salon.send({
                             embeds: [embed],
                             components: [row]
-                        })
-                        db.messageid = msg.id
-                       await client.db.set(`ticket_${i.guild.id}`, db)
+                        });
+                        db.messageid = msg.id;
+                        await client.db.set(`ticket_${i.guild.id}`, db);
                     }
                 } else if (db.type === "button") {
                     const buttons = db.option.map((option, index) => {
                         const emoji = client.emojis.cache.get(option.emoji);
-                        if(emoji) {
+                        if (emoji) {
                             return new ButtonBuilder()
-                            .setCustomId(`ticket_${option.value}`)
-                            .setLabel(option.text)
-                            .setEmoji(option.emoji)
-                            .setStyle(2);
+                                .setCustomId(`ticket_${option.value}`)
+                                .setLabel(option.text)
+                                .setEmoji(option.emoji)
+                                .setStyle(2);
                         } else {
                             return new ButtonBuilder()
-                            .setCustomId(`ticket_${option.value}`)
-                            .setLabel(option.text)
-                            .setStyle(2);
+                                .setCustomId(`ticket_${option.value}`)
+                                .setLabel(option.text)
+                                .setStyle(2);
                         }
                     });
-                    
             
                     const groupButtons = [];
                     while (buttons.length > 0) {
@@ -377,7 +378,7 @@ module.exports = {
                     const rowButtons = groupButtons.map(group => new ActionRowBuilder().addComponents(...group));
             
                     if (fetch) {
-                        fetch.edit({ components: rowButtons });
+                        await fetch.edit({ components: rowButtons });
                     } else {
                         const msg = await salon.send({
                             embeds: [embed],
@@ -387,12 +388,10 @@ module.exports = {
                         await client.db.set(`ticket_${i.guild.id}`, db);
                     }
                 }
-
-                msg.edit({
-                    components: []
-                })
-                return i.editReply({content: "Panel des tickets actif"})
+            
+                await i.editReply({ content: "Panel des tickets actif" });
             }
+            
 
 
 
@@ -749,7 +748,7 @@ module.exports = {
                         response.first().delete().catch(() => { });
                         embedMenu();
                     } else {
-                        const invalidMessage = await msg.reply({ content: await client.lang('ticket.command.messageinvalide')});
+                        const invalidMessage = await msg.reply({ content: await client.lang('ticket.command.messageinvalide') });
                         setTimeout(() => {
                             invalidMessage.delete().catch(() => { });
                         }, 5000);
@@ -757,7 +756,7 @@ module.exports = {
                         embedMenu();
                     }
                 } else {
-                    const timeoutMessage = await msg.reply({ content: await client.lang('ticket.command.finit')})
+                    const timeoutMessage = await msg.reply({ content: await client.lang('ticket.command.finit') })
                     setTimeout(() => {
                         timeoutMessage.delete().catch(() => { });
                     }, 5000);
@@ -1000,7 +999,7 @@ module.exports = {
                     } catch (error) {
                         console.error(error);
                         await embedOptions(id);
-                        message.channel.send(await client.lang('ticket.command.finit') )
+                        message.channel.send(await client.lang('ticket.command.finit'))
 
                     }
                 }
