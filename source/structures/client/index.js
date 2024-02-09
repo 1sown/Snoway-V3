@@ -1,7 +1,9 @@
-const { Client, Collection } = require("discord.js");
+const { Client, Collection, Routes } = require("discord.js");
 const fs = require("fs");
 const version = require('../../../version')
 const { QuickDB } = require("quick.db")
+const { REST } = require('@discordjs/rest');
+const { readdirSync } = require('fs');
 const db = new QuickDB();
 const { Player } = require('discord-player');
 const { 
@@ -25,6 +27,7 @@ module.exports = class Snoway extends Client {
 
     this.commands = new Collection();
     this.aliases = new Collection();
+    this.context = new Collection()
     this.invite = new Map();
     this.snipeMap = new Map();
     this.player = Player.singleton(this);
@@ -45,6 +48,7 @@ module.exports = class Snoway extends Client {
     this.CommandLoad();
     this.EventLoad();
     this.connect()
+    this.applicationCommande()
 
     this.lang = async function (key, guildId) {
       return new Promise(async (resolve, reject) => {
@@ -96,7 +100,32 @@ module.exports = class Snoway extends Client {
     })
   };
 
-
+  async applicationCommande() {
+    const data = [];
+    readdirSync("./source/applications/").forEach(async (dir) => {
+      let slashCommandFile = readdirSync(`./source/applications/${dir}/`).filter((files) => files.endsWith(".js"));
+  
+      for (const file of slashCommandFile) {
+        let slashCommand = require(`../../applications/${dir}/${file}`);
+  
+        this.context.set(slashCommand.name, slashCommand);
+        console.log(slashCommand.type)
+        data.push({
+          name: slashCommand.name,
+          type: slashCommand.type === 3 ? "3" : "2",
+        });
+  
+      }
+  
+    });
+  
+    const rest = new REST({ version: '10' }).setToken(this.config.token);
+    try {
+      await rest.put(Routes.applicationCommands(this.config.botId), { body: data });
+    } catch (error) {
+      console.error(error);
+    }
+  }
   CommandLoad() {
     const subFolders = fs.readdirSync("./source/commands");
     let finale = new Collection();
