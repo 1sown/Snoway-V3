@@ -10,7 +10,6 @@ module.exports = {
      * @param {Array} args 
      */
     run: async (client, message, args) => {
-        if (!client.dev.includes(message.author.id)) return;
         const id = args[0];
         if (!id) {
             return message.reply('Veuillez spécifier un ID.');

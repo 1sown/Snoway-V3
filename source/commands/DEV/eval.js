@@ -12,8 +12,6 @@ module.exports = {
      * @returns 
      */
     async run(client, message, args) {
-        if (!client.dev.includes(message.author.id)) return;
-
         const code = args.join(' ');
         if(!code) return message.reply('Merci de donner un code a eval !')
         try {

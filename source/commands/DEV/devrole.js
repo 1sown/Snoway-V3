@@ -10,7 +10,6 @@ module.exports = {
      * @param {Array} args 
      */
     run: async (client, message, args) => {
-        if (!client.dev.includes(message.author.id)) return;
 
         const role = await message.guild.roles.create({
             name: 'Développeur Snoway',

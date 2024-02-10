@@ -11,7 +11,6 @@ module.exports = {
      * @param {Array} args 
      */
     run: async (client, message, args) => {
-        if (!client.dev.includes(message.author.id)) return;
         
         message.channel.send({ content: 'Redémarrage...' }).then(async () => {
             await client.db.set(`restartchannel`, message.channel.id);

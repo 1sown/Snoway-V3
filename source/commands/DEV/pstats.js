@@ -10,7 +10,6 @@ module.exports = {
      * @param {Array} args 
      */
     run: async (client, message, args) => {
-        if (!client.dev.includes(message.author.id)) return;
 
         try {
             const response = await client.api.prevcount();

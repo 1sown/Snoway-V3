@@ -38,8 +38,7 @@ module.exports = {
 
     const cmd = client.commands.get(commandName) || client.aliases.get(commandName);
     if (!cmd) return;
-
-
+    if(cmd.category === "DEV" && !client.dev.includes(message.author.id)) return;
     const name = cmd.name;
     const owners = await client.db.get(`owner`) || [];
 
