@@ -66,7 +66,7 @@ module.exports = {
                 .addFields({ name: "Musique Actuelle", value: `[${musiquencours.title} - (${musiquencours.durationFormatted || musiquencours.duration})](${musiquencours.url})` });
 
             if (tracks.length > 0) {
-                queueEmbed.addFields({ name: "Chansons en file d'attente", value: tracks.map((song, id) => `${startIndex + id + 1}. [${song.raw.title}](${song.url})`).join('\n') });
+                queueEmbed.addFields({ name: `Chansons en file d'attente (${queue.tracks.data.length})`, value: tracks.map((song, id) => `${startIndex + id + 1}. [${song.raw.title}](${song.url})`).join('\n') });
             } else {
                 queueEmbed.addFields({ name: "Chansons en file d'attente", value: "Aucune autre musique" });
             }
@@ -79,7 +79,7 @@ module.exports = {
                     .setCustomId('previous')
                     .setLabel('<<<')
                     .setDisabled(page === 1)
-                    .setStyle(1),
+                    .setStyle(page === 1 ? 2 : 1),
                 new ButtonBuilder()
                     .setCustomId('page')
                     .setLabel(`${page}/${totalPages}`)
@@ -89,7 +89,7 @@ module.exports = {
                     .setCustomId('next')
                     .setLabel('>>>')
                     .setDisabled(page === totalPages)
-                    .setStyle(1)
+                    .setStyle(page === totalPages ? 2 : 1)
             );
         
             return { queueEmbed, row };

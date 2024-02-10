@@ -28,8 +28,6 @@ module.exports = {
      * @param {string[]} args
      */
     run: async (client, message, args) => {
-        return message.reply('Commande en dev...')
-
         try {
             const subCommand = args[0];
 
@@ -52,7 +50,11 @@ module.exports = {
                     const playlistName = args[1];
                     const db = await client.db.get(`playlist_${message.author.id}`) || [];
                     const verif = db.find(playlist => playlist.name === playlistName);
-
+                    if (db.length >= 25) {
+                        return message.reply("Vous avez déjà atteint le nombre maximal de playlists. Merci d'en supprimer pour en créer une nouvelle.");
+                    }
+                    
+                    
                     if (verif) {
                         return message.reply('Une playlist existe déjà avec ce nom.');
                     }
@@ -85,8 +87,12 @@ module.exports = {
                     const playlistsMap = playlistsSlice.map((playlist) => {
                         const musiqueplaylist = playlist.musique.length
                         const createDate = new Date(playlist.create);
+                        const editDate = new Date(playlist.edit);
+                        const formattedDateEdit = `${editDate.getDate()}/${editDate.getMonth() + 1}/${editDate.getFullYear()}`;
+                        const formaDateEdit = `${editDate.getHours().toString().padStart(2, '0')}:${editDate.getMinutes().toString().padStart(2, '0')}:${editDate.getSeconds().toString().padStart(2, '0')}`
                         const formattedDate = `${createDate.getDate()}/${createDate.getMonth() + 1}/${createDate.getFullYear()}`;
-                        return `__**Playlist**__ \`${playlist.name}\` | **${musiqueplaylist} musique${musiqueplaylist < 1 ? "s" : ""}** (Créée le \`${formattedDate}\`)`;
+                        const formaDate = `${createDate.getHours().toString().padStart(2, '0')}:${createDate.getMinutes().toString().padStart(2, '0')}:${createDate.getSeconds().toString().padStart(2, '0')}`
+                        return `__**Playlist**__ \`${playlist.name}\` \`\`\`js\nMusique${musiqueplaylist < 1 ? "s" : ""}: ${musiqueplaylist}\nCréée ${formattedDate} [${formaDate}]\nModifier: ${formattedDateEdit} [${formaDateEdit}]\`\`\``;
                     }).join('\n');
 
                     const embed = new Discord.EmbedBuilder()
@@ -165,6 +171,33 @@ module.exports = {
                     });
                     break;
 
+                    case 'add':
+                        const playlistNameToAdd = args[1];
+                        const songToAdd = args.slice(2).join(" "); 
+                        
+                        if (!playlistNameToAdd || !songToAdd) {
+                            return message.reply("Utilisation invalide. Utilisation correcte: `playlist add <nom_playlist> <song>`");
+                        }
+                    
+                        const playlistsToAdd = await client.db.get(`playlist_${message.author.id}`) || [];
+                        const playlistToAdd = playlistsToAdd.find(playlist => playlist.name === playlistNameToAdd);
+                    
+                        if (!playlistToAdd) {
+                            return message.reply("Playlist non trouvée.");
+                        }
+                    
+                        if (playlistToAdd.musique.includes(songToAdd)) {
+                            return message.reply("La chanson existe déjà dans la playlist.");
+                        }
+                    
+                        playlistToAdd.musique.push(songToAdd);
+                        playlistToAdd.edit = Date.now(); 
+                    
+                        await client.db.set(`playlist_${message.author.id}`, playlistsToAdd);
+                    
+                        message.reply(`La chanson \`${songToAdd}\` a été ajoutée à la playlist \`${playlistNameToAdd}\`.`);
+                        break;
+                    
                 default:
                     message.reply(`Utilisation invalide, \`${client.prefix}help playlist\`.`);
                     break;
