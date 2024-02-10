@@ -8,7 +8,6 @@ module.exports = {
      * @param {Role} role 
      */
     run: async (client, role) => {
-        console.log(role)
         const color = await client.db.get(`color_${role.guild.id}`) || client.config.color
         const logs = await client.db.get(`logs_${role.guild.id}`) || []
         const salon = client.channels.cache.get(logs[0]?.roles)
