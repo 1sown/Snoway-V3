@@ -300,16 +300,20 @@ module.exports = {
                     });
                 }
             
-                const salon = client.channels.cache.get(db.salon);
+                const salon = client.channels.cache.get(db.salon)
                 if (!salon) {
                     return i.editReply({
                         content: await client.lang('ticket.command.valide.nochannel'),
                         flags: 64
                     });
                 }
-                const fetch = await salon.messages.fetch(db.messageid).catch(() => null);
+                let fetch = null
+                if(db.messageid) { 
+                    fetch = await salon.messages.fetch(db.messageid).catch(() => null);
+                }
+
                 if (fetch) {
-                    if (fetch.author && fetch.author.id !== client.user.id) {
+                    if (fetch?.author?.id !== client.user.id) {
                         return i.editReply({
                             content: await client.lang('ticket.command.valide.nomessage'),
                             flags: 64
@@ -342,42 +346,44 @@ module.exports = {
                                 .addOptions(options)
                         );
             
-                    if (fetch) {
-                        await fetch.edit({ components: [row] });
-                    } else {
-                        const msg = await salon.send({
-                            embeds: [embed],
-                            components: [row]
-                        });
-                        db.messageid = msg.id;
-                        await client.db.set(`ticket_${i.guild.id}`, db);
-                    }
+                        if (fetch?.content || fetch) {
+                            if (fetch?.author?.id === client.user.id) {
+                                await fetch.edit({ components: [row] })
+                            } 
+                        } else {
+                            const msg = await salon.send({
+                                embeds: [embed],
+                                components: [row]
+                            });
+                            db.messageid = msg.id;
+                            await client.db.set(`ticket_${i.guild.id}`, db);
+                        }
                 } else if (db.type === "button") {
                     const buttons = db.option.map((option, index) => {
                         const emoji = client.emojis.cache.get(option.emoji);
+                        const buttonBuilder = new ButtonBuilder()
+                            .setCustomId(`ticket_${option.value}`)
+                            .setLabel(option.text)
+                            .setStyle(2);
+                
                         if (emoji) {
-                            return new ButtonBuilder()
-                                .setCustomId(`ticket_${option.value}`)
-                                .setLabel(option.text)
-                                .setEmoji(option.emoji)
-                                .setStyle(2);
-                        } else {
-                            return new ButtonBuilder()
-                                .setCustomId(`ticket_${option.value}`)
-                                .setLabel(option.text)
-                                .setStyle(2);
+                            buttonBuilder.setEmoji(emoji);
                         }
+                
+                        return buttonBuilder;
                     });
-            
+                
                     const groupButtons = [];
                     while (buttons.length > 0) {
                         groupButtons.push(buttons.splice(0, 5));
                     }
-            
+                
                     const rowButtons = groupButtons.map(group => new ActionRowBuilder().addComponents(...group));
-            
-                    if (fetch) {
-                        await fetch.edit({ components: rowButtons });
+                
+                    if (fetch && (fetch.content || fetch)) {
+                        if (fetch.author?.id === client.user.id) {
+                            await fetch.edit({ components: rowButtons });
+                        }
                     } else {
                         const msg = await salon.send({
                             embeds: [embed],
@@ -387,7 +393,7 @@ module.exports = {
                         await client.db.set(`ticket_${i.guild.id}`, db);
                     }
                 }
-            
+                
                 await i.editReply({ content: "Panel des tickets actif" });
                 return;
             }
