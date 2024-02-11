@@ -77,7 +77,6 @@ module.exports = {
             }
 
     
-
             const salonlog = client.channels.cache.get(dboption.logs)
 
             if (salonlog) {

@@ -35,10 +35,11 @@ module.exports = class Snoway extends Client {
     this.functions = require('../Functions/index')
     this.utils = require('../Utils/index')
     this.config = require('../../../config/config');
+    this.service = require('../../../service/snoway')
 
     this.support = 'https://discord.gg/snoway'
-    this.footer = { text: "Snoway © 2024" }
-    this.dev = ["798973949189947459", "233657223190937601", "396363649830354944"]
+    this.footer = this.service.footer
+    this.dev = this.service.dev
 
     this.version = version;
     this.db = db
@@ -171,7 +172,6 @@ module.exports = class Snoway extends Client {
 
       for (const eventFile of eventsFiles) {
         const event = require(`../../events/${category}/${eventFile}`);
-
         const eventHandler = (...args) => event.run(this, ...args);
         this.on(event.name, eventHandler);
         if (category === 'anticrash') {
