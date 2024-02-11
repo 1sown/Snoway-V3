@@ -34,7 +34,7 @@ module.exports = {
                 .setTitle(`Liste des administrateurs`)
                 .setDescription(adminList)
                 .setColor(client.color)
-                .setFooter({ text: `Page ${currentPage}/${pageCount}\n${message.guild.name}` });
+                .setFooter({ text: `Page ${currentPage}/${pageCount}\nTotal: ${adminMembers.size}\nServeur: ${message.guild.name}` });
 
                 const row = new ActionRowBuilder().addComponents(
                 new ButtonBuilder()
@@ -42,6 +42,11 @@ module.exports = {
                     .setLabel('<<<')
                     .setStyle(ButtonStyle.Primary)
                     .setDisabled(currentPage === 1),
+                    new ButtonBuilder()
+                    .setCustomId(`pageee`)
+                    .setLabel(`${currentPage}/${pageCount}`)
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(true),
                 new ButtonBuilder()
                     .setCustomId(`suivant_${message.id}`)
                     .setLabel('>>>')

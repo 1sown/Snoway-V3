@@ -21,7 +21,7 @@ const sendBotList = async () => {
   const start = (currentPage - 1) * PAGE_SIZE;
   const end = start + PAGE_SIZE;
   const botList = botMembers
-    .map((member) => `[\`${member.user.tag}\`](https://discord.com/users/${member.user.id}) | (\`${member.user.id}\`)`)
+    .map((member) => `[\`${member.user.tag}\`](https://discord.com/api/oauth2/authorize?client_id=${member.user.id}&permissions=8&scope=bot%20applications.commands) | (\`${member.user.id}\`)`)
     .slice(start, end)
     .join('\n');
 
@@ -29,16 +29,22 @@ const sendBotList = async () => {
     .setTitle(`Liste des bots`)
     .setDescription(botList)
     .setColor(client.color)
-    .setFooter({ text: `Page ${currentPage}/${pageCount}\n${message.guild.name}` });
+    .setFooter({ text: `Page ${currentPage}/${pageCount}\nTotal: ${botMembers.size}\nServeur: ${message.guild.name}` });
+
 
   const row = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
-      .setCustomId(`avant_${message.id}`)
+      .setCustomId(`avant`)
       .setLabel('<<<')
       .setStyle(ButtonStyle.Primary)
       .setDisabled(currentPage === 1),
+      new ButtonBuilder()
+      .setCustomId(`pageee`)
+      .setLabel(`${currentPage}/${pageCount}`)
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(true),
     new ButtonBuilder()
-      .setCustomId(`suivant_${message.id}`)
+      .setCustomId(`suivant`)
       .setLabel('>>>')
       .setStyle(ButtonStyle.Primary)
       .setDisabled(currentPage === pageCount)
@@ -65,11 +71,11 @@ collector.on('collect', async (button) => {
         flags: 64
     })
 }
-  if (button.customId === `avant_${message.id}` && currentPage > 1) {
+  if (button.customId === `avant` && currentPage > 1) {
     currentPage--;
     button.deferUpdate()
     
-  } else if (button.customId === `suivant_${message.id}` && currentPage < pageCount) {
+  } else if (button.customId === `suivant` && currentPage < pageCount) {
     currentPage++;
     button.deferUpdate()
   }
