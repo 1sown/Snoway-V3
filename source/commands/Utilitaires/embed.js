@@ -1,5 +1,7 @@
 const { ActionRowBuilder, StringSelectMenuBuilder, EmbedBuilder, Message, ButtonBuilder } = require('discord.js');
 const Snoway = require('../../structures/client/index')
+const Discord = require('discord.js')
+
 module.exports = {
     name: 'embed',
     aliases: ["createembed", "embedbuilder", "builder"],
@@ -84,10 +86,52 @@ module.exports = {
         const collector = msg.createMessageComponentCollector();
 
         collector.on('collect', async i => {
+            if (i.user.id !== message.author.id) {
+                return i.reply({
+                    content: await client.lang('interaction'),
+                    flags: 64
+                })
+            }
+
+            switch (i.customId) {
+                case "yep":
+                    const channel = new Discord.ActionRowBuilder()
+                        .addComponents(
+                            new Discord.ChannelSelectMenuBuilder()
+                                .setCustomId('channel-send')
+                                .setMinValues(1)
+                                .setMaxValues(1)
+                                .addChannelTypes(0)
+                        );
+            
+                    i.update({ components: [channel], embeds: [], content: "Merci de choisir un canal où l'embed sera envoyé." });
+                    break;
+                case "nop":
+                    i.message.delete().catch(() => {});
+                    break;
+
+                case "channel-send": 
+                      i.deferUpdate()
+                       const channeltosend = client.channels.cache.get(i.values[0])
+
+                       channeltosend.send({
+                        embeds: [embed]
+                       })
+
+                       msg.edit({
+                        content: `L'embed viens d'être envoyé`,
+                        embeds: [embed],
+                        components: []
+                       })
+                break;
+            }
+            
+
+
             if (i.customId === 'options') {
                 await i.deferUpdate();
+
                 const option = i.values[0];
-                let response;
                 switch (option) {
                     case 'titre':
                         const replyTitle = await msg.reply('Merci de me donner le nouveau titre de l\'embed');
@@ -204,63 +248,165 @@ module.exports = {
                         });
                         break;
 
-                        case 'auteur':
-                            const replyAskName = await msg.reply('Merci de me donner le nom de l\'auteur de l\'embed. Si vous ne souhaitez pas ajouter d\'auteur, répondez "non".');
-                            const responseName = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
-                        
-                            let authorName = '';
-                        
-                            responseName.on('collect', async m => {
-                                const nameResponse = m.content.trim();
-                                if (nameResponse.toLowerCase() === 'non') {
-                                    await replyAskName.delete().catch(() => {});
-                                    await m.delete().catch(() => {});
-                                    responseName.stop();
-                                    return;
-                                } else {
-                                    authorName = nameResponse;
-                                    await replyAskName.delete().catch(() => {});
-                                    await m.delete().catch(() => {});
-                                    responseName.stop();
-                                    
-                                    const replyAskURL = await msg.reply('Merci de me donner l\'URL de l\'auteur de l\'embed. Si vous ne souhaitez pas ajouter d\'auteur, répondez "non".');
-                                    const responseURL = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
-                        
-                                    responseURL.on('collect', async m => {
-                                        const urlResponse = m.content.trim();
-                                        if (urlResponse.toLowerCase() === 'non') {
-                                            await replyAskURL.delete().catch(() => {});
-                                            await m.delete().catch(() => {});
-                                            responseURL.stop();
-                                            embed.setAuthor({name: authorName});
-                                            return;
-                                        } else {
-                                            const authorUrl = urlResponse;
-                                            embed.setAuthor({name: authorName, iconURL: authorUrl});
-                                            await msg.edit({ embeds: [embed] });
-                        
-                                            await replyAskURL.delete().catch(() => {});
-                                            await m.delete().catch(() => {});
-                                            responseURL.stop();
-                                        }
-                                    });
-                                }
-                            });
-                            break;                        
-                        
+                    case 'auteur':
+                        const replyAskName = await msg.reply('Merci de me donner le nom de l\'auteur de l\'embed. Si vous ne souhaitez pas ajouter d\'auteur, répondez \`non\`.');
+                        const responseName = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
 
+                        let authorName = '';
+
+                        responseName.on('collect', async m => {
+                            const nameResponse = m.content.trim();
+                            if (nameResponse.toLowerCase() === 'non') {
+                                await replyAskName.delete().catch(() => { });
+                                await m.delete().catch(() => { });
+                                responseName.stop();
+                                return;
+                            } else {
+                                authorName = nameResponse;
+                                await replyAskName.delete().catch(() => { });
+                                await m.delete().catch(() => { });
+                                responseName.stop();
+
+                                const replyAskURL = await msg.reply('Merci de me donner l\'URL de l\'auteur de l\'embed. Si vous ne souhaitez pas ajouter d\'auteur, répondez \`non\`.');
+                                const responseURL = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+
+                                responseURL.on('collect', async m => {
+                                    const urlResponse = m.content.trim();
+                                    if (urlResponse.toLowerCase() === 'non') {
+                                        await replyAskURL.delete().catch(() => { });
+                                        await m.delete().catch(() => { });
+                                        responseURL.stop();
+                                        embed.setAuthor({ name: authorName });
+                                        await msg.edit({ embeds: [embed] });
+                                        return;
+                                    } else {
+                                        const attachment = m.attachments.first();
+                                        const imageURL = attachment ? attachment.url : null;
+                                        if (!imageURL) {
+                                            await message.channel.send('URL invalide. Veuillez fournir une URL valide ou répondre avec \`non\` pour annuler.');
+                                            return;
+                                        }
+                                        embed.setAuthor({ name: authorName, iconURL: imageURL });
+                                        await msg.edit({ embeds: [embed] });
+
+                                        await replyAskURL.delete().catch(() => { });
+                                        await m.delete().catch(() => { });
+                                        responseURL.stop();
+                                    }
+                                });
+                            }
+                        });
+
+                        break;
                     case 'footer':
+                        const ez = await msg.reply("Quel texte voulez-vous ajouter au footer de cet embed ?");
+
+                        const textCollector = message.channel.createMessageCollector({
+                            filter: m => m.author.id === message.author.id,
+                            max: 1,
+                            time: 120000
+                        });
+
+                        textCollector.on('collect', async (collectedText) => {
+                            const footerText = collectedText.content.trim();
+                            collectedText.delete();
+                            textCollector.stop();
+
+                            if (!footerText) {
+                                message.channel.send("Vous n'avez pas fourni de texte pour le footer.");
+                                return;
+                            }
+
+                            if (footerText.toLowerCase() === 'non') {
+                                embed.setFooter(footerText);
+                                await msg.edit({ embeds: [embed] });
+                                return;
+                            }
+
+                            const ez2 = await msg.reply("Si vous souhaitez également ajouter une image au footer, veuillez envoyer l'image maintenant. Sinon, répondez avec `non`.");
+
+                            const imageCollector = message.channel.createMessageCollector({
+                                filter: m => m.author.id === message.author.id,
+                                max: 1,
+                                time: 120000
+                            });
+
+                            imageCollector.on('collect', async (collectedImage) => {
+                                const attachment = collectedImage.attachments.first();
+                                const imageURL = attachment ? attachment.url : null;
+
+                                embed.setFooter({
+                                    text: footerText,
+                                    iconURL: imageURL
+                                });
+
+                                collectedImage.delete();
+                                imageCollector.stop();
+
+                                await msg.edit({ embeds: [embed] });
+                            });
+
+                            imageCollector.on('end', (collected, reason) => {
+                                if (reason === 'time') {
+                                    message.channel.send("Temps écoulé. La commande a été annulée.");
+                                }
+                                ez2.delete().catch(() => { });
+                            });
+                            ez.delete().catch(() => { });
+                        });
+
+                        textCollector.on('end', (collected, reason) => {
+                            if (reason === 'time') {
+                                message.channel.send("Temps écoulé. La commande a été annulée.");
+                            }
+                            ez.delete().catch(() => { });
+                        });
                         break;
 
                     case 'copy':
+                        const copyRequest = await msg.reply("Merci de fournir l'ID du message contenant l'embed que vous souhaitez copier.");
+
+                        const copyCollector = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+
+                        copyCollector.on('collect', async m => {
+                            const messageID = m.content.trim();
+
+                            const targetMessage = await message.channel.messages.fetch(messageID);
+
+                            if (!targetMessage) {
+                                await message.channel.send("Le message avec cet ID n'a pas été trouvé. Veuillez vérifier l'ID et réessayer.");
+                                return;
+                            }
+
+                            const lastEmbed = targetMessage?.embeds[0];
+
+                            if (lastEmbed) {
+                                const embedCopy = new Discord.EmbedBuilder(lastEmbed);
+
+                                await msg.edit({ embeds: [embedCopy] });
+                                await copyRequest.delete();
+                                await m.delete();
+                            } else {
+                                await message.channel.send("Aucun embed n'a été trouvé dans le message spécifié.");
+                            }
+                            copyCollector.stop();
+                        });
+
+                        copyCollector.on('end', async (collected, reason) => {
+                            if (reason === 'time') {
+                                await message.channel.send("La demande a expiré. Veuillez réessayer.");
+                                await copyRequest.delete();
+                            }
+                        });
+
                         break;
 
                     default:
-                      
+
                         break;
                 }
-            
-        }
+
+            }
         });
-},
+    },
 };

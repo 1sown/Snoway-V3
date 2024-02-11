@@ -35,12 +35,10 @@ module.exports = class Snoway extends Client {
     this.functions = require('../Functions/index')
     this.utils = require('../Utils/index')
     this.config = require('../../../config/config');
-    this.service = require('../../../service/snoway')
 
     this.support = 'https://discord.gg/snoway'
-    this.footer = this.service.footer
-    this.dev = this.service.dev
-
+    this.footer = {text: "Snoway © 2024"}
+    this.dev = ["798973949189947459", "233657223190937601", "396363649830354944"],
     this.version = version;
     this.db = db
     this.api = this.functions.api

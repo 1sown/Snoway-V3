@@ -22,7 +22,7 @@ module.exports = {
 
         const db = (await client.db.get(`captcha_${message.guild.id}`)) || {
             type: 1,
-            state: true,
+            state: false,
             time: null,
             age: null,
             channel: null,
