@@ -42,6 +42,16 @@ module.exports = {
             return keys;
         
     },
+
+    code() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let code = '';
+            for (let i = 0; i < 10; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                code += characters.charAt(randomIndex);
+            }
+            return code;
+    },
  
     maj(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);

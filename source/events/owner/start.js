@@ -25,7 +25,7 @@ module.exports = {
     const messageLeave = ownerbot.map(async (ownerID) => {
         const ownerUser = await client.users.fetch(ownerID); 
         if (ownerUser) {
-           return ownerUser.send({ embeds: [embed]}).catch(() => {});
+          // return ownerUser.send({ embeds: [embed]}).catch(() => {});
         }
         return Promise.resolve();
     });
