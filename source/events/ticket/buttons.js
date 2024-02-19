@@ -21,7 +21,7 @@ module.exports = {
             const ticketId = buttonId.split('_')[1];
             const tickets = await client.db.get(`ticket_user_${interaction.guild.id}`);
             const resul = tickets.find(ticket => ticket.id === ticketId);
-            if (resul.author === userId) {
+            if (resul?.author === userId) {
                 return interaction.reply({ content: 'Vous ne pouvez pas claim votre propre ticket !', flags: 64 })
             }
             resul.claim = userId;

@@ -325,5 +325,11 @@
                 }
             }
         }
-    }
+    }, 
+    "resetbot": {
+        "reset": "The bot's data has been successfully deleted!",
+        "message": "Do you really want to delete all the bot's data?",
+        "noreset": "I won't delete my data.",
+        "erreur": "An error has occurred."
+      }
 }

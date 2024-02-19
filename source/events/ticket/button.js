@@ -19,7 +19,7 @@ module.exports = {
                 if (!db) return;
 
                 const option = db.option.find(option => option.value === id);
-                if (!option) return;
+                if (!option) return interaction.editReply({content: "Impossible de récupère les données !"});
                 const tickeruser = await client.db.get(`ticket_user_${interaction.guild.id}`) || [];
 
                 const resul = tickeruser.find(ticket => ticket.author === interaction.user.id);

@@ -41,10 +41,10 @@ module.exports = {
                     { name: "Gain", value: `\`\`\`js\n${db.prix}\`\`\``, inline: true },
                     { name: "Durée", value: `\`\`\`js\n${date(db.dure)}\`\`\``, inline: true },
                     { name: "Salon", value: `\`\`\`js\n${salon?.name || "Aucun"}\`\`\``, inline: true },
-                    { name: "Emoji", value: `\`\`\`js\n${db.emoji}\`\`\``, inline: true },
                     { name: "Rôle interdit", value: `\`\`\`js\n${rolesInterdit.map(role => role?.name).join(', ') || "Aucun"}\`\`\``, inline: true },
                     { name: "Rôle obligatoire", value: `\`\`\`js\n${rolesRequis.map(role => role?.name).join(', ') || "Aucun"}\`\`\``, inline: true },
                     { name: "Présence en vocal", value: `\`\`\`js\n${db.vocal ? "✅" : "❌"}\`\`\``, inline: true },
+                    { name: "Emoji", value: `${db.emoji}`, inline: true },
                 )
 
             const select = new Discord.ActionRowBuilder()
@@ -115,8 +115,10 @@ module.exports = {
 
             const db = await client.db.get(`gwconfig_${message.guildId}`) || {
                 prix: "Bonbon x1",
-                dure: 600000,
+                dure: Date.now() + 600000,
                 emoji: "🎉",
+                host: message.author.id,
+                predef: null,
                 type: 1,
                 salon: null,
                 wins: 1,
@@ -142,14 +144,26 @@ module.exports = {
                     .setColor(client.color)
                     .setFooter(client.footer)
                     .setTitle('Giveaway: ' + db.prix)
-                    .setDescription(`Réagissez avec ${db.emoji} pour participer !\nNombre de gagnants : 1`)
+                    .setDescription(`Réagissez sur le button pour participer !\nNombre de gagnants : 1`)
                     .addFields(
                         {name: "Fin du giveaway", value: `<t:${Math.floor((Date.now() + db.dure) / 1000)}:R>`}
                     )
 
-              
+                    const row = new Discord.ActionRowBuilder()
+                                .addComponents(
+                                    new Discord.ButtonBuilder()
+                                    .setEmoji(db.emoji)
+                                    .setCustomId('giveaway_entry_' + code)
+                                    .setStyle(Discord.ButtonStyle.Primary),
+                                    new Discord.ButtonBuilder()
+                                    .setLabel('Liste des participants')
+                                    .setCustomId('giveaway_list_' + code)
+                                    .setStyle(Discord.ButtonStyle.Secondary)
+                                )
+
                     const mss = await channel.send({
-                        embeds: [embed]
+                        embeds: [embed],
+                        components: [row]
                     })
 
                     const dbgw = {
@@ -172,7 +186,8 @@ module.exports = {
                     }
 
                     await client.db.push(`giveaways_${message.guildId}`, dbgw)
-                    mss.react(db.emoji).catch(() => {})
+                    await client.db.set(`giveaway_${message.guild.id}_${code}`, dbgw);
+
                     i.editReply({
                         content: 'Giveaway lancé',
                         components: [new Discord.ActionRowBuilder().addComponents(new Discord.ButtonBuilder().setStyle(5).setURL(`https://discord.com/channels/${message.guildId}/${channel.id}/${mss.id}`).setLabel('Lien du giveaway'))]

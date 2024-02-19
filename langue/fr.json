@@ -323,7 +323,13 @@
                 }
             }
         }
-    }
+    }, 
+    "resetbot": {
+        "reset": "Les données du bot ont été supprimées avec succès !",
+        "message": "Voulez-vous vraiment supprimer toutes les données du bot ?",
+        "noreset": "Je ne supprimerai pas mes données.",
+        "erreur": "Une erreur s'est produite."
+      }
     
    
 }

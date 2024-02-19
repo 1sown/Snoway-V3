@@ -18,10 +18,10 @@ module.exports = {
                 await interaction.deferReply({ ephemeral: true })
                 const id = interaction.values[0].split('_')[1];
                 const db = await client?.db.get(`ticket_${interaction.guild.id}`);
-                if (!db) return;
+                if (!db) return interaction.editReply({content: "Impossible de récupère les données !"});
 
                 const option = db.option.find(option => option.value === id);
-                if (!option) return;
+                if (!option) return interaction.editReply({content: "Impossible de récupère les données !"});
 
                 const options = [];
 

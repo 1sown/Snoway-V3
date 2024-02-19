@@ -1,6 +1,5 @@
 const Snoway = require("../../structures/client/index");
 const Discord = require('discord.js')
-const Snipe = new Map();
 
 module.exports = {
     name: "messageDelete",
@@ -12,14 +11,10 @@ module.exports = {
         if (!message.guild || message.author?.bot) return;
         const channelId = message.channel.id;
 
-        if (!Snipe.has(channelId)) {
-            Snipe.set(channelId, []);
-        }
-
-        Snipe.get(channelId).unshift({
+        client.SnipeMsg.set(channelId, {
             content: message.content,
-            author: message.author,
+            author: message.author.id,
             timestamp: Date.now(),
-        });
+        })
     }
 };
