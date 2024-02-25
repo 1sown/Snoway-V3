@@ -34,6 +34,13 @@ module.exports = {
                 break;
         }
 
+        const fetchedLogs = await oldChannel.guild.fetchAuditLogs({
+            limit: 1,
+            type: 11
+        }).then(audit => audit.entries.first());
+        const user = fetchedLogs ? fetchedLogs.executor : "Inconnu";
+
+
         const embed = new EmbedBuilder()
             .setColor(color)
             .setFooter(client.footer)
@@ -42,6 +49,8 @@ module.exports = {
             .addFields({ name: "Nom (Après)", value: `\`\`\`js\n${newChannel.name}\`\`\``,  inline: true })
             .addFields({ name: "ID", value: `\`\`\`js\n${newChannel.id}\`\`\``, inline: true })
             .addFields({ name: "Type",value:   `\`\`\`js\n${channeltype}\`\`\``, inline: true })
+            .addFields({ name: "Auteur", value: `\`\`\`js\n${user.tag} (ID: ${user.id})\`\`\``, inline: true } )
+
         salon.send({ embeds: [embed] });
     }
 };

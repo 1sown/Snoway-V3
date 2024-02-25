@@ -8,11 +8,17 @@ module.exports = {
         const salon = client.channels.cache.get(logs[0]?.roles);
         if (!salon) return;
 
+        const fetchedLogs = await channel.guild.fetchAuditLogs({
+            limit: 1,
+            type: 32
+        }).then(audit => audit.entries.first());
+        const user = fetchedLogs ? fetchedLogs.executor : "Inconnu";
+
         const embed = new EmbedBuilder()
             .setColor(color)
             .setFooter(client.footer)
-            .setTitle('Modification de Rôle');
-
+            .setTitle('Modification de Rôle')
+            .addFields({ name: "Auteur", value: `\`\`\`js\n${user.tag} (ID: ${user.id})\`\`\``, inline: true } )
         if (oldRole.name !== newRole.name) {
             embed.addFields({name: "Nom", value: `*Avant :* \`\`\`js\n${oldRole.name}\`\`\`\n*Après :* \`\`\`js\n${newRole.name}\`\`\``, inline: true});
         }

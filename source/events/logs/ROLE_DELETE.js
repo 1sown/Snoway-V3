@@ -8,11 +8,17 @@ module.exports = {
         const salon = client.channels.cache.get(logs[0]?.roles);
         if (!salon) return;
 
+        const fetchedLogs = await channel.guild.fetchAuditLogs({
+            limit: 1,
+            type: 32
+        }).then(audit => audit.entries.first());
+        const user = fetchedLogs ? fetchedLogs.executor : "Inconnu";
+
         const embed = new EmbedBuilder()
             .setColor(color)
             .setFooter(client.footer)
             .setTitle('Suppression de Rôle')
-            .setDescription(`Le rôle "${role.name}" a été supprimé.`);
+            .setDescription(`Le rôle "${role.name}" a été supprimé\nAuteur: ${user}`);
 
         salon.send({ embeds: [embed] });
     }

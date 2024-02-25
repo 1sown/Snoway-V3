@@ -13,6 +13,13 @@ module.exports = {
         const salon = client.channels.cache.get(logs[0]?.roles)
         if (!salon) return;
 
+        const fetchedLogs = await channel.guild.fetchAuditLogs({
+            limit: 1,
+            type: 30
+        }).then(audit => audit.entries.first());
+        const user = fetchedLogs ? fetchedLogs.executor : "Inconnu";
+
+
         const embed = new EmbedBuilder()
             .setColor(color)
             .setFooter(client.footer)
@@ -27,6 +34,8 @@ module.exports = {
                 name: "Position", value: `\`\`\`js\n${role.rawPosition}\`\`\``, inline: true
             }, {
                 name: "Mentionable", value: `\`\`\`js\n${role.mentionable ? "Oui" : "Non"}\`\`\``, inline: true
+            }, {
+                name: "Auteur", value: `\`\`\`js\n${user.tag} (ID: ${user.id})\`\`\``, inline: true
             })
 
         salon.send({

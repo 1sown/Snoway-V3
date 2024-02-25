@@ -32,6 +32,11 @@ module.exports = {
                 break;
         }
 
+        const fetchedLogs = await channel.guild.fetchAuditLogs({
+            limit: 1,
+            type: 10
+        }).then(audit => audit.entries.first());
+        const user = fetchedLogs ? fetchedLogs.executor : "Inconnu";
         const embed = new EmbedBuilder()
             .setColor(color)
             .setFooter(client.footer)
@@ -39,6 +44,7 @@ module.exports = {
             .addFields({ name: "Nom", value: `\`\`\`js\n${channel.name}\`\`\``, inline: true })
             .addFields({ name: "ID", value: `\`\`\`js\n${channel.id}\`\`\``, inline: true })
             .addFields({ name: "Type", value: `\`\`\`js\n${channeltype}\`\`\``, inline: true })
+            .addFields({ name: "Créateur", value: `\`\`\`js\n${user.tag} (ID: ${user.id})\`\`\``, inline: true } )
 
         salon.send({ embeds: [embed] });
     }
