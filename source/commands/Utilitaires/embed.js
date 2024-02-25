@@ -93,41 +93,6 @@ module.exports = {
                 })
             }
 
-            switch (i.customId) {
-                case "yep":
-                    const channel = new Discord.ActionRowBuilder()
-                        .addComponents(
-                            new Discord.ChannelSelectMenuBuilder()
-                                .setCustomId('channel-send')
-                                .setMinValues(1)
-                                .setMaxValues(1)
-                                .addChannelTypes(0)
-                        );
-            
-                    i.update({ components: [channel], embeds: [], content: "Merci de choisir un canal où l'embed sera envoyé." });
-                    break;
-                case "nop":
-                    i.message.delete().catch(() => {});
-                    break;
-
-                case "channel-send": 
-                      i.deferUpdate()
-                       const channeltosend = client.channels.cache.get(i.values[0])
-
-                       channeltosend.send({
-                        embeds: [embed]
-                       })
-
-                       msg.edit({
-                        content: `L'embed viens d'être envoyé`,
-                        embeds: [embed],
-                        components: []
-                       })
-                break;
-            }
-            
-
-
             if (i.customId === 'options') {
                 await i.deferUpdate();
 
@@ -371,7 +336,7 @@ module.exports = {
                         copyCollector.on('collect', async m => {
                             const messageID = m.content.trim();
 
-                            const targetMessage = await message.channel.messages.fetch(messageID);
+                            const targetMessage = await message.channel.messages.fetch(messageID).catch(() => { });
 
                             if (!targetMessage) {
                                 await message.channel.send("Le message avec cet ID n'a pas été trouvé. Veuillez vérifier l'ID et réessayer.");
@@ -405,7 +370,40 @@ module.exports = {
 
                         break;
                 }
+            }
 
+
+            switch (i.customId) {
+                case "yep":
+                    const channel = new Discord.ActionRowBuilder()
+                        .addComponents(
+                            new Discord.ChannelSelectMenuBuilder()
+                                .setCustomId('channel-send')
+                                .setMinValues(1)
+                                .setMaxValues(1)
+                                .addChannelTypes(0)
+                        );
+            
+                    i.update({ components: [channel], content: "Merci de choisir un canal où l'embed sera envoyé." });
+                    break;
+                case "nop":
+                    i.message.delete().catch(() => {});
+                    break;
+
+                case "channel-send": 
+                      i.deferUpdate()
+                       const channeltosend = client.channels.cache.get(i.values[0])
+                        console.log(message.embed)
+                       channeltosend.send({
+                        embeds: [embed]
+                       })
+
+                       msg.edit({
+                        content: `L'embed viens d'être envoyé`,
+                        embeds: [embed],
+                        components: []
+                       })
+                break;
             }
         });
     },
