@@ -44,7 +44,6 @@ async function embed(client) {
     .setFooter(client.footer);
 
   try {
-    console.log(await client.functions.fivem.getPlayerMax())
     const servData = (await client.functions.fivem.getAllPlayer()).serv;
     const serv = servData !== undefined ? servData : [];
      embed.setTitle(`Joueur connecté ${((await client.functions.fivem.getAllPlayer()).serv).length}/${(await client.functions.fivem.getPlayerMax()).max}`);

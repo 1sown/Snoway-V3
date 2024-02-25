@@ -11,7 +11,6 @@ module.exports = {
      * 
      */
     run: async (client, member) => {
-        console.log()
         try {
             const dbChannels = await client.db.get(`ghostjoin_${member.guild.id}`) || [];
             if (dbChannels.length > 0) {
