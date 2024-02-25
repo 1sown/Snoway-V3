@@ -142,7 +142,7 @@ module.exports = {
     
                     const embed = new Discord.EmbedBuilder()
                     .setColor(client.color)
-                    .setFooter(client.footer)
+                    .setFooter({text: "Giveaway code: " + code})
                     .setTitle('Giveaway: ' + db.prix)
                     .setDescription(`Réagissez sur le button pour participer !\nNombre de gagnants : 1`)
                     .addFields(

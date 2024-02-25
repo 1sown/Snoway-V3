@@ -8,7 +8,7 @@ module.exports = {
      * @param {Discord.Message} message
      */
     run: async (client, message, newmessage) => {
-        if (!message.guild || message.bot || !message.author) return;
+        if (!message.guild || message.bot || !message.author || !message.author.id || message.guildId) return;
         if(!message.content === undefined || !newmessage.content === undefined)return;
         const channelId = message.channel.id;
 

@@ -8,7 +8,7 @@ module.exports = {
      * @param {Discord.Message} message
      */
     run: async (client, message) => {
-        if (!message.guild || message.author?.bot) return;
+        if (!message.guild || message.bot || !message.author || !message.author.id || message.guildId) return;
         const channelId = message.channel.id;
 
         client.SnipeMsg.set(channelId, {
