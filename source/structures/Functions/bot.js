@@ -133,6 +133,7 @@ module.exports = {
             "rose": "#dc14eb",
             "violet": "#764686",
             "sown": "#e1adff",
+            "inside": "#99fcff",
             "orange": "#FFA500",
             "jaune": "#FFFF00",
             "marron": "#A52A2A",

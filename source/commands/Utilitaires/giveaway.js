@@ -172,7 +172,7 @@ module.exports = {
                         author: i.user.id, 
                         create: Date.now(),
                         end: false,
-                        endTime: null,
+                        endTime: Date.now() + db.dure,
                         endAuthor: null,
                         code: code,
                         prix: db.prix,

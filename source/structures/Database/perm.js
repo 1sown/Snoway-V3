@@ -1,7 +1,11 @@
 module.exports = async (client, db) => {
     client.guilds.cache.forEach(guild => {
         setTimeout(async () => {
+            const langue = await db.get(`langue`);
             const check = await db.get(`perms_${guild.id}`);
+            if(!langue) {
+                await db.set(`langue`, "fr");
+            }
             if (!check) {
                 const defaultPermissions = {
                     "perm1": { "role": null, "commands": [] },

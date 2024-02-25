@@ -39,7 +39,6 @@ module.exports = {
             const giveawayCode = customId.split('_')[2];
             const giveawayData = await client.db.get(`giveaway_${interaction.guildId}_${giveawayCode}`);
             if (giveawayData) {
-                console.log(giveawayData)
                 const participants = giveawayData.participant;
                 if (participants.length > 0) {
                     const participantInfo = await Promise.all(participants.map(async id => {
