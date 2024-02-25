@@ -390,19 +390,25 @@ module.exports = {
                     i.message.delete().catch(() => {});
                     break;
 
-                case "channel-send": 
-                      i.deferUpdate()
-                       const channeltosend = client.channels.cache.get(i.values[0])
-                        console.log(message.embed)
-                       channeltosend.send({
-                        embeds: [embed]
-                       })
-
-                       msg.edit({
-                        content: `L'embed viens d'être envoyé`,
-                        embeds: [embed],
-                        components: []
-                       })
+                    case "channel-send": 
+                    i.deferUpdate();
+                    const channeltosend = client.channels.cache.get(i.values[0]);
+                    const embeds = i.message.embeds;
+                    if (embeds && embeds.length > 0) {
+                        const embedToSend = embeds[0];
+                        channeltosend.send({
+                            embeds: [embedToSend]
+                        }).then(() => {
+                            msg.edit({
+                                content: `L'embed vient d'être envoyé`,
+                                components: []
+                            });
+                        }).catch(error => {
+                            console.error("Une erreur s'est produite:", error);
+                        });
+                    } else {
+                        console.error("Aucun embed trouvé dans le message d'origine.");
+                    }
                 break;
             }
         });
