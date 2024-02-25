@@ -3,7 +3,7 @@ const { EmbedBuilder } = require('discord.js');
 module.exports = {
     name: 'unlock',
     description: {
-        fr: 'Déverrouille le canal en rétablissant les permissions',
+        fr: 'Déverrouille le channel en rétablissant les permissions',
         en: 'Unlocks the channel by restoring permissions'
     }, 
     usage: {

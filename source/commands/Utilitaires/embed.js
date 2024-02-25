@@ -384,7 +384,7 @@ module.exports = {
                                 .addChannelTypes(0)
                         );
             
-                    i.update({ components: [channel], content: "Merci de choisir un canal où l'embed sera envoyé." });
+                    i.update({ components: [channel], content: "Merci de choisir un channel où l'embed sera envoyé." });
                     break;
                 case "nop":
                     i.message.delete().catch(() => {});

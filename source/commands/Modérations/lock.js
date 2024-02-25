@@ -1,7 +1,7 @@
 module.exports = {
     name: 'lock',
     description: {
-        fr: 'Verrouille le canal en restreignant les permissions',
+        fr: 'Verrouille le channel en restreignant les permissions',
         en: 'Locks the channel by restricting permissions'
     },
     usage: {
