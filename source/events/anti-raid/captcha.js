@@ -8,7 +8,7 @@ module.exports = {
      * @param {Discord.GuildMember} member
      */
     run: async (client, member) => {
-        if (member.bot) return;
+        if (!member || member?.bot) return;
         const db = await client.db.get(`captcha_${member.guild.id}`)
         if (!db) return;
         const accountCreationDate = member.user.createdAt;

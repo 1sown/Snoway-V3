@@ -17,7 +17,7 @@ module.exports = {
         const tickets = await client.db.get(`ticket_user_${message.guild.id}`);
         const resul = tickets.find(ticket => ticket.salon === ticketId);
         if (!resul) return message.channel.send({ content: `\`❌\` Erreur : Ce salon n'est pas un de mes ticket` });
-        const user = client.users.fetch(resul.author);
+        const user = client.users.fetch(resul.author).catch(() => client.users.cache.get(resul.author));
         const usercache = client.users.cache.get(resul.author);
         if (!dbserveur) return;
         const dboption = dbserveur.option.find(option => option.value === resul.option);
