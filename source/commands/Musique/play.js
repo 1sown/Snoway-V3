@@ -4,6 +4,7 @@ const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index')
 module.exports = {
     name: "play",
+    aliases: ['p'],
     description: {
         fr: "Permet de lancer une musique",
         en: "Play music"

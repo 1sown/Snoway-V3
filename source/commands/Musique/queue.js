@@ -4,6 +4,7 @@ const Snoway = require("../../structures/client/index");
 
 module.exports = {
     name: "queue",
+    aliases: ['mabite'],
     description: {
         fr: "Voir les musiques qui vont être jouées",
         en: "See the music to be played"
