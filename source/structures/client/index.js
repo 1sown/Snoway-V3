@@ -115,6 +115,7 @@ module.exports = class Snoway extends Client {
         data.push({
           name: slashCommand.name,
           description: slashCommand.description ? slashCommand.description : null,
+          description_localizations: slashCommand.description_localizations ? slashCommand.description_localizations : null,
           type: slashCommand.type,
           options: slashCommand.options ? slashCommand.options : null,
         });

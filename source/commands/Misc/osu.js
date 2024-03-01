@@ -28,7 +28,7 @@ module.exports = {
         try {
             const response = await axios.get(`https://osu.ppy.sh/api/get_user?k=35b2e1806edeed1011fc4b63f001a441e088cdee&u=${encodeURIComponent(username)}`);
             if (response.data.length === 0 || !response.data) return message.reply('Veuillez fournir le nom d\'utilisateur valide');
-
+            console.log(response.data[0])
             const userData = response.data[0];
             const date = new Date(userData.join_date).getTime()
             const embed = new Discord.EmbedBuilder()

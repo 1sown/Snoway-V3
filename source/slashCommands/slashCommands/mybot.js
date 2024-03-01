@@ -4,6 +4,10 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'mybot',
     description:  'Affiche vos bots',
+    description_localizations: {
+        "fr": "Affiche vos bots", 
+        "en-US": "Display your bots"
+    },
     type: 1,
     /**
      * 

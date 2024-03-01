@@ -3,30 +3,29 @@ const fs = require('fs');
 const Snoway = require('../../structures/client/index.js');
 module.exports = {
     name: "help",
-    description: {
-        fr:"Affiche les commandes du bot",
-        en: "Displays bot commands"
+    description:  'Affiche les commandes du bot',
+    description_localizations: {
+        "fr": "Affiche les commandes du bot",
+        "en-US": "Displays bot commands"
     },
-    usage: {
-        fr: {
-            "help [commande]": "Affiche les commandes ou une commande du bot"
-        }, en: {
-            "help [command]": "Displays commands or a bot command"
-        }
-    },
+    type: 1,
     /**
      * 
      * @param {Snoway} client 
-     * @param {Discord.Message} message 
+     * @param {Discord.Interaction} interaction 
      * @param {args[]} args 
      * @returns 
      */
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
+        await interaction.deferReply();
+
+        const color = await client.db.get(`color_${interaction.guild.id}`) || client.config.color
         const lang = await client.db.get(`langue`)
+        const prefix = await client.db.get(`prefix_${interaction.guild.id}`) || client.config.prefix
         const aidetext = await client.lang('help.aide')
-        const aide = aidetext.replace("{prefix}", `${client.prefix}`)
-        if (args.length === 0) {
-            const cmddanslefichier = fs.readdirSync('./source/commands').filter(folder => folder !== 'DEV');
+        const aide = aidetext.replace("{prefix}", `${prefix}`)
+
+        const cmddanslefichier = fs.readdirSync('./source/commands').filter(folder => folder !== 'DEV');
             const module = await client.db.get(`module-help`) || 'normal'
             const fileEmojis = {
                 Informations: '🔍',
@@ -43,14 +42,7 @@ module.exports = {
             };
 
             if (module === 'normal') {
-                const totalpag = cmddanslefichier.length;
                 let page = 0;
-
-                if (args.length > 0 && !isNaN(args[0])) {
-                    page = parseInt(args[0]) - 1;
-                    if (page < 0) page = 0;
-                    if (page >= totalpag) page = totalpag - 1;
-                }
 
                 const folderOrder = [
                     'Antiraid',
@@ -87,7 +79,7 @@ module.exports = {
                     const fichiertasoeur = cmddanslefichier[pageactuellement];
                     const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
                     const categoryCommands = cmdFiles.map(file => {
-                        const command = require(`../${fichiertasoeur}/${file}`);
+                        const command = require(`../../commands/${fichiertasoeur}/${file}`);
                         let usages = null;
                         let descriptions = null
                         if (command.usage) {
@@ -120,14 +112,14 @@ module.exports = {
 
                         let description = '';
                         for (const [key, value] of Object.entries(usage)) {
-                            description += `\n\`${client.prefix}${key}\`\n${value}`;
+                            description += `\n\`${prefix}${key}\`\n${value}`;
                         }
 
                         return description;
                     });
 
                     const embed = new Discord.EmbedBuilder()
-                        .setColor(client.color)
+                        .setColor(color)
                         .setTitle((fileEmojis[fichiertasoeur] || '❌') + " " + fichiertasoeur)
                         .setFooter(client.footer)
                         .setDescription(`${aide}\n` + categoryCommands.join(''));
@@ -158,13 +150,13 @@ module.exports = {
                 };
 
                 const { embeds, components } = generetapage(page);
-                const helpMessage = await message.channel.send({ embeds, components });
+                const helpMessage = await interaction.editReply({ embeds, components });
 
                 const filter = i => i.customId === 'selectMenu';
                 const collector = helpMessage.createMessageComponentCollector({ filter });
 
                 collector.on('collect', async i => {
-                    if (i.user.id !== message.author.id) {
+                    if (i.user.id !== interaction.user.id) {
                         return i.reply({
                             content: await client.lang('interaction'),
                             flags: 64
@@ -187,7 +179,7 @@ module.exports = {
                     const catecmd = [];
 
                     for (const file of cmdfichier) {
-                        const command = require(`../${folder}/${file}`);
+                        const command = require(`../../commands/${folder}/${file}`);
                         catecmd.push(`${command.name}`);
                     }
 
@@ -195,71 +187,14 @@ module.exports = {
                 }
 
                 const helptext = await client.lang('help.help')
-                const text = helptext.replace("{prefix}", `${client.prefix}`)
+                const text = helptext.replace("{prefix}", `${prefix}`)
                 const embed = new Discord.EmbedBuilder()
-                    .setColor(client.color)
+                    .setColor(color)
                     .setAuthor({ name: "Snoway V3", url: client.user.avatarURL(), iconURL: client.user.avatarURL() })
-                    .setDescription(`${await client.lang("help.prefix")} \`${client.prefix}\`\n${await client.lang("help.cmd")} \`${client.commands.size}\`\n${text}\n\n` + formattedCategories.join('\n\n'))
+                    .setDescription(`${await client.lang("help.prefix")} \`${prefix}\`\n${await client.lang("help.cmd")} \`${client.commands.size}\`\n${text}\n\n` + formattedCategories.join('\n\n'))
                     .setFooter(client.footer);
 
-                message.channel.send({ embeds: [embed] });
+                interaction.editReply({ embeds: [embed] });
             }
         }
-        if (args.length !== 0) {
-            const cmdname = args[0]
-            const command = client.commands.get(cmdname) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(cmdname));
-            if (!command) {
-                const noexiste = await client.lang('help.inconnue')
-                const replay = noexiste.replace("{prefix}", `${client.prefix}`)
-                return message.reply(replay);
-            }
-            let usages = null
-            let description = null
-            if (command.usage) {
-                switch (lang) {
-                    case "fr":
-                        usages = command.usage.fr;
-                        break;
-                    case "en":
-                        usages = command.usage.en;
-                        break;
-                    default:
-                        usages = command.usage.fr;
-                }
-            }
-
-                switch (lang) {
-                    case "fr":
-                        description = command.description.fr;
-                        break;
-                    case "en":
-                        description = command.description.en;
-                        break;
-                    default:
-                        description = command.description.fr;
-                }
-
-            const usage = usages || {
-                [command.name]: description || await client.lang('help.description')
-            };
-            const fields = [];
-
-            for (const [key, value] of Object.entries(usage)) {
-                fields.push({ name: "`" + client.prefix + key + "`", value: value, inline: false });
-            }
-            const embed = new Discord.EmbedBuilder()
-                .setTitle(`${await client.lang('help.command')} ${client.functions.bot.maj(command.name)}`)
-                .setColor(client.color)
-                .setFooter(client.footer)
-                .addFields(fields);
-            const row = new Discord.ActionRowBuilder()
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setStyle(5)
-                        .setURL(client.support)
-                        .setLabel(await client.lang('help.button'))
-                )
-            message.channel.send({ embeds: [embed], components: [row] });
-        }
-    }
 }

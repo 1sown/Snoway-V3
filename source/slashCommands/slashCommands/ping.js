@@ -4,6 +4,10 @@ const Snoway = require('../../structures/client/index.js');
 module.exports = {
   name: 'ping',
   description: "Affiche la latence du bot",
+  description_localizations: {
+    "fr": "Affiche la latence du bot", 
+    "en-US": "Displays bot latency"
+},
   type: "1",
   /**
    * 

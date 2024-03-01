@@ -3,7 +3,10 @@ const { EmbedBuilder, Message } = require('discord.js');
 const Snoway = require('../../structures/client/index')
 module.exports = {
     name: "skip",
-    description: "Passe la musique actuelle",
+    description: {
+        fr: "Passe la musique actuelle",
+        en: "Pass the current music",
+    },
     /**
      * @param {Snoway} client
      * @param {Message} message

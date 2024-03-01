@@ -5,6 +5,10 @@ const Snoway = require('../../structures/client/index.js');
 module.exports = {
     name: 'botinfo',
     description: "Affiche les informations du bot",
+    description_localizations: {
+        "fr": "Affiche les informations du bot", 
+        "en-US": "Displays bot information"
+    },
     type: 1,
     /**
      * 
