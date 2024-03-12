@@ -143,8 +143,8 @@ module.exports = {
 
                 const button_power = new Discord.ButtonBuilder()
                 .setCustomId('button_power_' + dbmodule)
-                .setStyle(db.status ? 3 : 4)
-                .setLabel('EZ')
+                .setStyle(2)
+                .setEmoji(db.status ? client.functions.emoji.status_on : client.functions.emoji.status_off)
                 const button = new Discord.ActionRowBuilder().addComponents(button_power)
 
             msg.edit({ embeds: [embed], components: [SelectModule, selectSanction, SelectWL, button] })
@@ -184,9 +184,6 @@ module.exports = {
                 i.deferUpdate();
                 panel(dbmodule)
             }
-
-
-
         })
 
         async function dbGet(module) {
@@ -201,11 +198,11 @@ module.exports = {
                         channel: null
                     },
                     wl: {
-                        bypass: ["ROLE", "USER"],
-                        wl: true,
+                        bypass: [],
+                        wl: false,
                         buyers: true,
                         role: [],
-                        user: ["233657223190937601", "798973949189947459"]
+                        user: []
                     }
                 }, AddBot: {
                     sanction: "NONE",

@@ -22,7 +22,8 @@ module.exports = {
     message: "<:message:1210808484254326854>",
 
     // PANEL
-
+    status_off: "<:status_off:1217192735807635546>",
+    status_on: "<:status_on:1217192730690846851>",
     power_on: "<:power_on:1217060775005524038>",
     power_off: "<:power_off:1217060748136812554",
     sanction_on: "<:sanction_on:1217079403008360468",
