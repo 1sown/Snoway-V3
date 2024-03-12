@@ -144,6 +144,7 @@ module.exports = {
                 const button_power = new Discord.ButtonBuilder()
                 .setCustomId('button_power_' + dbmodule)
                 .setStyle(2)
+                .setLabel('Status')
                 .setEmoji(db.status ? client.functions.emoji.status_on : client.functions.emoji.status_off)
                 const button = new Discord.ActionRowBuilder().addComponents(button_power)
 
@@ -214,7 +215,7 @@ module.exports = {
                     wl: {
                         bypass: [],
                         wl: false,
-                        buyers: false,
+                        buyers: true,
                         role: [],
                         user: []
                     }
