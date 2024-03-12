@@ -2,7 +2,9 @@ module.exports = {
     buyers: "<:buyer:1189236174045323285>",
     owners: "<:owners:1189298926851993676>",
     del: "<:delete:1203418392225390672>",
+    
     // Captcha 
+
     param: "<:settings:1202977729969131600>",
     new: "<:new:1203415887697158164>",
     temps: "<:temps:1197834074975387658>",
@@ -17,5 +19,12 @@ module.exports = {
     // Leaderboard 
 
     vocal: "<:vocal:1210808528319815740>",
-    message: "<:message:1210808484254326854>"
+    message: "<:message:1210808484254326854>",
+
+    // PANEL
+
+    power_on: "<:power_on:1217060775005524038>",
+    power_off: "<:power_off:1217060748136812554",
+    sanction_on: "<:sanction_on:1217079403008360468",
+    sanction_off: "<:sanction_off:1217079404388421652>"
 }
