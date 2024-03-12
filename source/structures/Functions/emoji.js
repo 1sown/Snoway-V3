@@ -26,5 +26,11 @@ module.exports = {
     power_on: "<:power_on:1217060775005524038>",
     power_off: "<:power_off:1217060748136812554",
     sanction_on: "<:sanction_on:1217079403008360468",
-    sanction_off: "<:sanction_off:1217079404388421652>"
+    sanction_off: "<:sanction_off:1217079404388421652>",
+    user_on: "<:user_on:1217171351014604922>",
+    user_off: "<:user_off:1217171349471105165>",
+    role_on: "<:role_on:1217171347793510412>",
+    role_off: "<:role_off:1217171346262327406>",
+    wl_on: "<:wl_on:1217173485374148679>",
+    wl_off: "<:wl_off:1217173484137091152>"
 }

@@ -2,7 +2,10 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'clearwarns',
-    description: 'Supprime tous les avertissements d\'un utilisateur',
+    description: {
+        fr: 'Supprime tous les avertissements d\'un utilisateur',
+        en: "Remove all warnings from a user"
+    },
     run: async (client, message, args) => {
         try {
             const memberId = args[0];

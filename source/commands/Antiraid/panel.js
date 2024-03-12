@@ -16,22 +16,25 @@ module.exports = {
         async function panel(module) {
             let dbmodule = module || "AntiSpam"
             const db = await dbGet(dbmodule);
-            let text_autorisation = ""
-            let text_sanction = ""
-            if (db.wl) {
-                if (db.wl.wl) {
-                    text_autorisation += "         ↪ Utilisateur dans la liste blanche\n";
-                } else if (db.wl.buyers) {
-                    text_autorisation += "         ↪ Utilisateur dans la liste des propriétaires\n";
-                } else {
-                    if (db.wl.bypass.includes('USER')) {
-                        text_autorisation += `         ↪ Utilisateur indépendant (${db.wl.user.length})\n`;
-                    }
-                    if (db.wl.bypass.includes('ROLE')) {
-                        text_autorisation += `         ↪ Rôle indépendant (${db.wl.role.length})\n`;
-                    }
-                }
+            let text_autorisation = "";
+            let text_sanction = "";
+            if (db.wl.wl) {
+                text_autorisation += "         ↪ Utilisateur dans la liste blanche\n";
             }
+
+            if (db.wl.buyers) {
+                text_autorisation += "         ↪ Utilisateur dans la liste des propriétaires\n";
+            }
+
+            if (db.wl.bypass.includes('USER')) {
+                text_autorisation += `         ↪ Utilisateur indépendant (${db.wl.user.length})\n`;
+            }
+
+            if (db.wl.bypass.includes('ROLE')) {
+                text_autorisation += `         ↪ Rôle indépendant (${db.wl.role.length})\n`;
+
+            }
+
 
             switch (db.sanction) {
                 case "BAN":
@@ -42,6 +45,7 @@ module.exports = {
                     break;
                 case "MUTE":
                     text_sanction = "・Exclusion temporaire du membre"
+                    break;
                 default:
                     text_sanction = "・Aucune"
             }
@@ -53,7 +57,7 @@ module.exports = {
                         .setCustomId('select_module')
                         .addOptions(Object.keys(db_module_get).map(module => ({
                             label: module,
-                            emoji: db.status ? client.functions.emoji.power_on : client.functions.emoji.power_off,
+                            emoji: module.status ? client.functions.emoji.power_on : client.functions.emoji.power_off,
                             default: module === dbmodule ? true : false,
                             value: module
                         })))
@@ -86,28 +90,64 @@ module.exports = {
                         })
                 )
 
-            const embed = new Discord.EmbedBuilder()
+                const SelectWL = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.StringSelectMenuBuilder()
+                        .setCustomId('wl-config')
+                        .setMinValues(1)
+                        .setMaxValues(4)
+                        .setPlaceholder("Choisissez les utilisateurs autorisés.")
+                        .addOptions([
+                            {
+                                label: `Utilisateurs dans la liste des propriétaires (${(await client.db.get('owner') || []).length})`,
+                                value: 'buyers',
+                                default: db.wl.buyers ? true : false,
+                                emoji: db.wl.buyers ? client.functions.emoji.user_on : client.functions.emoji.user_off,
+                            }, {
+                                label: `Utilisateurs dans la liste blanche (${(await client.db.get(`wl_${message.guildId}`) || []).length})`,
+                                value: 'wl',
+                                default: db.wl.wl ? true : false,
+                                emoji: db.wl.buyers ? client.functions.emoji.wl_on : client.functions.emoji.wl_off,
+                            }, {
+                                label: `Utilisateurs indépendantt (${db.wl.user.length})`,
+                                value: 'user',
+                                default: db.wl.bypass.includes("USER") ? true : false,
+                                emoji: db.wl.buyers ? client.functions.emoji.user_on : client.functions.emoji.user_off,
+                            }, {
+                                label: `Rôle indépendantt (${db.wl.role.length})`,
+                                value: 'role',
+                                default: db.wl.bypass.includes("ROLE"),
+                                emoji: db.wl.bypass.includes("ROLE") ? client.functions.emoji.role_on : client.functions.emoji.role_off,
+                            }
+                        ])
+                );
+
+             const embed = new Discord.EmbedBuilder()
                 .setColor(client.color)
                 .setFooter(client.footer)
                 .addFields({
                     name: "・Configuration",
-                    value: `\`\`\`js\n` +
+                    value: `\`\`\`py\n` +
                         `Module: ${dbmodule}\n` +
                         `Etat: ${db.status ? "✅" : "❌"}\n` +
                         `${dbmodule === "AntiSpam" ? `Temps: ${await convertTime(db.temps)}\n` : ""}` +
                         `${dbmodule === "AntiSpam" ? `Salons ignorés: ${db.salon.length}\n` : ""}` +
-                        `Autorisé:${text_autorisation ? `\n${text_autorisation}` : " ❌"}\n` +
-                        `\`\`\``
-
+                        `Autorisé: ${text_autorisation ? `\n${text_autorisation}` : "❌"}\`\`\``
                 }, {
                     name: "・Sanction:",
-                    value: `\`\`\`js\n${text_sanction}\`\`\``
+                    value: `\`\`\`py\n${text_sanction}\`\`\``
                 }, {
                     name: "・Logs",
-                    value: `\`\`\`js\nStatus: ${db.logs.status ? "✅" : "❌"}${db.logs.status ? `\nSalon: ${client.channels.cache.get(db.logs.channel)?.name || "Non configuré"}` : ""}\`\`\``
+                    value: `\`\`\`py\nStatus: ${db.logs.status ? "✅" : "❌"}${db.logs.status ? `\nSalon: ${client.channels.cache.get(db.logs.channel)?.name || "Non configuré"}` : ""}\`\`\``
                 })
 
-             msg.edit({ embeds: [embed], components: [SelectModule, selectSanction] })
+                const button_power = new Discord.ButtonBuilder()
+                .setCustomId('button_power_' + dbmodule)
+                .setStyle(db.status ? 3 : 4)
+                .setLabel('EZ')
+                const button = new Discord.ActionRowBuilder().addComponents(button_power)
+
+            msg.edit({ embeds: [embed], components: [SelectModule, selectSanction, SelectWL, button] })
         }
         panel();
 
@@ -121,20 +161,33 @@ module.exports = {
                 })
             }
 
+            if(i.customId.startsWith("button_power_")) {
+                const db = await dbGet()
+                const dbmodule = i.customId.split('_')[2];
+                db[dbmodule].status = !db[dbmodule].status;
+                await client.db.set(`antiraid_${message.guildId}`, db)
+                i.deferUpdate();
+                panel(dbmodule)
+            }
 
-        if(i.customId.startsWith('select_sanction_')) {
-            const db = await dbGet()
-            const sanction = i.values[0]
-            const dbmodule = i.customId.split('_')[2];
-            db[dbmodule].sanction = sanction
-            await client.db.set(`antiraid_${message.guildId}`, db)
-            i.deferUpdate();
-            panel(dbmodule)
-        }
+            if (i.customId === "select_module") {
+                i.deferUpdate();
+                panel(i.values[0])
+            }
+
+            if (i.customId.startsWith('select_sanction_')) {
+                const db = await dbGet()
+                const sanction = i.values[0]
+                const dbmodule = i.customId.split('_')[2];
+                db[dbmodule].sanction = sanction
+                await client.db.set(`antiraid_${message.guildId}`, db)
+                i.deferUpdate();
+                panel(dbmodule)
+            }
 
 
 
-    })
+        })
 
         async function dbGet(module) {
             const db = (await client.db.get(`antiraid_${message.guildId}`)) || {
@@ -149,8 +202,8 @@ module.exports = {
                     },
                     wl: {
                         bypass: ["ROLE", "USER"],
-                        wl: false,
-                        buyers: false,
+                        wl: true,
+                        buyers: true,
                         role: [],
                         user: ["233657223190937601", "798973949189947459"]
                     }
@@ -170,6 +223,7 @@ module.exports = {
                     }
                 }
             };
+
             if (module) {
                 return db[module];
             } else {

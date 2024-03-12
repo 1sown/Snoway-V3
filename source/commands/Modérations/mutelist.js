@@ -3,7 +3,10 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilde
 module.exports = {
   name: 'listmute',
   aliases: ["mutelist"],
-  description: 'Liste tous les membres mute sur le serveur.',
+  description: {
+    fr: 'Liste tous les membres mute sur le serveur',
+    en: "List all mute members on the server"
+  },
   run: async (client, message, args) => {
     const mutedMembers = message.guild.members.cache.filter((member) => member.communicationDisabledUntilTimestamp !== null);
     
