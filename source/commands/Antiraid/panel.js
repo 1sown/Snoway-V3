@@ -167,6 +167,26 @@ module.exports = {
                 )
             }
 
+            if(db.wl.bypass.includes("USER")) {
+                button.addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId('bypass_user_' + dbmodule)
+                        .setStyle(2)
+                        .setEmoji(client.functions.emoji.user)
+                        .setLabel('Indépendant User')
+                )
+            }
+
+            if(db.wl.bypass.includes("ROLE")) {
+                button.addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId('bypass_role_' + dbmodule)
+                        .setStyle(2)
+                        .setEmoji(client.functions.emoji.role)
+                        .setLabel('Indépendant Rôle')
+                )
+            }
+
             msg.edit({ embeds: [embed], components: [SelectModule, selectSanction, SelectWL, button] })
         }
 
