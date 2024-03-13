@@ -10,8 +10,11 @@ module.exports = {
     /**
      * @param {Snoway} client
      * @param {Discord.Message} message
+     * @param {Discord.Interaction} interaction
      */
     run: async (client, message) => {
+        let action = false
+
         const msg = await message.channel.send("** **")
         async function panel(module) {
             let dbmodule = module || "AntiSpam"
@@ -59,7 +62,7 @@ module.exports = {
                             emoji: db_module_get[module].status ? client.functions.emoji.power_on : client.functions.emoji.power_off,
                             default: module === dbmodule ? true : false,
                             value: module
-                        })))                        
+                        })))
                 )
 
             const selectSanction = new Discord.ActionRowBuilder()
@@ -137,7 +140,7 @@ module.exports = {
                     value: `\`\`\`py\n${text_sanction}\`\`\``
                 }, {
                     name: "・Logs",
-                    value: `\`\`\`py\nStatus: ${db.logs.status ? "✅" : "❌"}${db.logs.status ? `\nSalon: ${client.channels.cache.get(db.logs.channel)?.name || "Non configuré"}` : ""}\`\`\``
+                    value: `\`\`\`py\nStatus: ${db.logs.status ? "✅" : "❌"}${db.logs.status ? `\nSalon: ${client.channels.cache.get(db.logs.channel)?.name || "Inconnue"} (ID: ${client.channels.cache.get(db.logs.channel)?.id || "Inconnue"}) ` : ""}\`\`\``
                 })
 
             const button_power = new Discord.ButtonBuilder()
@@ -146,7 +149,7 @@ module.exports = {
                 .setLabel('Status')
                 .setEmoji(db.status ? client.functions.emoji.status_on : client.functions.emoji.status_off)
 
-                const logs_power = new Discord.ButtonBuilder()
+            const logs_power = new Discord.ButtonBuilder()
                 .setCustomId('logs_power_' + dbmodule)
                 .setStyle(2)
                 .setEmoji(client.functions.emoji.logs)
@@ -154,13 +157,13 @@ module.exports = {
 
             const button = new Discord.ActionRowBuilder().addComponents(button_power, logs_power)
 
-            if(db.logs.status) {
+            if (db.logs.status) {
                 button.addComponents(
-                     new Discord.ButtonBuilder()
-                    .setCustomId('logs_channel_' + dbmodule)
-                    .setStyle(2)
-                    .setEmoji(client.functions.emoji.channel)
-                    .setLabel('Salon')
+                    new Discord.ButtonBuilder()
+                        .setCustomId('logs_channel_' + dbmodule)
+                        .setStyle(2)
+                        .setEmoji(client.functions.emoji.channel)
+                        .setLabel('Salon')
                 )
             }
 
@@ -177,6 +180,55 @@ module.exports = {
                     content: await client.lang('interaction'),
                     flags: 64
                 })
+            }
+
+            if (action) {
+                return i.reply({
+                    embeds: [new Discord.EmbedBuilder().setColor(client.color).setDescription(`${client.functions.emoji.no_white} Désolé, une action est déjà en cours d'exécution !`)],
+                    flags: 64
+                })
+            }
+
+            if (i.customId.startsWith("logs_channel_")) {
+                const db = await dbGet()
+                const dbmodule = i.customId.split('_')[2];
+                i.deferUpdate();
+                action = true
+                const embed = new Discord.EmbedBuilder()
+                    .setColor(client.color)
+                    .setDescription("***\`Mentionne\` ou envoie-moi \`l'identifiant\` du salon que tu souhaites ajouter, écrit \`cancel\` pour annuler***")
+
+
+                const msg_demande = await i.channel.send({
+                    content: null,
+                    embeds: [embed],
+                });
+
+                const filter = (response) => response.author.id === i.user.id;
+                const response = await i.channel.awaitMessages({ filter, max: 1, time: 15000, errors: ['time'] });
+
+                if (response && response.first()) {
+                    const channelId = response.first().content.replace(/[<#>|]/g, '');
+                    const channel = client.channels.cache.get(channelId);
+
+                    if (channel) {
+                        db[dbmodule].logs.channel = channel.id;
+                        await client.db.set(`antiraid_${message.guildId}`, db)
+                        panel(dbmodule)
+                    } else {
+                        const channel = client.channels.cache.get(response.first().channelId);
+                        const salon = await channel.send({ content: '***Le salon mentionné est invalide. Veuillez mentionner un salon valide.***' });
+                        updateEmbed()
+                        setTimeout(() => {
+                            salon.delete().catch(() => { })
+                        }, 8000)
+
+                    }
+
+                    action = false
+                    response.first().delete().catch(() => { });
+                    msg_demande.delete().catch(() => { });
+                }
             }
 
             if (i.customId.startsWith("button_power_")) {
@@ -231,7 +283,7 @@ module.exports = {
 
                 if (i.values.includes("user")) {
                     const userIndex = db[dbmodule].wl.bypass.indexOf("USER");
-                    if (userIndex !== -1) {} else {
+                    if (userIndex !== -1) { } else {
                         db[dbmodule].wl.bypass.push("USER");
                     }
                 }
@@ -245,7 +297,7 @@ module.exports = {
 
                 if (i.values.includes("role")) {
                     const roleIndex = db[dbmodule].wl.bypass.indexOf("ROLE");
-                    if (roleIndex !== -1) {} else {
+                    if (roleIndex !== -1) { } else {
                         db[dbmodule].wl.bypass.push("ROLE");
                     }
                 }
