@@ -82,10 +82,16 @@ module.exports = {
 
         const sentMessage = await message.reply({ embeds: [embed], components: [row] });
 
-        const filter = (interaction) => interaction.user.id === message.author.id;
         const collector = sentMessage.createMessageComponentCollector();
 
-        collector.on('collect', (interaction) => {
+        collector.on('collect', async (interaction) => {
+            if (interaction.user.id !== message.author.id) {
+                return interaction.reply({
+                    content: await client.lang('interaction'),
+                    flags: 64
+                })
+            }
+
             if (interaction.customId === 'prev' && currentPage > 1) {
                 currentPage--;
             } else if (interaction.customId === 'next' && currentPage < totalPages) {

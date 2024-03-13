@@ -50,17 +50,16 @@ module.exports = {
                     text_sanction = "・Aucune"
             }
             const db_module_get = await dbGet();
-
             const SelectModule = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.StringSelectMenuBuilder()
                         .setCustomId('select_module')
                         .addOptions(Object.keys(db_module_get).map(module => ({
                             label: module,
-                            emoji: module.status ? client.functions.emoji.power_on : client.functions.emoji.power_off,
+                            emoji: db_module_get[module].status ? client.functions.emoji.power_on : client.functions.emoji.power_off,
                             default: module === dbmodule ? true : false,
                             value: module
-                        })))
+                        })))                        
                 )
 
             const selectSanction = new Discord.ActionRowBuilder()
@@ -90,12 +89,12 @@ module.exports = {
                         })
                 )
 
-                const SelectWL = new Discord.ActionRowBuilder()
+            const SelectWL = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.StringSelectMenuBuilder()
-                        .setCustomId('wl-config')
-                        .setMinValues(1)
+                        .setCustomId('wl-config_' + dbmodule)
                         .setMaxValues(4)
+                        .setMinValues(0)
                         .setPlaceholder("Choisissez les utilisateurs autorisés.")
                         .addOptions([
                             {
@@ -107,22 +106,22 @@ module.exports = {
                                 label: `Utilisateurs dans la liste blanche (${(await client.db.get(`wl_${message.guildId}`) || []).length})`,
                                 value: 'wl',
                                 default: db.wl.wl ? true : false,
-                                emoji: db.wl.buyers ? client.functions.emoji.wl_on : client.functions.emoji.wl_off,
+                                emoji: db.wl.wl ? client.functions.emoji.wl_on : client.functions.emoji.wl_off,
                             }, {
-                                label: `Utilisateurs indépendantt (${db.wl.user.length})`,
+                                label: `Utilisateurs indépendant (${db.wl.user.length})`,
                                 value: 'user',
                                 default: db.wl.bypass.includes("USER") ? true : false,
-                                emoji: db.wl.buyers ? client.functions.emoji.user_on : client.functions.emoji.user_off,
+                                emoji: db.wl.bypass.includes("USER") ? client.functions.emoji.user_on : client.functions.emoji.user_off,
                             }, {
-                                label: `Rôle indépendantt (${db.wl.role.length})`,
+                                label: `Rôle indépendant (${db.wl.role.length})`,
                                 value: 'role',
                                 default: db.wl.bypass.includes("ROLE"),
                                 emoji: db.wl.bypass.includes("ROLE") ? client.functions.emoji.role_on : client.functions.emoji.role_off,
-                            }
+                            },
                         ])
                 );
 
-             const embed = new Discord.EmbedBuilder()
+            const embed = new Discord.EmbedBuilder()
                 .setColor(client.color)
                 .setFooter(client.footer)
                 .addFields({
@@ -141,12 +140,12 @@ module.exports = {
                     value: `\`\`\`py\nStatus: ${db.logs.status ? "✅" : "❌"}${db.logs.status ? `\nSalon: ${client.channels.cache.get(db.logs.channel)?.name || "Non configuré"}` : ""}\`\`\``
                 })
 
-                const button_power = new Discord.ButtonBuilder()
+            const button_power = new Discord.ButtonBuilder()
                 .setCustomId('button_power_' + dbmodule)
                 .setStyle(2)
                 .setLabel('Status')
                 .setEmoji(db.status ? client.functions.emoji.status_on : client.functions.emoji.status_off)
-                const button = new Discord.ActionRowBuilder().addComponents(button_power)
+            const button = new Discord.ActionRowBuilder().addComponents(button_power)
 
             msg.edit({ embeds: [embed], components: [SelectModule, selectSanction, SelectWL, button] })
         }
@@ -162,7 +161,7 @@ module.exports = {
                 })
             }
 
-            if(i.customId.startsWith("button_power_")) {
+            if (i.customId.startsWith("button_power_")) {
                 const db = await dbGet()
                 const dbmodule = i.customId.split('_')[2];
                 db[dbmodule].status = !db[dbmodule].status;
@@ -175,6 +174,60 @@ module.exports = {
                 i.deferUpdate();
                 panel(i.values[0])
             }
+
+            if (i.customId.startsWith("wl-config_")) {
+                const db = await dbGet();
+                const dbmodule = i.customId.split('_')[1];
+
+                if (i.values.includes("wl")) {
+                    db[dbmodule].wl.wl = true;
+                }
+
+                if (!i.values.includes("wl")) {
+                    db[dbmodule].wl.wl = false;
+                }
+
+                if (i.values.includes("buyers")) {
+                    db[dbmodule].wl.buyers = true;
+                }
+
+                if (!i.values.includes("buyers")) {
+                    db[dbmodule].wl.buyers = false;
+                }
+
+                if (!i.values.includes("user")) {
+                    const userIndex = db[dbmodule].wl.bypass.indexOf("USER");
+                    if (userIndex !== -1) {
+                        db[dbmodule].wl.bypass.splice(userIndex, 1);
+                    }
+                }
+
+                if (i.values.includes("user")) {
+                    const userIndex = db[dbmodule].wl.bypass.indexOf("USER");
+                    if (userIndex !== -1) {} else {
+                        db[dbmodule].wl.bypass.push("USER");
+                    }
+                }
+
+                if (!i.values.includes("role")) {
+                    const roleIndex = db[dbmodule].wl.bypass.indexOf("ROLE");
+                    if (roleIndex !== -1) {
+                        db[dbmodule].wl.bypass.splice(roleIndex, 1);
+                    }
+                }
+
+                if (i.values.includes("role")) {
+                    const roleIndex = db[dbmodule].wl.bypass.indexOf("ROLE");
+                    if (roleIndex !== -1) {} else {
+                        db[dbmodule].wl.bypass.push("ROLE");
+                    }
+                }
+
+                await client.db.set(`antiraid_${message.guildId}`, db);
+                i.deferUpdate();
+                panel(dbmodule);
+            }
+
 
             if (i.customId.startsWith('select_sanction_')) {
                 const db = await dbGet()

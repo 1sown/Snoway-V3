@@ -48,6 +48,7 @@ module.exports = {
 
                 case 'create':
                     const playlistName = args[1];
+                    if(!playlistName) return;
                     const db = await client.db.get(`playlist_${message.author.id}`) || [];
                     const verif = db.find(playlist => playlist.name === playlistName);
                     if (db.length >= 25) {
