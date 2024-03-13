@@ -145,10 +145,28 @@ module.exports = {
                 .setStyle(2)
                 .setLabel('Status')
                 .setEmoji(db.status ? client.functions.emoji.status_on : client.functions.emoji.status_off)
-            const button = new Discord.ActionRowBuilder().addComponents(button_power)
+
+                const logs_power = new Discord.ButtonBuilder()
+                .setCustomId('logs_power_' + dbmodule)
+                .setStyle(2)
+                .setEmoji(client.functions.emoji.logs)
+                .setLabel('Logs')
+
+            const button = new Discord.ActionRowBuilder().addComponents(button_power, logs_power)
+
+            if(db.logs.status) {
+                button.addComponents(
+                     new Discord.ButtonBuilder()
+                    .setCustomId('logs_channel_' + dbmodule)
+                    .setStyle(2)
+                    .setEmoji(client.functions.emoji.channel)
+                    .setLabel('Salon')
+                )
+            }
 
             msg.edit({ embeds: [embed], components: [SelectModule, selectSanction, SelectWL, button] })
         }
+
         panel();
 
         const collector = msg.createMessageComponentCollector()
@@ -165,6 +183,15 @@ module.exports = {
                 const db = await dbGet()
                 const dbmodule = i.customId.split('_')[2];
                 db[dbmodule].status = !db[dbmodule].status;
+                await client.db.set(`antiraid_${message.guildId}`, db)
+                i.deferUpdate();
+                panel(dbmodule)
+            }
+
+            if (i.customId.startsWith("logs_power_")) {
+                const db = await dbGet()
+                const dbmodule = i.customId.split('_')[2];
+                db[dbmodule].logs.status = !db[dbmodule].logs.status;
                 await client.db.set(`antiraid_${message.guildId}`, db)
                 i.deferUpdate();
                 panel(dbmodule)
