@@ -16,6 +16,137 @@ module.exports = {
         let action = false
 
         const msg = await message.channel.send("** **")
+
+        async function reloadIndependantRole(module, guild) {
+            const db = await dbGet(module);
+            let roles = [];
+            db.wl.role.forEach(roleId => {
+                const role = guild.roles.cache.get(roleId);
+                if (role) {
+                    roles.push({ name: role.name, id: role.id });
+                }
+            });
+
+            const embed = new Discord.EmbedBuilder()
+                .setColor(client.color)
+                .setDescription(`\`\`\`js\n${roles.length > 0 ? roles.map(db => `・ ${db.name} (ID: ${db.id})`).join('\n') : "Aucun rôle ne figure dans la liste des indépendants."}\`\`\``)
+                .setTitle('・Indépendant Rôle');
+
+            const SelectAdd = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.RoleSelectMenuBuilder()
+                        .setDefaultRoles(null)
+                        .setPlaceholder("Séléctionnez un ou plusieurs rôle(s)")
+                        .setCustomId('bypassrole_add_' + module)
+                        .setMaxValues(25)
+                        .setDefaultRoles()
+                )
+
+            const SelectRemove = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.StringSelectMenuBuilder()
+                        .setCustomId('bypassrole_remove_' + module)
+                        .setPlaceholder("Séléctionnez un ou plusieurs rôle(s)")
+                        .setMaxValues(roles.length === 0 ? 1 : roles.length)
+                        .setDisabled(roles.length === 0 ? true : false)
+                        .setOptions(roles.length > 0 ? roles.map(db => ({
+                            label: db.name,
+                            description: `ID: ${db.id}`,
+                            value: db.id,
+                            emoji: client.functions.emoji.role
+                        }))
+                            : [{ label: "Snoway First", value: 'snowayfirstez' }]
+                        )
+
+
+                )
+
+            const button = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId('retour_' + module)
+                        .setStyle(2)
+                        .setEmoji(client.functions.emoji.retour),
+                    new Discord.ButtonBuilder()
+                        .setCustomId('nombrebypassrole_' + module)
+                        .setStyle(2)
+                        .setDisabled(true)
+                        .setLabel(`${roles.length}/25`),
+                    new Discord.ButtonBuilder()
+                        .setCustomId('clearbypassrole_' + module)
+                        .setStyle(2)
+                        .setDisabled(roles.length < 0 ? true : false)
+                        .setEmoji(client.functions.emoji.del)
+                )
+            msg.edit({ embeds: [embed], components: [SelectAdd, SelectRemove, button] });
+        }
+
+
+        async function reloadIndependantUser(module) {
+            const db = await dbGet(module);
+            let users = [];
+            db.wl.user.forEach(userId => {
+                const user = client.users.cache.get(userId);
+                if (user) {
+                    users.push({ name: user.username, id: user.id });
+                }
+            });
+
+            const embed = new Discord.EmbedBuilder()
+                .setColor(client.color)
+                .setDescription(`\`\`\`js\n${users.length > 0 ? users.map(db => `・ ${db.name} (ID: ${db.id})`).join('\n') : "Aucun utilisateur ne figure dans la liste des indépendants."}\`\`\``)
+                .setTitle('・Indépendant User');
+
+            const SelectAdd = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.UserSelectMenuBuilder()
+                    .addDefaultUsers(users.map(db => db.id))
+                        .setPlaceholder("Séléctionnez un ou plusieurs utilisateur(s)")
+                        .setCustomId('bypassuser_add_' + module)
+                        .setMaxValues(25)
+
+                )
+
+            const SelectRemove = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.StringSelectMenuBuilder()
+                        .setCustomId('bypassuser_remove_' + module)
+                        .setPlaceholder("Séléctionnez un ou plusieurs utilisateur(s)")
+                        .setMaxValues(users.length === 0 ? 1 : users.length)
+                        .setDisabled(users.length === 0 ? true : false)
+                        .setOptions(users.length > 0 ? users.map(db => ({
+                            label: db.name,
+                            description: `ID: ${db.id}`,
+                            value: db.id,
+                            emoji: client.functions.emoji.user
+                        }))
+                            : [{ label: "Snoway First", value: 'snowayfirstez' }]
+                        )
+
+
+                )
+
+            const button = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId('retour_' + module)
+                        .setStyle(2)
+                        .setEmoji(client.functions.emoji.retour),
+                    new Discord.ButtonBuilder()
+                        .setCustomId('nombrebypassuser_' + module)
+                        .setStyle(2)
+                        .setDisabled(true)
+                        .setLabel(`${users.length}/25`),
+                    new Discord.ButtonBuilder()
+                        .setCustomId('clearbypassuser_' + module)
+                        .setStyle(2)
+                        .setDisabled(users.length < 0 ? true : false)
+                        .setEmoji(client.functions.emoji.del)
+                )
+            msg.edit({ embeds: [embed], components: [SelectAdd, SelectRemove, button] });
+        }
+
+
         async function panel(module) {
             let dbmodule = module || "AntiSpam"
             const db = await dbGet(dbmodule);
@@ -167,7 +298,7 @@ module.exports = {
                 )
             }
 
-            if(db.wl.bypass.includes("USER")) {
+            if (db.wl.bypass.includes("USER")) {
                 button.addComponents(
                     new Discord.ButtonBuilder()
                         .setCustomId('bypass_user_' + dbmodule)
@@ -177,7 +308,7 @@ module.exports = {
                 )
             }
 
-            if(db.wl.bypass.includes("ROLE")) {
+            if (db.wl.bypass.includes("ROLE")) {
                 button.addComponents(
                     new Discord.ButtonBuilder()
                         .setCustomId('bypass_role_' + dbmodule)
@@ -209,6 +340,131 @@ module.exports = {
                 })
             }
 
+            if (i.customId.startsWith("bypass_role_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                reloadIndependantRole(dbmodule, i.guild)
+            }
+
+            if (i.customId.startsWith("bypass_user_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                reloadIndependantUser(dbmodule)
+            }
+
+            if (i.customId.startsWith("retour_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                panel(dbmodule)
+            }
+
+            if (i.customId.startsWith("bypassuser_add_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                const db = await dbGet();
+                const values = i.values;
+
+                if (db[dbmodule].wl.user.length >= 25) {
+                    return i.reply({ content: "Vous ne pouvez pas ajouter plus de 25 utilisateurs !", flags: 64 });
+                }
+
+                for (const userId of values) {
+                    const userNotDb = !db[dbmodule].wl.user.includes(userId);
+                    if (userNotDb) {
+                        db[dbmodule].wl.user.push(userId);
+                    }
+                }
+
+                await client.db.set(`antiraid_${message.guildId}`, db);
+                reloadIndependantUser(dbmodule);
+            }
+
+            if (i.customId.startsWith("bypassuser_remove_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                const db = await dbGet();
+                const values = i.values;
+
+                if (db[dbmodule].wl.user.length === 0) {
+                    return i.reply({ content: "Aucun utilisateur à retirer de la liste des users indépendants.", flags: 64 });
+                }
+
+                for (const userId of values) {
+                    const roleDb = db[dbmodule].wl.user.includes(userId);
+
+                    if (roleDb) {
+                        db[dbmodule].wl.user = db[dbmodule].wl.user.filter(id => id !== userId);
+                    }
+                }
+
+                await client.db.set(`antiraid_${message.guildId}`, db);
+                reloadIndependantUser(dbmodule);
+            }
+
+            if (i.customId.startsWith("clearbypassuser_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[1];
+                const db = await dbGet();
+                db[dbmodule].wl.user = []
+                await client.db.set(`antiraid_${message.guildId}`, db)
+                reloadIndependantUser(dbmodule)
+            }
+
+            if (i.customId.startsWith("bypassrole_add_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                const db = await dbGet();
+                const values = i.values;
+
+                if (db[dbmodule].wl.role.length >= 25) {
+                    return i.reply({ content: "Vous ne pouvez pas ajouter plus de 25 rôles !", flags: 64 });
+                }
+
+                for (const roleId of values) {
+                    const roleNotInDb = !db[dbmodule].wl.role.includes(roleId);
+
+                    if (roleNotInDb) {
+                        db[dbmodule].wl.role.push(roleId);
+                    }
+                }
+
+                await client.db.set(`antiraid_${message.guildId}`, db);
+                reloadIndependantRole(dbmodule, i.guild);
+            }
+
+            if (i.customId.startsWith("bypassrole_remove_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                const db = await dbGet();
+                const values = i.values;
+
+                if (db[dbmodule].wl.role.length === 0) {
+                    return i.reply({ content: "Aucun rôle à retirer de la liste des rôles indépendants.", flags: 64 });
+                }
+
+                for (const roleId of values) {
+                    const roleInDb = db[dbmodule].wl.role.includes(roleId);
+
+                    if (roleInDb) {
+                        db[dbmodule].wl.role = db[dbmodule].wl.role.filter(id => id !== roleId);
+                    }
+                }
+
+                await client.db.set(`antiraid_${message.guildId}`, db);
+                reloadIndependantRole(dbmodule, i.guild);
+            }
+
+
+
+            if (i.customId.startsWith("clearbypassrole_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[1];
+                const db = await dbGet();
+                db[dbmodule].wl.role = []
+                await client.db.set(`antiraid_${message.guildId}`, db)
+                reloadIndependantRole(dbmodule, i.guild)
+            }
+
             if (i.customId.startsWith("logs_channel_")) {
                 const db = await dbGet()
                 const dbmodule = i.customId.split('_')[2];
@@ -230,7 +486,13 @@ module.exports = {
                 if (response && response.first()) {
                     const channelId = response.first().content.replace(/[<#>|]/g, '');
                     const channel = client.channels.cache.get(channelId);
-
+                    if (response.first().content === "cancel" || response.first().content === "ntm") {
+                        panel(dbmodule)
+                        action = false
+                        response.first().delete().catch(() => { });
+                        msg_demande.delete().catch(() => { });
+                        return;
+                    }
                     if (channel) {
                         db[dbmodule].logs.channel = channel.id;
                         await client.db.set(`antiraid_${message.guildId}`, db)
@@ -238,7 +500,7 @@ module.exports = {
                     } else {
                         const channel = client.channels.cache.get(response.first().channelId);
                         const salon = await channel.send({ content: '***Le salon mentionné est invalide. Veuillez mentionner un salon valide.***' });
-                        updateEmbed()
+                        panel(dbmodule)
                         setTimeout(() => {
                             salon.delete().catch(() => { })
                         }, 8000)
