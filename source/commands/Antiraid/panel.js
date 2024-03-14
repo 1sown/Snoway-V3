@@ -3,6 +3,7 @@ const Snoway = require('../../structures/client/index')
 
 module.exports = {
     name: "panel",
+    aliases: ["antiraid", "protect", "protects"],
     description: {
         fr: "Configure la sécurité du serveur",
         en: "Configures server security"

@@ -16,7 +16,8 @@ module.exports = {
      */
     run: async (client, message, args) => {
 
-        const snipe = client.SnipeMsg.get(message.channel.id)
+        const snipe = client.SnipeEdit.get(message.channel.id)
+        console.log(client.SnipeEdit.get(message.channelId))
 
         if(!snipe) {
             return message.channel.send("Il n'y a aucun message à snipe dans ce salon.");
