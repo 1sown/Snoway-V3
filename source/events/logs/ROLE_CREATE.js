@@ -13,7 +13,7 @@ module.exports = {
         const salon = client.channels.cache.get(logs[0]?.roles)
         if (!salon) return;
 
-        const fetchedLogs = await channel.guild.fetchAuditLogs({
+        const fetchedLogs = await role.guild.fetchAuditLogs({
             limit: 1,
             type: 30
         }).then(audit => audit.entries.first());
