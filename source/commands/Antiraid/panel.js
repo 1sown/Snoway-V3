@@ -213,7 +213,7 @@ module.exports = {
         }
 
         async function panel(module) {
-            let dbmodule = module || "AntiSpam"
+            let dbmodule = module || "AddBot"
             const db = await dbGet(dbmodule);
             let text_autorisation = "";
             let text_sanction = "";
