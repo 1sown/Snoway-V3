@@ -39,5 +39,6 @@ module.exports = {
     logs: "<:logs:1217484515543355423>",
     no_white: "<:snoway_no:1217570485433274431>",
     slash: "<:slash_cmd:1218216636356628510>",
-    temps: "<:temps:1218218228350980098>"
+    temps: "<:temps:1218218228350980098>",
+    message: "<:message:1218232422210998442>"
 }

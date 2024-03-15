@@ -329,6 +329,7 @@ module.exports = {
                         `Module: ${client.utils.anitiraid(dbmodule)}\n` +
                         `Etat: ${db.status ? "✅" : "❌"}\n` +
                         `${dbmodule === "AntiSpam" ? `Temps: ${await convertTime(db.temps)}\n` : ""}` +
+                        `${dbmodule === "AntiSpam" ? `Message: ${db.messages}\n` : ""}` +
                         `${db.message ? `Salons ignorés: ${db.salon.length}\n` : ""}` +
                         `Autorisé: ${text_autorisation ? `\n${text_autorisation}` : "❌"}\`\`\``
                 }, {
@@ -399,8 +400,14 @@ module.exports = {
                             .setCustomId('temps_' + dbmodule)
                             .setStyle(2)
                             .setLabel('Intervalle')
-                            .setEmoji(client.functions.emoji.temps)
+                            .setEmoji(client.functions.emoji.temps),
+                            new Discord.ButtonBuilder()
+                            .setCustomId('messages_' + dbmodule)
+                            .setStyle(2)
+                            .setLabel('Message')
+                            .setEmoji(client.functions.emoji.message)
                     );
+                    
                 }
             }
 
@@ -670,7 +677,7 @@ module.exports = {
                 action = true;
                 const embed = new Discord.EmbedBuilder()
                     .setColor(client.color)
-                    .setDescription(client.functions.emoji.temps + "***Envoie-moi la \`durée\` que tu souhaite modifier, écrit \`cancel\` pour annuler.***");
+                    .setDescription("***Envoie-moi la \`durée\` que tu souhaite modifier, écrit \`cancel\` pour annuler.***");
 
                 const msg_demande = await i.channel.send({
                     content: null,
@@ -696,7 +703,7 @@ module.exports = {
                         response.first().delete().catch(() => { });
                         msg_demande.delete().catch(() => { });
                         const responseReply = await i.channel.send({
-                            embeds: [new Discord.EmbedBuilder().setColor(client.color).setDescription(`${client.functions.emoji.no_white} Le temps indiqué est **invalide**. Veuillez essayer avec des formats comme : \`15s\`, \`1m\` !`)],
+                            embeds: [new Discord.EmbedBuilder().setColor(client.color).setDescription(`Le temps indiqué est **invalide**. Veuillez essayer avec des formats comme : \`15s\`, \`1m\` !`)],
                             flags: 64
                         });
 
@@ -717,6 +724,51 @@ module.exports = {
                 }
             }
 
+            if (i.customId.startsWith("messages_")) {
+                const db = await dbGet();
+                const dbmodule = i.customId.split('_')[1];
+                i.deferUpdate();
+                action = true;
+                const embed = new Discord.EmbedBuilder()
+                    .setColor(client.color)
+                    .setDescription("***Envoie-moi le nombre de \`message maximal\` de l'action, \`cancel\` pour annuler***");
+            
+                const msg_demande = await i.channel.send({
+                    content: null,
+                    embeds: [embed],
+                });
+            
+                const filter = (response) => response.author.id === i.user.id && !isNaN(parseInt(response.content));
+                const response = await i.channel.awaitMessages({ filter, max: 1, time: 15000, errors: ['time'] });
+            
+                if (response && response.first()) {
+                    const input = parseInt(response.first().content.trim());
+            
+                    if (isNaN(input)) {
+                        action = false;
+                        response.first().delete().catch(() => {});
+                        msg_demande.delete().catch(() => {});
+                        const responseReply = await i.channel.send({
+                            embeds: [new Discord.EmbedBuilder().setColor(client.color).setDescription(`Vous n'avez pas indiqué un nombre.`)],
+                            flags: 64
+                        });
+            
+                        setTimeout(() => {
+                            responseReply.delete().catch(() => {});
+                        }, ms("10s"));
+                        return;
+                    } else {
+                        db[dbmodule].messages = input;
+                        await client.db.set(`antiraid_${message.guildId}`, db);
+                    }
+            
+                    panel(dbmodule);
+                    action = false;
+                    response.first().delete().catch(() => {});
+                    msg_demande.delete().catch(() => {});
+                }
+            }
+            
             if (i.customId.startsWith("button_power_")) {
                 const db = await dbGet()
                 const dbmodule = i.customId.split('_')[2];
@@ -811,6 +863,7 @@ module.exports = {
                     sanction: "NONE",
                     salon: [],
                     temps: 3000,
+                    messages: 5,
                     message: true,
                     status: false,
                     logs: {
