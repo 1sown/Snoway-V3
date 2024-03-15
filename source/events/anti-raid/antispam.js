@@ -96,9 +96,9 @@ async function sendLogs(client, channel, spamUsers, config, deletedCount) {
             }
           }).join('\n');
 
-        let totalDeletedCount = spamUsers.length * deletedCount; 
+        let deleteCount = spamUsers.length * deletedCount; 
         let embed = new Discord.EmbedBuilder()
-        .setFooter({ text: `${totalDeletedCount} messages supprimés dans ${channel.name}`, iconURL: channel.guild.iconURL() })
+        .setFooter({ text: `${deleteCount} messages supprimés dans ${channel.name}`, iconURL: channel.guild.iconURL() })
             .setTimestamp()
             .setAuthor({name: "・ Actions non autorisées"})
             .addFields({name: "・Utilisateurs", value: `\`\`\`py\n${mentionUsers}\`\`\``})
