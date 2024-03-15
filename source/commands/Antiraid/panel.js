@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index')
+const ms = require('../../structures/Utils/ms')
 
 module.exports = {
     name: "panel",
@@ -82,6 +83,70 @@ module.exports = {
             msg.edit({ embeds: [embed], components: [SelectAdd, SelectRemove, button] });
         }
 
+        async function reloadIndependantSalon(module) {
+            const db = await dbGet(module);
+            let salon = [];
+            db.salon.forEach(salonID => {
+                const salonn = client.channels.cache.get(salonID);
+                if (salonn) {
+                    salon.push({ name: salonn.name, id: salonn.id });
+                }
+            });
+
+            const embed = new Discord.EmbedBuilder()
+                .setColor(client.color)
+                .setDescription(`\`\`\`js\n${salon.length > 0 ? salon.map(db => `・ ${db.name} (ID: ${db.id})`).join('\n') : "Aucun salon ne figure dans la liste des indépendants."}\`\`\``)
+                .setTitle('・Indépendant Salon');
+
+            const SelectAdd = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ChannelSelectMenuBuilder()
+                        .setDefaultChannels(salon.map(db => db.id))
+                        .setChannelTypes(0)
+                        .setPlaceholder("Séléctionnez un ou plusieurs salon(s)")
+                        .setCustomId('bypasssalon_add_' + module)
+                        .setMaxValues(25)
+                )
+
+            const SelectRemove = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.StringSelectMenuBuilder()
+                        .setCustomId('bypasssalon_remove_' + module)
+                        .setPlaceholder("Séléctionnez un ou plusieurs salon(s)")
+                        .setMaxValues(salon.length === 0 ? 1 : salon.length)
+                        .setDisabled(salon.length === 0 ? true : false)
+                        .setOptions(salon.length > 0 ? salon.map(db => ({
+                            label: db.name,
+                            description: `ID: ${db.id}`,
+                            value: db.id,
+                            emoji: client.functions.emoji.channel
+                        }))
+                            : [{ label: "Snoway First", value: 'snowayfirstez' }]
+                        )
+
+
+                )
+
+            const button = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId('retour_' + module)
+                        .setStyle(2)
+                        .setEmoji(client.functions.emoji.retour),
+                    new Discord.ButtonBuilder()
+                        .setCustomId('nombrebypasssalon_' + module)
+                        .setStyle(2)
+                        .setDisabled(true)
+                        .setLabel(`${salon.length}/25`),
+                    new Discord.ButtonBuilder()
+                        .setCustomId('clearbypasssalon_' + module)
+                        .setStyle(2)
+                        .setDisabled(salon.length < 0 ? true : false)
+                        .setEmoji(client.functions.emoji.del)
+                )
+            msg.edit({ embeds: [embed], components: [SelectAdd, SelectRemove, button] });
+        }
+
 
         async function reloadIndependantUser(module) {
             const db = await dbGet(module);
@@ -101,7 +166,7 @@ module.exports = {
             const SelectAdd = new Discord.ActionRowBuilder()
                 .addComponents(
                     new Discord.UserSelectMenuBuilder()
-                    .addDefaultUsers(users.map(db => db.id))
+                        .addDefaultUsers(users.map(db => db.id))
                         .setPlaceholder("Séléctionnez un ou plusieurs utilisateur(s)")
                         .setCustomId('bypassuser_add_' + module)
                         .setMaxValues(25)
@@ -147,7 +212,6 @@ module.exports = {
             msg.edit({ embeds: [embed], components: [SelectAdd, SelectRemove, button] });
         }
 
-
         async function panel(module) {
             let dbmodule = module || "AntiSpam"
             const db = await dbGet(dbmodule);
@@ -190,7 +254,7 @@ module.exports = {
                     new Discord.StringSelectMenuBuilder()
                         .setCustomId('select_module')
                         .addOptions(Object.keys(db_module_get).map(module => ({
-                            label: module,
+                            label: `${client.utils.anitiraid(module)}`,
                             emoji: db_module_get[module].status ? client.functions.emoji.power_on : client.functions.emoji.power_off,
                             default: module === dbmodule ? true : false,
                             value: module
@@ -262,10 +326,10 @@ module.exports = {
                 .addFields({
                     name: "・Configuration",
                     value: `\`\`\`py\n` +
-                        `Module: ${dbmodule}\n` +
+                        `Module: ${client.utils.anitiraid(dbmodule)}\n` +
                         `Etat: ${db.status ? "✅" : "❌"}\n` +
                         `${dbmodule === "AntiSpam" ? `Temps: ${await convertTime(db.temps)}\n` : ""}` +
-                        `${dbmodule === "AntiSpam" ? `Salons ignorés: ${db.salon.length}\n` : ""}` +
+                        `${db.message ? `Salons ignorés: ${db.salon.length}\n` : ""}` +
                         `Autorisé: ${text_autorisation ? `\n${text_autorisation}` : "❌"}\`\`\``
                 }, {
                     name: "・Sanction:",
@@ -318,8 +382,33 @@ module.exports = {
                         .setLabel('Indépendant Rôle')
                 )
             }
+            const newComponent = new Discord.ActionRowBuilder()
 
-            msg.edit({ embeds: [embed], components: [SelectModule, selectSanction, SelectWL, button] })
+            if (db.message) {
+                newComponent.addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId('salon_ignore_' + dbmodule)
+                        .setStyle(2)
+                        .setLabel('Salons ignorés')
+                        .setEmoji(client.functions.emoji.slash)
+                );
+
+                if (dbmodule === "AntiSpam") {
+                    newComponent.addComponents(
+                        new Discord.ButtonBuilder()
+                            .setCustomId('temps_' + dbmodule)
+                            .setStyle(2)
+                            .setLabel('Intervalle')
+                            .setEmoji(client.functions.emoji.temps)
+                    );
+                }
+            }
+
+            if (db.message) {
+                msg.edit({ embeds: [embed], components: [SelectModule, selectSanction, SelectWL, button, newComponent] });
+            } else {
+                msg.edit({ embeds: [embed], components: [SelectModule, selectSanction, SelectWL, button] });
+            }
         }
 
         panel();
@@ -347,6 +436,12 @@ module.exports = {
                 reloadIndependantRole(dbmodule, i.guild)
             }
 
+            if (i.customId.startsWith("salon_ignore_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                reloadIndependantSalon(dbmodule)
+            }
+
             if (i.customId.startsWith("bypass_user_")) {
                 i.deferUpdate();
                 const dbmodule = i.customId.split('_')[2];
@@ -357,6 +452,59 @@ module.exports = {
                 i.deferUpdate();
                 const dbmodule = i.customId.split('_')[2];
                 panel(dbmodule)
+            }
+
+            if (i.customId.startsWith("bypasssalon_add_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                const db = await dbGet();
+                const values = i.values;
+
+                if (db[dbmodule].salon.length >= 25) {
+                    return i.reply({ content: "Vous ne pouvez pas ajouter plus de 25 salons !", flags: 64 });
+                }
+
+                for (const salonID of values) {
+                    const userNotDb = !db[dbmodule].salon.includes(salonID);
+                    if (userNotDb) {
+                        db[dbmodule].salon.push(salonID);
+                    }
+                }
+
+                await client.db.set(`antiraid_${message.guildId}`, db);
+                reloadIndependantSalon(dbmodule);
+            }
+
+            if (i.customId.startsWith("bypasssalon_remove_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[2];
+                const db = await dbGet();
+                const values = i.values;
+
+                if (db[dbmodule].salon.length === 0) {
+                    return i.reply({ content: "Aucun salon à retirer de la liste des salon indépendants.", flags: 64 });
+                }
+
+                for (const salonID of values) {
+                    const salonDB = db[dbmodule].salon.includes(salonID);
+
+                    if (salonDB) {
+                        db[dbmodule].salon = db[dbmodule].salon.filter(id => id !== salonID);
+                    }
+                }
+
+                await client.db.set(`antiraid_${message.guildId}`, db);
+                reloadIndependantSalon(dbmodule);
+            }
+
+
+            if (i.customId.startsWith("clearbypasssalon_")) {
+                i.deferUpdate();
+                const dbmodule = i.customId.split('_')[1];
+                const db = await dbGet();
+                db[dbmodule].salon = []
+                await client.db.set(`antiraid_${message.guildId}`, db)
+                reloadIndependantSalon(dbmodule)
             }
 
             if (i.customId.startsWith("bypassuser_add_")) {
@@ -514,6 +662,61 @@ module.exports = {
                 }
             }
 
+
+            if (i.customId.startsWith("temps_")) {
+                const db = await dbGet()
+                const dbmodule = i.customId.split('_')[1];
+                i.deferUpdate();
+                action = true;
+                const embed = new Discord.EmbedBuilder()
+                    .setColor(client.color)
+                    .setDescription(client.functions.emoji.temps + "***Envoie-moi la \`durée\` que tu souhaite modifier, écrit \`cancel\` pour annuler.***");
+
+                const msg_demande = await i.channel.send({
+                    content: null,
+                    embeds: [embed],
+                });
+
+                const filter = (response) => response.author.id === i.user.id;
+                const response = await i.channel.awaitMessages({ filter, max: 1, time: 15000, errors: ['time'] });
+
+                if (response && response.first()) {
+                    const input = response.first().content.trim();
+
+                    if (input.toLowerCase() === "cancel" || input.toLowerCase() === "ntm") {
+                        action = false;
+                        response.first().delete().catch(() => {});
+                        msg_demande.delete().catch(() => {});
+                        return;
+                    }
+
+                    let duration = ms(input);
+                    if (!duration) {
+                        action = false;
+                        response.first().delete().catch(() => { });
+                        msg_demande.delete().catch(() => { });
+                        const responseReply = await i.channel.send({
+                            embeds: [new Discord.EmbedBuilder().setColor(client.color).setDescription(`${client.functions.emoji.no_white} Le temps indiqué est **invalide**. Veuillez essayer avec des formats comme : \`15s\`, \`1m\` !`)],
+                            flags: 64
+                        });
+
+                        setTimeout(() => {
+                            responseReply.delete().catch(() => { });
+                        }, ms("10s"));
+                        return;
+                    } else {
+                        db[dbmodule].temps = duration
+                         await client.db.set(`antiraid_${message.guildId}`, db)
+                    }
+
+                    
+                    panel(dbmodule);
+                    action = false;
+                    response.first().delete().catch(() => { });
+                    msg_demande.delete().catch(() => { });
+                }
+            }
+
             if (i.customId.startsWith("button_power_")) {
                 const db = await dbGet()
                 const dbmodule = i.customId.split('_')[2];
@@ -608,6 +811,7 @@ module.exports = {
                     sanction: "NONE",
                     salon: [],
                     temps: 3000,
+                    message: true,
                     status: false,
                     logs: {
                         status: false,
@@ -623,6 +827,7 @@ module.exports = {
                 }, AddBot: {
                     sanction: "NONE",
                     salon: [],
+                    message: false,
                     logs: {
                         status: false,
                         channel: null
