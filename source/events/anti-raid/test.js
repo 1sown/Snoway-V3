@@ -1,9 +1,12 @@
 const Discord = require('discord.js');
 const ms = require('ms');
 
-const spamTimeout = 3000; 
-
-const spamUsers = {};
+const raid = new Map();
+const config = {
+    sanction: ["Mute"],
+    logsstatus: true,
+    logs: '1217857016110776430'
+};
 module.exports = {
     name: 'messageCreate',
 
@@ -12,37 +15,82 @@ module.exports = {
 
         const userId = message.author.id;
 
-        if (spamUsers[userId]) {
-            const lastMessageTime = spamUsers[userId].lastMessageTime;
+        if (raid.has(userId)) {
+            const userData = raid.get(userId);
+
+            const lastMessageTime = userData.lastMessageTime;
             const currentTime = Date.now();
 
-            if (currentTime - lastMessageTime < spamTimeout) {
-                spamUsers[userId].lastMessageTime = currentTime;
+            if (currentTime - lastMessageTime < 3000) {
+                userData.lastMessageTime = currentTime;
 
-                clearTimeout(spamUsers[userId].warnTimeout);
-                spamUsers[userId].warnTimeout = setTimeout(() => {
-                    sendSpamWarning(client, Object.keys(spamUsers), message.channelId);
-                    resetSpamData(Object.keys(spamUsers));
-                }, spamTimeout);
+                clearTimeout(userData.warnTimeout);
+                userData.warnTimeout = setTimeout(() => {
+                    if (!userData.warned) {
+                        userData.warned = true;
+                        sendSpamWarning(client, Array.from(raid.keys()), message.channel.id, Array.from(raid.values()));
+                        resetSpamData(Array.from(raid.values()), message.channel);
+                    }
+                }, 3000);
+
+                if (!userData.messages) {
+                    userData.messages = [];
+                }
+                userData.messages.push(message);
 
                 return;
             }
         }
 
-        spamUsers[userId] = {
-            lastMessageTime: Date.now()
-        };
+        raid.set(userId, {
+            lastMessageTime: Date.now(),
+            messages: [message]
+        });
     }
 }
 
-function sendSpamWarning(client, userIds, channelId) {
-    if(userIds.length === 0) return;
+function sendSpamWarning(client, userIds, channelId, userDataArray) {
+    if (userIds.length === 0) return;
+    const messagesToDelete = userDataArray.reduce((acc, userData) => {
+        if (userData && userData.messages) {
+            acc.push(...userData.messages.map(msg => msg.id));
+        }
+        return acc;
+    }, []);
     const warningMessage = `${userIds.map(userId => `<@${userId}>`).join(', ')}, Le spam est interdit sur ce serveur !`;
-    client.channels.cache.get(channelId).send(warningMessage);
+    const channel = client.channels.cache.get(channelId)
+    channel.send(warningMessage);
+    const mentionUsers = userIds.map(userId => {
+        const user = client.users.cache.get(userId)
+        return `${user.username} (ID: ${user.id})`
+    }).join('\n')
+
+    
+    let embed = new Discord.EmbedBuilder()
+        .setFooter({ text: `${messagesToDelete.length || 0} messages supprimés dans ${channel.name}`, iconURL: channel.guild.iconURL() })
+        .setTimestamp()
+        .setAuthor({ name: "・ Actions non autorisées" })
+        .addFields({ name: "・Utilisateurs", value: `\`\`\`py\n${mentionUsers}\`\`\`` })
+        .addFields({ name: "・Sanction", value: `\`\`\`py\n${config.sanction[0]}\`\`\`` })
+        .addFields({ name: "・Modifications apportées", value: "\`\`\`py\nMessages contenants du spam\`\`\`" })
+        .setColor(client.color);
+    const logsChannel = client.channels.cache.get(config.logs)
+    logsChannel?.send({ embeds: [embed] })
 }
 
-function resetSpamData(userIds) {
-    userIds.forEach(userId => {
-        delete spamUsers[userId];
-    });
+async function resetSpamData(userDataArray, channel) {
+    const messagesToDelete = userDataArray.reduce((acc, userData) => {
+        if (userData && userData.messages) {
+            acc.push(...userData.messages.map(msg => msg.id));
+        }
+        return acc;
+    }, []);
+
+    try {
+        await channel.bulkDelete(messagesToDelete.slice(0, 100));
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+
+    raid.clear();
 }
