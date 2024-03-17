@@ -7,7 +7,7 @@ module.exports = {
     name: 'messageCreate',
 
     run: async (client, message) => {
-        /*  const channel = message.channel;
+      /*   const channel = message.channel;
           if (!channel || !channel.guild || message.author.id === client.user.id) return;
           const config = {
               sanction: ["Mute"],
@@ -32,40 +32,56 @@ module.exports = {
   };
   
   async function handleSpam(client, channel, author, userData, config, message) {
-      if (!userData.handled) {
-          userData.handled = true;
-          config.sanction?.forEach(async action => {
-              switch (action) {
-                  case "Mute":
-                      if (!author.bot) message.member.timeout(ms('15s'), { reason: "heal - antispam" });
-                      break;
-                  case "Ban":
-                      message.member.ban({ reason: "heal - antispam" });
-                      break;
-                  case "Kick":
-                      message.member.kick("heal - antispam");
-                      break;
-                  case "Derank":
-                      message.member.roles.set([]);
-                      break;
-                  default:
-                      break;
-              }
-          });
-  
-          let spamUsers = [author.id];
-          for (const [userId, data] of spamData.get(channel.id)) {
-              if (data.count >= 3 && userId !== author.id) {
-                  spamUsers.push(userId);
-              }
-          }
-  
-          let mentionUsers = spamUsers.map(user => `${user}`)
-  
-          await sendLogs(client, channel, spamUsers, config, userData.count);
-          await deleteMessages(channel, userData.messageIds, mentionUsers);
-      }
-  }
+    if (!userData.handled) {
+        userData.handled = true;
+
+        config.sanction?.forEach(async action => {
+            switch (action) {
+                case "Mute":
+                    if (!author.bot) message.member.timeout(ms('15s'), { reason: "heal - antispam" });
+                    break;
+                case "Ban":
+                    message.member.ban({ reason: "heal - antispam" });
+                    break;
+                case "Kick":
+                    message.member.kick("heal - antispam");
+                    break;
+                case "Derank":
+                    message.member.roles.set([]);
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        let spamUsers = [author.id];
+        for (const [userId, data] of spamData.get(channel.id)) {
+            if (data.count >= 3 && userId !== author.id) {
+                spamUsers.push(userId);
+            }
+        }
+
+        let mentionUsers = spamUsers.map(user => `<@${user}>`).join(', ');
+
+        channel.send(`❌ ${mentionUsers}, Le spam est interdit sur ce serveur !`)
+            .then((m) => setTimeout(() => m.delete(), 5000))
+            .catch(() => { });
+
+        while (userData.count >= 3) {
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            userData = spamData.get(channel.id)?.get(author.id) || { count: 0, messageIds: [] };
+        }
+        console.log(spamData)
+        await sendLogs(client, channel, spamUsers, config, userData.count);
+
+        for (const userId of spamUsers) {
+            spamData.get(channel.id)?.delete(userId);
+        }
+    }
+}
+
+
+
   
   async function deleteMessages(channel, messageIds, spamUsers) {
       try {
@@ -112,9 +128,7 @@ module.exports = {
                       spamData.get(channel.id)?.delete(userId);
                   }
               })
-              .catch(error => console.error("Une erreur s'est produite lors de l'envoi des logs :", error));
+              .catch(error => console.error("Erreur:", error));*/
       }
-  }*/
+  }
 
-    }
-}
