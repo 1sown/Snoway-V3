@@ -21,7 +21,7 @@ module.exports = class Snoway extends Client {
     }
   ) {
     super(options);
-    this.setMaxListeners(0);
+    this.setMaxListeners(Infinity);
 
     this.commands = new Collection();
     this.aliases = new Collection();

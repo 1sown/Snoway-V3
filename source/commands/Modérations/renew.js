@@ -24,7 +24,7 @@ module.exports = {
         try {
             const chan = await channel.clone({ reason: `Channel renew par ${message.author.tag}` });
             await channel.delete();
-            chan.send("<@" + message.author + '>, Salon renouvelé avec succès.')
+            chan.send("<@" + message.author + '>, Salon renouvelé avec succès.').then((m) => setTimeout(() => m.delete(), 2000)).catch((e) => {})
         } catch (error) {
             console.error(error);
             channel.send('Une erreur viens de se produire.');

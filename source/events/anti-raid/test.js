@@ -59,7 +59,7 @@ function sendSpamWarning(client, userIds, channelId, userDataArray) {
     }, []);
     const warningMessage = `${userIds.map(userId => `<@${userId}>`).join(', ')}, Le spam est interdit sur ce serveur !`;
     const channel = client.channels.cache.get(channelId)
-    channel.send(warningMessage);
+    channel.send(warningMessage).then((m) => setTimeout(() => m.delete(), 3000));
     const mentionUsers = userIds.map(userId => {
         const user = client.users.cache.get(userId)
         return `${user.username} (ID: ${user.id})`
