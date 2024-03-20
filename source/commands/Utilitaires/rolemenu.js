@@ -19,6 +19,19 @@ module.exports = {
         async function update(msgID) {
             const database = await client.db.get(`rolemenu_${message.guild.id}`) || [];
             const db = database.find(dbEntry => dbEntry.messageId === msgID) || { messageId: null, channel: null, option: [] };
+
+            const embed = new Discord.EmbedBuilder()
+            .setTitle('Paramètre du rôle menu')
+            .setColor(client.color)
+            .setFooter(client.footer)
+            .addFields(
+                {name: "Channel", value: `\`\`\`js\n${client.channels.cache.get(db.channel)?.name ? `${client.channels.cache.get(db.channel).name} (${client.channels.cache.get(db.channel).id})` : "Inconnue"}\`\`\``}
+            )
+
+            message.channel.send({embeds: [embed]})
         }
+
+
+        update()
     }
 }

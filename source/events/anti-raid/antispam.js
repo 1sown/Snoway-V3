@@ -11,13 +11,19 @@ module.exports = {
   * @param {Discord.Message} message
   */
     run: async (client, message) => {
-        if (!message.guild || message.author.id === message.guild.ownerId || message.author.id === client.user.id) return;
-        if (client.config.buyers.includes(message.author.id)) return;
-        const db = await client.db.get(`antiraid_${message.guildId}.AntiSpam`)
-        if (!db) return;
-        if (!db.status) return;
-        if (db.salon.includes(message.channelId)) return;
-
+        if (!message.guild || message.author.bot || message.author.id === message.guild.ownerId || message.author.id === client.user.id || client.config.buyers.includes(message.author.id)) return;
+        const member = message.member;
+        const db = await client.db.get(`antiraid_${message.guildId}.AntiSpam`);
+        if (!db || !db.status || db.salon.includes(message.channelId)) return;
+        if (db.wl && (await client.db.get(`wl_${message.guild}`) || []).includes(message.author.id)) return;
+        if (db.wl && db.wl.bypass.includes("USER") && db.wl.user.includes(message.author.id)) return;
+        if (db.wl && db.wl.bypass.includes("ROLE")) {
+            const rolesToCheck = db.wl.role;
+        
+            if (rolesToCheck.some(roleId => member.roles.cache.has(roleId))) {
+                return;
+            }
+        }
         const userId = message.author.id;
 
         if (raid.has(userId)) {
@@ -25,8 +31,7 @@ module.exports = {
 
             const lastMessageTime = userData.lastMessageTime;
             const currentTime = Date.now();
-            console.log(raid, db)
-            if (currentTime - lastMessageTime < 3000 && userData.messages.length >= db.messages) {
+            if (currentTime - lastMessageTime < db.temps && userData.messages.length >= db.messages) {
                 userData.lastMessageTime = currentTime;
 
                 clearTimeout(userData.warnTimeout);
@@ -42,7 +47,7 @@ module.exports = {
                                 break;
                             case "MUTE":
                                 message.member.roles.set([]);
-                                message.member.timeout(ms('15d'), { reason: "Snoway - Antispam" });
+                                message.member.timeout(ms('15s'), { reason: "Snoway - Antispam" });
                                 break;
                             default:
                                 break;
@@ -51,7 +56,7 @@ module.exports = {
                         sendSpamWarning(client, Array.from(raid.keys()), message.channel.id, Array.from(raid.values()), db);
                         resetSpamData(Array.from(raid.values()), message.channel);
                     }
-                }, 3000);
+                }, db.temps);
 
                 if (!userData.messages) {
                     userData.messages = [];
@@ -63,9 +68,9 @@ module.exports = {
             } else {
                 setTimeout(() => {
                     if (currentTime - lastMessageTime >= 3000 && userData.messages.length === 0) {
-                        raid.delete(userId); 
+                        raid.delete(userId);
                     }
-                }, 3000);
+                }, db.temps);
             }
         }
 
