@@ -1,134 +1,135 @@
 const Discord = require('discord.js');
 const ms = require('ms');
+const Snoway = require('../../structures/client/index')
 
-let spamData = new Map();
-
+const raid = new Map();
+const config = {
+    sanction: "Mute",
+    logsstatus: true,
+    logs: '1217857016110776430'
+};
 module.exports = {
     name: 'messageCreate',
-
+    /**
+  * @param {Snoway} client
+  * @param {Discord.Message} message
+  */
     run: async (client, message) => {
-      /*   const channel = message.channel;
-          if (!channel || !channel.guild || message.author.id === client.user.id) return;
-          const config = {
-              sanction: ["Mute"],
-              logsstatus: true,
-              logs: '1217857016110776430'
-          };
-  
-  
-          let userData = (spamData.get(channel.id) || new Map()).get(message.author.id) || { count: 0, messageIds: [] };
-  
-          userData.count++;
-          userData.messageIds.push(message.id);
-  
-          let channelData = spamData.get(channel.id) || new Map();
-          channelData.set(message.author.id, userData);
-          spamData.set(channel.id, channelData);
-  
-          if (userData.count >= 3) {
-              await handleSpam(client, channel, message.author, userData, config, message);
-          }
-      }
-  };
-  
-  async function handleSpam(client, channel, author, userData, config, message) {
-    if (!userData.handled) {
-        userData.handled = true;
+        if (!message.guild || message.author.id === message.guild.ownerId || message.author.id === client.user.id) return;
+        if (client.config.buyers.includes(message.author.id)) return;
+        const db = await client.db.get(`antiraid_${message.guildId}.AntiSpam`)
+        if (!db) return;
+        if (!db.status) return;
+        if (db.salon.includes(message.channelId)) return;
 
-        config.sanction?.forEach(async action => {
-            switch (action) {
-                case "Mute":
-                    if (!author.bot) message.member.timeout(ms('15s'), { reason: "heal - antispam" });
-                    break;
-                case "Ban":
-                    message.member.ban({ reason: "heal - antispam" });
-                    break;
-                case "Kick":
-                    message.member.kick("heal - antispam");
-                    break;
-                case "Derank":
-                    message.member.roles.set([]);
-                    break;
-                default:
-                    break;
+        const userId = message.author.id;
+
+        if (raid.has(userId)) {
+            const userData = raid.get(userId);
+
+            const lastMessageTime = userData.lastMessageTime;
+            const currentTime = Date.now();
+            console.log(raid, db)
+            if (currentTime - lastMessageTime < 3000 && userData.messages.length >= db.messages) {
+                userData.lastMessageTime = currentTime;
+
+                clearTimeout(userData.warnTimeout);
+                userData.warnTimeout = setTimeout(() => {
+                    if (!userData.warned) {
+                        userData.warned = true;
+                        switch (db.sanction) {
+                            case "BAN":
+                                message.member.ban({ reason: "Snoway - Antispam" });
+                                break;
+                            case "KICK":
+                                message.member.kick("Snoway - Antispam");
+                                break;
+                            case "MUTE":
+                                message.member.roles.set([]);
+                                message.member.timeout(ms('15d'), { reason: "Snoway - Antispam" });
+                                break;
+                            default:
+                                break;
+                        }
+
+                        sendSpamWarning(client, Array.from(raid.keys()), message.channel.id, Array.from(raid.values()), db);
+                        resetSpamData(Array.from(raid.values()), message.channel);
+                    }
+                }, 3000);
+
+                if (!userData.messages) {
+                    userData.messages = [];
+                }
+
+                userData.messages.push(message);
+
+                return;
+            } else {
+                setTimeout(() => {
+                    if (currentTime - lastMessageTime >= 3000 && userData.messages.length === 0) {
+                        raid.delete(userId); 
+                    }
+                }, 3000);
             }
+        }
+
+        raid.set(userId, {
+            lastMessageTime: Date.now(),
+            messages: [message]
         });
-
-        let spamUsers = [author.id];
-        for (const [userId, data] of spamData.get(channel.id)) {
-            if (data.count >= 3 && userId !== author.id) {
-                spamUsers.push(userId);
-            }
-        }
-
-        let mentionUsers = spamUsers.map(user => `<@${user}>`).join(', ');
-
-        channel.send(`❌ ${mentionUsers}, Le spam est interdit sur ce serveur !`)
-            .then((m) => setTimeout(() => m.delete(), 5000))
-            .catch(() => { });
-
-        while (userData.count >= 3) {
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            userData = spamData.get(channel.id)?.get(author.id) || { count: 0, messageIds: [] };
-        }
-        console.log(spamData)
-        await sendLogs(client, channel, spamUsers, config, userData.count);
-
-        for (const userId of spamUsers) {
-            spamData.get(channel.id)?.delete(userId);
-        }
     }
 }
 
+function sendSpamWarning(client, userIds, channelId, userDataArray, db) {
+    if (userIds.length === 0) return;
+    const messagesToDelete = userDataArray.reduce((acc, userData) => {
+        if (userData && userData.messages) {
+            acc.push(...userData.messages.map(msg => msg.id));
+        }
+        return acc;
+    }, []);
+    const warningMessage = `${userIds.map(userId => `<@${userId}>`).join(', ')}, Le spam est interdit sur ce serveur !`;
+    const channel = client.channels.cache.get(channelId)
+    channel.send(warningMessage).then((m) => setTimeout(() => m.delete(), 3000));
+    const mentionUsers = userIds.map(userId => {
+        const user = client.users.cache.get(userId)
+        return `${user.username} (ID: ${user.id})`
+    }).join('\n')
 
 
-  
-  async function deleteMessages(channel, messageIds, spamUsers) {
-      try {
-          while (messageIds.length > 0) {
-              const chunk = messageIds.splice(0, 100);
-              await channel.bulkDelete(chunk).catch(() => { });
-          }
-  
-          let spammer = spamUsers.map(user => `<@${user}>`).join(', ')
-          channel.send(`❌ ${spammer}, Le spam est interdit sur ce serveur !`)
-              .then((m) => setTimeout(() => m.delete(), 5000))
-              .catch(() => { });
-      } catch (error) {
-          console.log(error);
-      }
-  }
-  
-  async function sendLogs(client, channel, spamUsers, config, deletedCount) {
-      if (config.logsstatus === true || config.logsstatus === "on") {
-          let logsChannel = channel.guild.channels.cache.get(config.logs);
-  
-          let mentionUsers = spamUsers.map(userId => {
-              const user = channel.guild.members.cache.get(userId);
-              if (user) {
-                return `・ ${user.user.username} (ID: ${user.id})`;
-              } else {
-                return `Utilisateur inconnu (ID: ${userId})`;
-              }
-            }).join('\n');
-  
-          let deleteCount = spamUsers.length * deletedCount; 
-          let embed = new Discord.EmbedBuilder()
-          .setFooter({ text: `${deleteCount} messages supprimés dans ${channel.name}`, iconURL: channel.guild.iconURL() })
-              .setTimestamp()
-              .setAuthor({name: "・ Actions non autorisées"})
-              .addFields({name: "・Utilisateurs", value: `\`\`\`py\n${mentionUsers}\`\`\``})
-              .addFields({name: "・Sanction", value: `\`\`\`py\n${config.sanction[0]}\`\`\``})
-              .addFields({name: "・Modifications apportées", value: "\`\`\`py\nMessages contenants du spam\`\`\`"})
-              .setColor(client.color);
-  
-          logsChannel?.send({ embeds: [embed] })
-              .then(() => {
-                  for (const userId of spamUsers) {
-                      spamData.get(channel.id)?.delete(userId);
-                  }
-              })
-              .catch(error => console.error("Erreur:", error));*/
-      }
-  }
+    let embed = new Discord.EmbedBuilder()
+        .setFooter({ text: `${messagesToDelete.length || 0} messages supprimés dans ${channel.name}`, iconURL: channel.guild.iconURL() })
+        .setTimestamp()
+        .setAuthor({ name: "・ Actions non autorisées" })
+        .addFields({ name: "・Utilisateurs", value: `\`\`\`py\n${mentionUsers}\`\`\`` })
+        .addFields({ name: "・Sanction", value: `\`\`\`py\n${db.sanction}\`\`\`` })
+        .addFields({ name: "・Modifications apportées", value: "\`\`\`py\nMessages contenants du spam\`\`\`" })
+        .setColor(client.color);
+    const logsChannel = client.channels.cache.get(db.logs.channel)
+    if (db.logs.status && logsChannel) {
+        logsChannel?.send({ embeds: [embed] })
+    }
+}
 
+async function resetSpamData(userDataArray, channel) {
+    const messagesToDelete = userDataArray.reduce((acc, userData) => {
+        if (userData && userData.messages) {
+            acc.push(...userData.messages.map(msg => msg.id));
+        }
+        return acc;
+    }, []);
+
+    let index = 0;
+
+    while (index < messagesToDelete.length) {
+        const messagesBatch = messagesToDelete.slice(index, index + 99);
+        try {
+            await channel.bulkDelete(messagesBatch);
+        } catch (error) {
+            console.error('Erreur:', error);
+        }
+        index += 99;
+    }
+
+    raid.clear();
+}
