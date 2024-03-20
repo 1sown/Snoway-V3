@@ -3,11 +3,7 @@ const ms = require('ms');
 const Snoway = require('../../structures/client/index')
 
 const raid = new Map();
-const config = {
-    sanction: "Mute",
-    logsstatus: true,
-    logs: '1217857016110776430'
-};
+
 module.exports = {
     name: 'messageCreate',
     /**
