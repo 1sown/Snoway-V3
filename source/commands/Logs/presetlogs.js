@@ -64,11 +64,11 @@ module.exports = {
                 })
 
                 let channelInfo = [
+                    { name: '📁・raid', dbKey: 'raid' },
                     { name: '📁・rôles', dbKey: 'roles' },
                     { name: '📁・voice', dbKey: 'voice' },
                     { name: '📁・msg', dbKey: 'message' },
                     { name: '📁・mods', dbKey: 'mod' },
-                    { name: '📁・raid', dbKey: 'raid' },
                     { name: '📁・channel', dbKey: 'channel' },
                     { name: '📁・boost', dbKey: 'boost' },
                     { name: '📁・flux', dbKey: 'flux' },
