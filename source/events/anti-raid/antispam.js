@@ -15,15 +15,7 @@ module.exports = {
         const member = message.member;
         const db = await client.db.get(`antiraid_${message.guildId}.AntiSpam`);
         if (!db || !db.status || db.salon.includes(message.channelId)) return;
-        if (db.wl && (await client.db.get(`wl_${message.guild}`) || []).includes(message.author.id)) return;
-        if (db.wl && db.wl.bypass.includes("USER") && db.wl.user.includes(message.author.id)) return;
-        if (db.wl && db.wl.bypass.includes("ROLE")) {
-            const rolesToCheck = db.wl.role;
-        
-            if (rolesToCheck.some(roleId => member.roles.cache.has(roleId))) {
-                return;
-            }
-        }
+
         const userId = message.author.id;
 
         if (raid.has(userId)) {
@@ -53,7 +45,7 @@ module.exports = {
                                 break;
                         }
 
-                        sendSpamWarning(client, Array.from(raid.keys()), message.channel.id, Array.from(raid.values()), db);
+                        sendNtm(client, Array.from(raid.keys()), message.channel.id, Array.from(raid.values()), db);
                         resetSpamData(Array.from(raid.values()), message.channel);
                     }
                 }, db.temps);
@@ -81,7 +73,7 @@ module.exports = {
     }
 }
 
-function sendSpamWarning(client, userIds, channelId, userDataArray, db) {
+function sendNtm(client, userIds, channelId, userDataArray, db) {
     if (userIds.length === 0) return;
     const messagesToDelete = userDataArray.reduce((acc, userData) => {
         if (userData && userData.messages) {
