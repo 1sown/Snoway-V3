@@ -28,8 +28,8 @@ module.exports = {
 
                 clearTimeout(userData.warnTimeout);
                 userData.warnTimeout = setTimeout(() => {
-                    if (!userData.warned) {
-                        userData.warned = true;
+                    if (!userData.warn) {
+                        userData.warn = true;
                         switch (db.sanction) {
                             case "BAN":
                                 message.member.ban({ reason: "Snoway - Antispam" });
