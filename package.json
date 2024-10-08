@@ -18,7 +18,7 @@
     "discord-backup": "^3.3.2",
     "discord-html-transcripts": "^3.2.0",
     "discord-player": "^6.6.6",
-    "discord.js": "^14.14.1",
+    "discord.js": "^14.16.3",
     "ffmpeg-static": "^5.2.0",
     "fivem": "^2.1.8",
     "fs": "^0.0.1-security",
